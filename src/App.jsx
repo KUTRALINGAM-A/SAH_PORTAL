@@ -113,26 +113,26 @@ function HomePage() {
             {
               step: '01',
               colorTheme: 'step-orange',
-              title: 'Register',
-              desc: 'Sign up with your Amrita Chennai Roll ID and create your profile.'
+              title: 'Register & Form a Team',
+              desc: 'Sign up with your Amrita Chennai Roll ID and create or join a 6-member team.'
             },
             {
               step: '02',
               colorTheme: 'step-navy',
-              title: 'Form a Team',
-              desc: 'Create a team or join one from the recruitment marketplace.'
+              title: 'Choose Problem',
+              desc: 'Select an official problem statement and start developing your prototype.'
             },
             {
               step: '03',
               colorTheme: 'step-teal',
-              title: 'Choose Problem',
-              desc: 'Select a problem statement and start building your solution.'
+              title: 'Lock & Submit',
+              desc: 'Lock your team (min 1 female member) and submit solution PPT & GitHub links.'
             },
             {
               step: '04',
               colorTheme: 'step-green',
-              title: 'Lock & Submit',
-              desc: 'Lock your team (6 members, 1 female min) for SPOC verification.'
+              title: 'Judging & Bootcamp',
+              desc: 'Undergo Z-Score normalized judging to qualify for the top 50 intensive bootcamp.'
             }
           ].map((item, i) => (
             <div key={i} className={`how-it-works-column ${item.colorTheme}`}>
