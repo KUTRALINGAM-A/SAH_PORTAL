@@ -71,9 +71,9 @@ function HomePage() {
           {/* Central Stem from bottom of pill */}
           <div className="flowchart-trunk" />
 
-          {/* 4-Branch Tree Grid (matching the 4-column cards grid exactly) */}
+          {/* 3-Branch Tree Grid (matching the 3-column cards grid exactly) */}
           <div className="flowchart-branches">
-            {/* Branch 1: Outer Left */}
+            {/* Branch 1: Left */}
             <div className="tree-branch branch-1">
               <div className="branch-h-line" />
               <div className="branch-v-line">
@@ -81,24 +81,15 @@ function HomePage() {
               </div>
             </div>
 
-            {/* Branch 2: Inner Left */}
+            {/* Branch 2: Center */}
             <div className="tree-branch branch-2">
-              <div className="branch-h-line" />
               <div className="branch-v-line">
                 <span className="branch-arrow" />
               </div>
             </div>
 
-            {/* Branch 3: Inner Right */}
+            {/* Branch 3: Right */}
             <div className="tree-branch branch-3">
-              <div className="branch-h-line" />
-              <div className="branch-v-line">
-                <span className="branch-arrow" />
-              </div>
-            </div>
-
-            {/* Branch 4: Outer Right */}
-            <div className="tree-branch branch-4">
               <div className="branch-h-line" />
               <div className="branch-v-line">
                 <span className="branch-arrow" />
@@ -107,7 +98,7 @@ function HomePage() {
           </div>
         </div>
 
-        {/* 4 Steps Row */}
+        {/* 3 Steps Row */}
         <div className="how-it-works-grid">
           {[
             {
@@ -124,15 +115,9 @@ function HomePage() {
             },
             {
               step: '03',
-              colorTheme: 'step-teal',
-              title: 'Lock & Submit',
-              desc: 'Lock your team (min 1 female member) and submit solution PPT & GitHub links.'
-            },
-            {
-              step: '04',
               colorTheme: 'step-green',
-              title: 'Judging & Bootcamp',
-              desc: 'Undergo Z-Score normalized judging to qualify for the top 50 intensive bootcamp.'
+              title: 'Lock & Submit',
+              desc: 'Lock your team (min 1 female member) and submit solution PPT & GitHub links for SPOC verification.'
             }
           ].map((item, i) => (
             <div key={i} className={`how-it-works-column ${item.colorTheme}`}>

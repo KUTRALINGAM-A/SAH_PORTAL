@@ -1890,6 +1890,7 @@ h4 { font-size: 1.125rem; }
 /* Tree Connector (Single point of origin under header pill branching out) */
 .flowchart-tree {
   width: 100%;
+  max-width: 1060px;
   margin: 0 auto;
   position: relative;
 }
@@ -1903,8 +1904,8 @@ h4 { font-size: 1.125rem; }
 
 .flowchart-branches {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 20px;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
   width: 100%;
   height: 28px;
   position: relative;
@@ -1915,38 +1916,20 @@ h4 { font-size: 1.125rem; }
   height: 100%;
 }
 
-/* Branch 1 (Outer Left): line from center junction to 50% of col 1 */
+/* Branch 1 (Left): horizontal line from center of col 2 to center of col 1 */
 .branch-1 .branch-h-line {
   position: absolute;
   top: 0;
-  right: calc(-100% - 30px);
+  right: calc(-50% - 24px);
   left: 50%;
   border-top: 2px dashed var(--border);
 }
 
-/* Branch 2 (Inner Left): line from center junction to 50% of col 2 */
-.branch-2 .branch-h-line {
-  position: absolute;
-  top: 0;
-  right: -10px;
-  left: 50%;
-  border-top: 2px dashed var(--border);
-}
-
-/* Branch 3 (Inner Right): line from center junction to 50% of col 3 */
+/* Branch 3 (Right): horizontal line from center of col 2 to center of col 3 */
 .branch-3 .branch-h-line {
   position: absolute;
   top: 0;
-  left: -10px;
-  right: 50%;
-  border-top: 2px dashed var(--border);
-}
-
-/* Branch 4 (Outer Right): line from center junction to 50% of col 4 */
-.branch-4 .branch-h-line {
-  position: absolute;
-  top: 0;
-  left: calc(-100% - 30px);
+  left: calc(-50% - 24px);
   right: 50%;
   border-top: 2px dashed var(--border);
 }
@@ -1983,21 +1966,18 @@ h4 { font-size: 1.125rem; }
   border-top-color: var(--navy);
 }
 .branch-3 .branch-arrow,
-.step-teal .branch-arrow {
-  border-top-color: var(--teal);
-}
-.branch-4 .branch-arrow,
 .step-green .branch-arrow {
   border-top-color: var(--green);
 }
 
-/* 4 Steps Grid */
+/* 3 Steps Grid */
 .how-it-works-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 20px;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
   width: 100%;
-  margin-top: 0;
+  max-width: 1060px;
+  margin: 0 auto;
 }
 
 .how-it-works-column {
@@ -2016,7 +1996,7 @@ h4 { font-size: 1.125rem; }
   position: relative;
   width: 100%;
   border-radius: var(--radius-lg);
-  padding: 34px 20px 24px;
+  padding: 34px 22px 26px;
   text-align: center;
   box-shadow: var(--shadow-sm);
   transition: transform var(--transition-base), box-shadow var(--transition-base);
@@ -2054,7 +2034,7 @@ h4 { font-size: 1.125rem; }
 
 .how-it-works-title {
   font-family: var(--font-heading);
-  font-size: 1.05rem;
+  font-size: 1.1rem;
   font-weight: 700;
   color: var(--navy);
   margin-bottom: 8px;
@@ -2062,9 +2042,9 @@ h4 { font-size: 1.125rem; }
 }
 
 .how-it-works-desc {
-  font-size: 0.85rem;
+  font-size: 0.88rem;
   color: var(--text-secondary);
-  line-height: 1.55;
+  line-height: 1.6;
   margin: 0;
 }
 
@@ -2085,14 +2065,6 @@ h4 { font-size: 1.125rem; }
   border: 1px solid rgba(27, 42, 74, 0.2);
 }
 
-.step-teal .how-it-works-badge {
-  background-color: var(--teal);
-}
-.step-teal .how-it-works-card {
-  background-color: rgba(0, 137, 123, 0.05);
-  border: 1px solid rgba(0, 137, 123, 0.22);
-}
-
 .step-green .how-it-works-badge {
   background-color: var(--green);
 }
@@ -2102,30 +2074,7 @@ h4 { font-size: 1.125rem; }
 }
 
 /* Mobile & Tablet Responsive */
-@media (max-width: 900px) {
-  .flowchart-tree {
-    display: none;
-  }
-  .how-it-works-grid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 36px 20px;
-  }
-  .mobile-step-connector {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    position: relative;
-    width: 100%;
-    height: 22px;
-  }
-  .mobile-step-connector .connector-line {
-    width: 0;
-    height: 16px;
-    border-left: 2px dashed var(--border);
-  }
-}
-
-@media (max-width: 600px) {
+@media (max-width: 860px) {
   .flowchart-tree {
     display: none;
   }
