@@ -1898,7 +1898,8 @@ h4 { font-size: 1.125rem; }
 .flowchart-trunk {
   width: 0;
   height: 18px;
-  border-left: 2px dashed var(--border);
+  border-left: 2px dashed var(--navy-light);
+  opacity: 0.6;
   margin: 0 auto;
 }
 
@@ -1922,7 +1923,8 @@ h4 { font-size: 1.125rem; }
   top: 0;
   right: calc(-50% - 24px);
   left: 50%;
-  border-top: 2px dashed var(--border);
+  border-top: 2px dashed var(--navy-light);
+  opacity: 0.6;
 }
 
 /* Branch 3 (Right): horizontal line from center of col 2 to center of col 3 */
@@ -1931,7 +1933,8 @@ h4 { font-size: 1.125rem; }
   top: 0;
   left: calc(-50% - 24px);
   right: 50%;
-  border-top: 2px dashed var(--border);
+  border-top: 2px dashed var(--navy-light);
+  opacity: 0.6;
 }
 
 /* Vertical drop from each branch down to badge */
@@ -1941,7 +1944,8 @@ h4 { font-size: 1.125rem; }
   left: 50%;
   width: 0;
   height: 26px;
-  border-left: 2px dashed var(--border);
+  border-left: 2px dashed var(--navy-light);
+  opacity: 0.6;
 }
 
 /* Chevron Downward Arrow */
@@ -2093,7 +2097,8 @@ h4 { font-size: 1.125rem; }
   .mobile-step-connector .connector-line {
     width: 0;
     height: 18px;
-    border-left: 2px dashed var(--border);
+    border-left: 2px dashed var(--navy-light);
+    opacity: 0.6;
   }
 }
 
