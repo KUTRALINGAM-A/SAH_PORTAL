@@ -84,9 +84,9 @@ export default function CreateTeamPage() {
   };
 
   return (
-    <div className="page-container" style={{ maxWidth: '640px', margin: '0 auto', padding: '30px' }}>
+    <div className="page-container"style={{ maxWidth: '640px', margin: '0 auto', padding: '30px' }}>
       <div className="page-header">
-        <h1 className="page-title">🚀 Create a Team</h1>
+        <h1 className="page-title"> Create a Team</h1>
         <p className="page-subtitle">Start your SIH journey by forming a team. You'll be the Team Leader.</p>
       </div>
 
@@ -97,7 +97,7 @@ export default function CreateTeamPage() {
             padding: '10px 14px', borderRadius: 'var(--radius-md)',
             fontSize: '0.85rem', marginBottom: '16px'
           }}>
-            ⚠️ {error}
+             {error}
           </div>
         )}
 
@@ -147,7 +147,7 @@ export default function CreateTeamPage() {
             className="btn btn-orange btn-lg w-full"
             disabled={loading}
           >
-            {loading ? 'Creating Team...' : '🚀 Create Team & Become Leader'}
+            {loading ? 'Creating Team...' : 'Create Team & Become Leader'}
           </button>
         </form>
       </div>

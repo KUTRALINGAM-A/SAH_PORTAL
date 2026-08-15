@@ -45,36 +45,36 @@ export default function ProfilePage() {
   const genderColor = profile.gender === 'Female' ? 'var(--purple)' : profile.gender === 'Other' ? 'var(--teal)' : 'var(--navy)';
 
   const roleLabel = 
-    profile.role === 'admin' ? '⚙️ Organizing Committee (Admin)' :
-    profile.role === 'judge' ? '⚖️ Evaluator / Judge' :
-    profile.role === 'spoc'  ? '🏛️ Institute SPOC' :
-    '🎓 Student / Team Leader';
+    profile.role === 'admin' ? 'Organizing Committee (Admin)' :
+    profile.role === 'judge' ? 'Evaluator / Judge' :
+    profile.role === 'spoc' ? 'Institute SPOC' :
+    'Student / Team Leader';
 
   return (
-    <div className="page-container" style={{ maxWidth: '750px', margin: '0 auto' }}>
+    <div className="page-container"style={{ maxWidth: '750px', margin: '0 auto' }}>
       <div className="page-header flex-between">
         <div>
           <h1 className="page-title">My Profile</h1>
           <p className="page-subtitle">View and update your SAH 2026 account details</p>
         </div>
         {!editing ? (
-          <button className="btn btn-outline" onClick={() => { setForm({ ...profile }); setEditing(true); }}>
-            ✏️ Edit Profile
+          <button className="btn btn-outline"onClick={() => { setForm({ ...profile }); setEditing(true); }}>
+             Edit Profile
           </button>
         ) : (
           <div style={{ display: 'flex', gap: '8px' }}>
-            <button className="btn btn-ghost" onClick={() => { setEditing(false); setForm({ ...profile }); }}>
+            <button className="btn btn-ghost"onClick={() => { setEditing(false); setForm({ ...profile }); }}>
               Cancel
             </button>
-            <button className="btn btn-primary" onClick={handleSave} disabled={loading}>
-              {loading ? 'Saving...' : '💾 Save Profile'}
+            <button className="btn btn-primary"onClick={handleSave} disabled={loading}>
+              {loading ? 'Saving...' : 'Save Profile'}
             </button>
           </div>
         )}
       </div>
 
       {/* Avatar & Header Card */}
-      <div className="card" style={{ textAlign: 'center', marginBottom: '20px', padding: '32px' }}>
+      <div className="card"style={{ textAlign: 'center', marginBottom: '20px', padding: '32px' }}>
         <div style={{
           width: '88px', height: '88px', borderRadius: '50%', background: genderColor,
           color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center',
@@ -154,7 +154,7 @@ export default function ProfilePage() {
               </select>
             ) : (
               <div style={{ padding: '10px 0', fontSize: '0.92rem' }}>
-                {profile.gender === 'Female' ? '♀️ Female' : profile.gender === 'Male' ? '♂️ Male' : profile.gender || '—'}
+                {profile.gender === 'Female' ? 'Female' : profile.gender === 'Male' ? 'Male' : profile.gender || '—'}
               </div>
             )}
           </div>
@@ -224,8 +224,8 @@ export default function ProfilePage() {
             ) : (
               <div style={{ padding: '10px 0', fontSize: '0.92rem' }}>
                 {profile.github_url ? (
-                  <a href={profile.github_url} target="_blank" rel="noreferrer" style={{ color: 'var(--blue)', wordBreak: 'break-all' }}>
-                    🔗 {profile.github_url}
+                  <a href={profile.github_url} target="_blank"rel="noreferrer"style={{ color: 'var(--blue)', wordBreak: 'break-all' }}>
+                     {profile.github_url}
                   </a>
                 ) : '—'}
               </div>
@@ -233,7 +233,7 @@ export default function ProfilePage() {
           </div>
 
           {/* LinkedIn URL */}
-          <div className="form-group" style={{ gridColumn: 'span 2' }}>
+          <div className="form-group"style={{ gridColumn: 'span 2' }}>
             <label className="form-label">LinkedIn Profile URL</label>
             {editing ? (
               <input
@@ -246,8 +246,8 @@ export default function ProfilePage() {
             ) : (
               <div style={{ padding: '10px 0', fontSize: '0.92rem' }}>
                 {profile.linkedin_url ? (
-                  <a href={profile.linkedin_url} target="_blank" rel="noreferrer" style={{ color: 'var(--blue)', wordBreak: 'break-all' }}>
-                    💼 {profile.linkedin_url}
+                  <a href={profile.linkedin_url} target="_blank"rel="noreferrer"style={{ color: 'var(--blue)', wordBreak: 'break-all' }}>
+                     {profile.linkedin_url}
                   </a>
                 ) : '—'}
               </div>
@@ -256,7 +256,7 @@ export default function ProfilePage() {
         </div>
 
         {/* Skills */}
-        <div className="form-group" style={{ marginTop: '16px' }}>
+        <div className="form-group"style={{ marginTop: '16px' }}>
           <label className="form-label">Skills & Technical Expertise</label>
           {editing ? (
             <SkillTagSelector
@@ -269,7 +269,7 @@ export default function ProfilePage() {
                 profile.skills.map(s => <span key={s} className="pill-badge skill">{s}</span>)
               ) : (
                 <span style={{ color: 'var(--text-muted)', fontSize: '0.9rem' }}>
-                  No skills added yet. Click "Edit Profile" to add your skills and tech stack.
+                  No skills added yet. Click "Edit Profile"to add your skills and tech stack.
                 </span>
               )}
             </div>
@@ -279,7 +279,7 @@ export default function ProfilePage() {
 
       {toast && (
         <div className={`toast ${toast.type}`}>
-          {toast.type === 'success' ? '✅' : '⚠️'} {toast.message}
+          {toast.type === 'success' ? '' : ''} {toast.message}
         </div>
       )}
     </div>

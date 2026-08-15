@@ -1,6 +1,7 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import NotificationBell from './NotificationBell';
+import sahLogo from '../assets/Logo.png';
 
 export default function Header() {
   const { isAuthenticated, profile, signOut } = useAuth();
@@ -23,7 +24,7 @@ export default function Header() {
     <header className="site-header">
       <div className="header-container">
         <Link to="/" className="header-logo" style={{ textDecoration: 'none' }}>
-          <img src="/Logo.png" alt="SAH 2026 Logo" />
+          <img src={sahLogo} alt="SAH 2026 Logo" style={{ height: '48px', width: 'auto' }} />
           <div className="header-logo-text">
             <span className="title">SMART AMRITA HACKATHON 2026</span>
             <span className="subtitle">Amrita Vishwa Vidyapeetham, Chennai Campus</span>
@@ -57,7 +58,11 @@ export default function Header() {
           ) : (
             <button className="btn-login-pill" onClick={handleAuthClick}>
               <span>SAH Login</span>
-              <span className="login-icon">👤</span>
+              <span className="login-icon">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
+                </svg>
+              </span>
             </button>
           )}
         </div>

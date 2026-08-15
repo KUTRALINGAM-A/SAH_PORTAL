@@ -2,7 +2,7 @@
  * Z-Score Normalization for fair judge scoring.
  * 
  * Problem: Different judges have different scoring tendencies.
- * A "harsh" judge might give 70/100 to a great team while a "lenient" judge
+ * A "harsh"judge might give 70/100 to a great team while a "lenient"judge
  * gives 90/100 to an average team.
  * 
  * Solution: Normalize each judge's scores to z-scores (mean=0, std=1),

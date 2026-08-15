@@ -45,10 +45,10 @@ export default function ProblemStatementsPage() {
         <p>Browse all problem statements for Smart Amrita Hackathon 2026</p>
       </div>
 
-      <div className="stats-row" style={{ marginBottom: '24px' }}>
+      <div className="stats-row"style={{ marginBottom: '24px' }}>
         <StatCard number={statements.length} label="Total Problem Statements" />
-        <StatCard number={hwCount} label="Hardware" accent />
-        <StatCard number={swCount} label="Software" accent />
+        <StatCard number={hwCount} label="Hardware"accent />
+        <StatCard number={swCount} label="Software"accent />
         <StatCard number={domains.length} label="Domains" />
       </div>
 
@@ -59,18 +59,18 @@ export default function ProblemStatementsPage() {
           value={search}
           onChange={(e) => setSearch(e.target.value)}
         />
-        <select className="filter-select" value={categoryFilter} onChange={(e) => setCategoryFilter(e.target.value)}>
+        <select className="filter-select"value={categoryFilter} onChange={(e) => setCategoryFilter(e.target.value)}>
           <option value="">All Categories</option>
           <option value="Software">Software</option>
           <option value="Hardware">Hardware</option>
         </select>
-        <select className="filter-select" value={domainFilter} onChange={(e) => setDomainFilter(e.target.value)}>
+        <select className="filter-select"value={domainFilter} onChange={(e) => setDomainFilter(e.target.value)}>
           <option value="">All Domains</option>
           {domains.map(d => <option key={d} value={d}>{d}</option>)}
         </select>
       </div>
 
-      <div className="card" style={{ padding: 0, overflow: 'auto' }}>
+      <div className="card"style={{ padding: 0, overflow: 'auto' }}>
         <table className="data-table">
           <thead>
             <tr>
@@ -83,7 +83,7 @@ export default function ProblemStatementsPage() {
           </thead>
           <tbody>
             {filtered.length === 0 ? (
-              <tr><td colSpan="5" style={{ textAlign: 'center', padding: '30px', color: 'var(--text-muted)' }}>No problem statements found.</td></tr>
+              <tr><td colSpan="5"style={{ textAlign: 'center', padding: '30px', color: 'var(--text-muted)' }}>No problem statements found.</td></tr>
             ) : (
               filtered.map(ps => (
                 <tr key={ps.id}>

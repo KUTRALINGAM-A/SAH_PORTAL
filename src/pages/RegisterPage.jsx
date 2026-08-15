@@ -4,6 +4,7 @@ import { useAuth } from '../context/AuthContext';
 import SkillTagSelector from '../components/SkillTagSelector';
 import { DEPARTMENTS, YEARS_OF_STUDY } from '../data/departments';
 import { validateRollNo, validateEmail, validatePassword, validatePhone } from '../utils/validators';
+import sahLogo from '../assets/Logo.png';
 
 export default function RegisterPage() {
   const { signUp } = useAuth();
@@ -91,14 +92,14 @@ export default function RegisterPage() {
   if (success) {
     return (
       <div className="login-page">
-        <div className="login-card" style={{ textAlign: 'center' }}>
-          <div style={{ fontSize: '4rem', marginBottom: '16px' }}>🎉</div>
+        <div className="login-card"style={{ textAlign: 'center' }}>
+          <div style={{ fontSize: '4rem', marginBottom: '16px' }}></div>
           <h2 style={{ color: 'var(--green)', marginBottom: '12px' }}>Registration Successful!</h2>
           <p style={{ color: 'var(--text-secondary)', marginBottom: '24px' }}>
             Account created for <strong>{form.email}</strong> ({form.role}).
             You can now log in to the SAH Portal.
           </p>
-          <Link to="/login" className="btn btn-primary btn-lg">
+          <Link to="/login"className="btn btn-primary btn-lg">
             Go to Login
           </Link>
         </div>
@@ -107,16 +108,16 @@ export default function RegisterPage() {
   }
 
   return (
-    <div className="login-page" style={{ alignItems: 'flex-start', paddingTop: '40px' }}>
-      <div className="login-card" style={{ maxWidth: '560px' }}>
+    <div className="login-page"style={{ alignItems: 'flex-start', paddingTop: '40px' }}>
+      <div className="login-card"style={{ maxWidth: '560px' }}>
         <div className="login-logo">
-          <img src="/Logo.png" alt="SAH 2026" />
+          <img src={sahLogo} alt="SAH 2026 Logo" style={{ display: 'block', margin: '0 auto 16px', maxHeight: '80px', width: 'auto' }} />
         </div>
 
-        <h2 className="login-heading" style={{ fontSize: '1.3rem' }}>
-          {form.role === 'student' ? '🎓 Student Registration' :
-           form.role === 'admin' ? '⚙️ Admin Registration' :
-           form.role === 'judge' ? '⚖️ Judge Registration' : '🏛️ SPOC Registration'}
+        <h2 className="login-heading"style={{ fontSize: '1.3rem' }}>
+          {form.role === 'student' ? 'Student Registration' :
+           form.role === 'admin' ? 'Admin Registration' :
+           form.role === 'judge' ? 'Judge Registration' : 'SPOC Registration'}
         </h2>
 
         <p className="login-subheading">
@@ -129,7 +130,7 @@ export default function RegisterPage() {
             padding: '10px 14px', borderRadius: 'var(--radius-md)',
             fontSize: '0.85rem', marginBottom: '16px'
           }}>
-            ⚠️ {errors.submit}
+             {errors.submit}
           </div>
         )}
 
@@ -142,10 +143,10 @@ export default function RegisterPage() {
               value={form.role}
               onChange={(e) => updateField('role', e.target.value)}
             >
-              <option value="student">🎓 Student / Team Leader</option>
-              <option value="admin">⚙️ Organizing Committee (Admin)</option>
-              <option value="judge">⚖️ Judge / Evaluator</option>
-              <option value="spoc">🏛️ SPOC / Institute Leader</option>
+              <option value="student"> Student / Team Leader</option>
+              <option value="admin"> Organizing Committee (Admin)</option>
+              <option value="judge"> Judge / Evaluator</option>
+              <option value="spoc"> SPOC / Institute Leader</option>
             </select>
           </div>
 

@@ -7,7 +7,7 @@ export default function MemberSlot({ member, profile, isLeader, onRemove, canRem
         style={onInviteClick ? { cursor: 'pointer', borderStyle: 'dashed' } : {}}
       >
         <span>
-          🪑 Empty Slot {onInviteClick ? '— Click to Invite / Add Member ➕' : '— Waiting for a member'}
+           Empty Slot {onInviteClick ? '— Click to Invite / Add Member ' : '— Waiting for a member'}
         </span>
       </div>
     );
@@ -54,36 +54,36 @@ export default function MemberSlot({ member, profile, isLeader, onRemove, canRem
         {getInitials(profile?.full_name)}
       </div>
 
-      <div className="member-info" style={{ flex: 1 }}>
-        <div className="member-name" style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+      <div className="member-info"style={{ flex: 1 }}>
+        <div className="member-name"style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
           <span style={{ fontWeight: 600 }}>{profile?.full_name || 'Loading...'}</span>
           {member.member_role === 'Leader' && (
-            <span className="pill-badge role-leader" style={{ fontSize: '0.7rem', padding: '2px 8px' }}>
-              👑 Leader
+            <span className="pill-badge role-leader"style={{ fontSize: '0.7rem', padding: '2px 8px' }}>
+               Leader
             </span>
           )}
           {onClickProfile && profile && (
             <span style={{ fontSize: '0.75rem', opacity: 0.5, marginLeft: 'auto', marginRight: '8px' }}>
-              👤 View Profile
+               View Profile
             </span>
           )}
         </div>
         <div className="member-detail">
           {profile?.roll_no ? `${profile.roll_no} · ` : ''}{profile?.department || 'Student'}
-          {profile?.gender === 'Female' && ' · ♀️ Female'}
+          {profile?.gender === 'Female' && ' · Female'}
           {profile?.year_of_study && ` · ${profile.year_of_study}`}
         </div>
         {profile?.skills?.length > 0 && (
           <div style={{ display: 'flex', gap: '4px', flexWrap: 'wrap', marginTop: '4px' }}>
             {profile.skills.slice(0, 4).map(s => (
-              <span key={s} className="pill-badge skill" style={{ fontSize: '0.7rem', padding: '1px 8px' }}>{s}</span>
+              <span key={s} className="pill-badge skill"style={{ fontSize: '0.7rem', padding: '1px 8px' }}>{s}</span>
             ))}
           </div>
         )}
       </div>
 
       {canRemove && member.member_role !== 'Leader' && (
-        <div className="member-actions" style={{ marginLeft: '8px' }}>
+        <div className="member-actions"style={{ marginLeft: '8px' }}>
           <button
             className="btn btn-ghost btn-sm"
             onClick={(e) => {

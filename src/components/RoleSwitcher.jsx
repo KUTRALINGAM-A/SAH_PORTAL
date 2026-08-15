@@ -1,9 +1,9 @@
 export default function RoleSwitcher({ currentRole, onRoleChange, availableRoles }) {
   const roleLabels = {
-    student: '🎓 Student',
-    admin: '⚙️ Admin',
-    judge: '⚖️ Judge',
-    spoc: '🏛️ SPOC'
+    student: 'Student',
+    admin: 'Admin',
+    judge: 'Judge',
+    spoc: 'SPOC'
   };
 
   return (

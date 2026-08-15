@@ -90,7 +90,7 @@ export default function EvaluationPage() {
   return (
     <div className="page-container">
       <div className="page-header">
-        <h1 className="page-title">⚖️ Evaluate Teams</h1>
+        <h1 className="page-title"> Evaluate Teams</h1>
         <p className="page-subtitle">Score teams on the standardized 100-point SIH rubric</p>
       </div>
 
@@ -117,9 +117,9 @@ export default function EvaluationPage() {
                   </div>
                 </div>
                 {evaluatedTeams.has(team.id) ? (
-                  <span className="pill-badge status-verified">✅ Scored</span>
+                  <span className="pill-badge status-verified"> Scored</span>
                 ) : (
-                  <span className="pill-badge status-open">⏳ Pending</span>
+                  <span className="pill-badge status-open"> Pending</span>
                 )}
               </div>
             </div>
@@ -128,35 +128,35 @@ export default function EvaluationPage() {
 
         {/* Rubric Form */}
         {selectedTeam && (
-          <div className="card card-elevated" style={{ position: 'sticky', top: '140px', alignSelf: 'start' }}>
+          <div className="card card-elevated"style={{ position: 'sticky', top: '140px', alignSelf: 'start' }}>
             <h3 style={{ marginBottom: '6px' }}>Evaluating: {selectedTeam.team_name}</h3>
             <p style={{ fontSize: '0.82rem', color: 'var(--text-secondary)', marginBottom: '24px' }}>
               {selectedTeam.problem_statements?.ps_code} — {selectedTeam.problem_statements?.title}
             </p>
 
             <RubricSlider
-              label="📖 Problem Understanding"
+              label="Problem Understanding"
               value={understanding}
               max={25}
               onChange={setUnderstanding}
             />
 
             <RubricSlider
-              label="⚙️ Prototype / Execution"
+              label="Prototype / Execution"
               value={execution}
               max={30}
               onChange={setExecution}
             />
 
             <RubricSlider
-              label="🌍 Real-World Impact"
+              label="Real-World Impact"
               value={impact}
               max={25}
               onChange={setImpact}
             />
 
             <RubricSlider
-              label="🎨 Pitch & UI/UX"
+              label="Pitch & UI/UX"
               value={pitch}
               max={20}
               onChange={setPitch}
@@ -190,7 +190,7 @@ export default function EvaluationPage() {
               onClick={handleSubmit}
               disabled={submitting || total === 0}
             >
-              {submitting ? 'Submitting...' : `✅ Submit Evaluation (${total}/100)`}
+              {submitting ? 'Submitting...' : `Submit Evaluation (${total}/100)`}
             </button>
           </div>
         )}

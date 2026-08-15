@@ -40,7 +40,7 @@ export default function SkillTagSelector({ selectedSkills, onChange, maxSkills =
         {selectedSkills.map(skill => (
           <span key={skill} className="selected-skill">
             {skill}
-            <button className="remove-skill" onClick={() => removeSkill(skill)}>×</button>
+            <button className="remove-skill"onClick={() => removeSkill(skill)}>×</button>
           </span>
         ))}
       </div>
@@ -48,7 +48,7 @@ export default function SkillTagSelector({ selectedSkills, onChange, maxSkills =
       <input
         type="text"
         className="skill-search"
-        placeholder="🔍 Search skills..."
+        placeholder="Search skills..."
         value={searchTerm}
         onChange={(e) => setSearchTerm(e.target.value)}
       />

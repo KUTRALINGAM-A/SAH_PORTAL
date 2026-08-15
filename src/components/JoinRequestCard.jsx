@@ -6,7 +6,7 @@ export default function JoinRequestCard({ request, profile, onAccept, onDecline,
       onClick={() => onClickProfile && profile && onClickProfile(profile)}
       title={onClickProfile && profile ? 'Click to view applicant profile' : undefined}
     >
-      <div className="avatar" style={{
+      <div className="avatar"style={{
         width: '42px', height: '42px', borderRadius: '50%',
         background: profile?.gender === 'Female' ? 'var(--purple)' : 'var(--navy)',
         color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center',
@@ -15,15 +15,15 @@ export default function JoinRequestCard({ request, profile, onAccept, onDecline,
         {profile?.full_name?.split(' ').map(n => n[0]).join('').slice(0, 2) || '?'}
       </div>
 
-      <div className="request-info" style={{ flex: 1 }}>
-        <div className="request-name" style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+      <div className="request-info"style={{ flex: 1 }}>
+        <div className="request-name"style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
           <span style={{ fontWeight: 600 }}>{profile?.full_name || 'Unknown Student'}</span>
           {profile?.gender === 'Female' && (
-            <span style={{ fontSize: '0.75rem' }}>♀️</span>
+            <span style={{ fontSize: '0.75rem' }}></span>
           )}
           {onClickProfile && profile && (
             <span style={{ fontSize: '0.75rem', opacity: 0.5, marginLeft: 'auto', marginRight: '8px' }}>
-              👤 View Profile
+               View Profile
             </span>
           )}
         </div>
@@ -48,11 +48,11 @@ export default function JoinRequestCard({ request, profile, onAccept, onDecline,
       </div>
 
       {showActions && request.status === 'PENDING' && (
-        <div className="request-actions" onClick={(e) => e.stopPropagation()}>
-          <button className="btn btn-primary btn-sm" onClick={() => onAccept(request.id)}>
+        <div className="request-actions"onClick={(e) => e.stopPropagation()}>
+          <button className="btn btn-primary btn-sm"onClick={() => onAccept(request.id)}>
             ✓ Accept
           </button>
-          <button className="btn btn-danger btn-sm" onClick={() => onDecline(request.id)}>
+          <button className="btn btn-danger btn-sm"onClick={() => onDecline(request.id)}>
             ✗ Decline
           </button>
         </div>

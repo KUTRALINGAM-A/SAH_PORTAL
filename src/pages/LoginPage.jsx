@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import sahLogo from '../assets/Logo.png';
 
 export default function LoginPage() {
   const { signIn, signUp, signOut, user, profile, isAuthenticated, error: authError } = useAuth();
@@ -34,7 +35,7 @@ export default function LoginPage() {
     <div className="login-page">
       <div className="login-card">
         <div className="login-logo">
-          <img src="/Logo.png" alt="SAH 2026" />
+          <img src={sahLogo} alt="SAH 2026 Logo" style={{ display: 'block', margin: '0 auto 16px', maxHeight: '80px', width: 'auto' }} />
         </div>
 
         <h2 className="login-heading">
@@ -55,7 +56,7 @@ export default function LoginPage() {
             textAlign: 'center'
           }}>
             <p style={{ fontSize: '0.9rem', marginBottom: '8px' }}>
-              👤 Currently logged in as: <strong>{profile?.full_name || user?.email}</strong> ({profile?.role || 'student'})
+               Currently logged in as: <strong>{profile?.full_name || user?.email}</strong> ({profile?.role || 'student'})
             </p>
             <div style={{ display: 'flex', gap: '8px', justifyContent: 'center' }}>
               <button
@@ -86,13 +87,13 @@ export default function LoginPage() {
             fontSize: '0.85rem',
             marginBottom: '16px'
           }}>
-            ⚠️ {error || authError}
+             {error || authError}
           </div>
         )}
 
         <form onSubmit={handleSubmit}>
           <div className="form-group">
-            <label className="form-label" style={{ fontWeight: 600, fontSize: '0.85rem' }}>Email Address</label>
+            <label className="form-label"style={{ fontWeight: 600, fontSize: '0.85rem' }}>Email Address</label>
             <input
               type="email"
               className="form-input"
@@ -105,7 +106,7 @@ export default function LoginPage() {
           </div>
 
           <div className="form-group">
-            <label className="form-label" style={{ fontWeight: 600, fontSize: '0.85rem' }}>Password</label>
+            <label className="form-label"style={{ fontWeight: 600, fontSize: '0.85rem' }}>Password</label>
             <input
               type="password"
               className="form-input"

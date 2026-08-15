@@ -189,7 +189,7 @@ export default function TeamMarketplace() {
           className={`filter-toggle ${needsFemale ? 'active' : ''}`}
           onClick={() => setNeedsFemale(!needsFemale)}
         >
-          ♀ Needs Female Member
+           Needs Female Member
         </button>
       </div>
 
@@ -200,7 +200,7 @@ export default function TeamMarketplace() {
       {/* Team Grid */}
       {filteredTeams.length === 0 ? (
         <div className="empty-state">
-          <div className="empty-icon">🔍</div>
+          <div className="empty-icon"></div>
           <h3>No teams match your filters</h3>
           <p>Try adjusting your search or create your own team!</p>
         </div>
@@ -223,7 +223,7 @@ export default function TeamMarketplace() {
       {/* Toast */}
       {toast && (
         <div className={`toast ${toast.type}`}>
-          {toast.type === 'success' ? '✅' : '⚠️'} {toast.message}
+          {toast.type === 'success' ? '' : ''} {toast.message}
         </div>
       )}
     </div>

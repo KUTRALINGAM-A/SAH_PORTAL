@@ -34,23 +34,23 @@ export default function NotificationBell() {
 
   const getNotifIcon = (type) => {
     switch (type) {
-      case 'join_request': return '📩';
-      case 'request_accepted': return '✅';
-      case 'request_declined': return '❌';
-      case 'team_locked': return '🔒';
-      case 'team_verified': return '🏆';
-      default: return '🔔';
+      case 'join_request': return '';
+      case 'request_accepted': return '';
+      case 'request_declined': return '';
+      case 'team_locked': return '';
+      case 'team_verified': return '';
+      default: return '';
     }
   };
 
   return (
-    <div className="notification-bell" ref={dropdownRef} style={{ position: 'relative' }}>
+    <div className="notification-bell"ref={dropdownRef} style={{ position: 'relative' }}>
       <button
         className="notification-bell"
         onClick={() => setIsOpen(!isOpen)}
         aria-label="Notifications"
       >
-        <span className="bell-icon">🔔</span>
+        <span className="bell-icon"></span>
         {unreadCount > 0 && (
           <span className="badge">{unreadCount > 9 ? '9+' : unreadCount}</span>
         )}
@@ -61,7 +61,7 @@ export default function NotificationBell() {
           <div className="dropdown-header">
             <span>Notifications</span>
             {unreadCount > 0 && (
-              <button className="mark-all-read" onClick={markAllAsRead}>
+              <button className="mark-all-read"onClick={markAllAsRead}>
                 Mark all as read
               </button>
             )}
@@ -69,7 +69,7 @@ export default function NotificationBell() {
 
           {notifications.length === 0 ? (
             <div className="notification-empty">
-              <p>🔕 No notifications yet</p>
+              <p> No notifications yet</p>
             </div>
           ) : (
             notifications.map(notif => (
