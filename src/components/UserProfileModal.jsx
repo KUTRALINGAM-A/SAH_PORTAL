@@ -19,7 +19,7 @@ export default function UserProfileModal({ profile, memberRole, onClose }) {
   const genderClass = profile.gender === 'Female' ? 'female' : profile.gender === 'Other' ? 'other' : 'male';
 
   return (
-    <div className="modal-overlay modal-overlay-top" onClick={onClose} style={{ zIndex: 15000 }}>
+    <div className="modal-overlay modal-overlay-top"onClick={onClose} style={{ zIndex: 15000 }}>
       <div
         className="modal-card modal-card-top"
         style={{
@@ -83,16 +83,16 @@ export default function UserProfileModal({ profile, memberRole, onClose }) {
                   {profile.full_name}
                 </h2>
                 {memberRole === 'Leader' ? (
-                  <span className="pill-badge role-leader" style={{ fontSize: '0.72rem', padding: '2px 8px' }}>
-                    👑 Team Leader
+                  <span className="pill-badge role-leader"style={{ fontSize: '0.72rem', padding: '2px 8px' }}>
+                     Team Leader
                   </span>
                 ) : memberRole ? (
-                  <span className="pill-badge status-open" style={{ fontSize: '0.72rem', padding: '2px 8px', background: 'rgba(255,255,255,0.2)', color: '#ffffff' }}>
-                    👤 {memberRole}
+                  <span className="pill-badge status-open"style={{ fontSize: '0.72rem', padding: '2px 8px', background: 'rgba(255,255,255,0.2)', color: '#ffffff' }}>
+                     {memberRole}
                   </span>
                 ) : (
-                  <span className="pill-badge skill" style={{ fontSize: '0.72rem', padding: '2px 8px' }}>
-                    🎓 Student
+                  <span className="pill-badge skill"style={{ fontSize: '0.72rem', padding: '2px 8px' }}>
+                     Student
                   </span>
                 )}
               </div>
@@ -124,7 +124,7 @@ export default function UserProfileModal({ profile, memberRole, onClose }) {
               color: 'var(--text-secondary)',
               fontWeight: 700
             }}>
-              📋 Academic & Profile Details
+               Academic & Profile Details
             </h4>
             <div style={{
               display: 'grid',
@@ -151,7 +151,7 @@ export default function UserProfileModal({ profile, memberRole, onClose }) {
               <div>
                 <span style={{ color: 'var(--text-secondary)', fontSize: '0.78rem', display: 'block', marginBottom: '2px' }}>Gender</span>
                 <strong style={{ color: 'var(--text-primary)' }}>
-                  {profile.gender || '—'} {profile.gender === 'Female' ? '♀️' : profile.gender === 'Male' ? '♂️' : ''}
+                  {profile.gender || '—'} {profile.gender === 'Female' ? '' : profile.gender === 'Male' ? '' : ''}
                 </strong>
               </div>
             </div>
@@ -167,7 +167,7 @@ export default function UserProfileModal({ profile, memberRole, onClose }) {
               color: 'var(--text-secondary)',
               fontWeight: 700
             }}>
-              📞 Contact Information
+               Contact Information
             </h4>
             <div style={{
               display: 'flex',
@@ -180,7 +180,7 @@ export default function UserProfileModal({ profile, memberRole, onClose }) {
             }}>
               {profile.email && (
                 <div style={{ display: 'flex', alignItems: 'center', gap: '10px', fontSize: '0.9rem' }}>
-                  <span style={{ fontSize: '1.1rem' }}>✉️</span>
+                  <span style={{ fontSize: '1.1rem' }}></span>
                   <a
                     href={`mailto:${profile.email}`}
                     style={{ color: 'var(--blue)', textDecoration: 'none', fontWeight: 600 }}
@@ -191,19 +191,19 @@ export default function UserProfileModal({ profile, memberRole, onClose }) {
               )}
               {profile.phone ? (
                 <div style={{ display: 'flex', alignItems: 'center', gap: '10px', fontSize: '0.9rem' }}>
-                  <span style={{ fontSize: '1.1rem' }}>📱</span>
+                  <span style={{ fontSize: '1.1rem' }}></span>
                   <a
                     href={`https://wa.me/${profile.phone.replace(/[^0-9]/g, '')}`}
                     target="_blank"
                     rel="noreferrer"
                     style={{ color: '#25D366', textDecoration: 'none', fontWeight: 600, display: 'inline-flex', alignItems: 'center', gap: '4px' }}
                   >
-                    {profile.phone} (WhatsApp / Call) ↗
+                    {profile.phone} (WhatsApp / Call) 
                   </a>
                 </div>
               ) : (
                 <div style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>
-                  📱 Phone / WhatsApp: Not provided
+                   Phone / WhatsApp: Not provided
                 </div>
               )}
             </div>
@@ -220,7 +220,7 @@ export default function UserProfileModal({ profile, memberRole, onClose }) {
                 color: 'var(--text-secondary)',
                 fontWeight: 700
               }}>
-                🌐 Portfolio & Social Profiles
+                 Portfolio & Social Profiles
               </h4>
               <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
                 {profile.github_url && (
@@ -231,7 +231,7 @@ export default function UserProfileModal({ profile, memberRole, onClose }) {
                     className="btn btn-outline btn-sm"
                     style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', fontWeight: 600 }}
                   >
-                    <span>🐙</span> GitHub Profile ↗
+                    <span></span> GitHub Profile 
                   </a>
                 )}
                 {profile.linkedin_url && (
@@ -242,7 +242,7 @@ export default function UserProfileModal({ profile, memberRole, onClose }) {
                     className="btn btn-outline btn-sm"
                     style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', color: '#0077B5', borderColor: '#0077B5', fontWeight: 600 }}
                   >
-                    <span>💼</span> LinkedIn Profile ↗
+                    <span></span> LinkedIn Profile 
                   </a>
                 )}
               </div>
@@ -259,7 +259,7 @@ export default function UserProfileModal({ profile, memberRole, onClose }) {
               color: 'var(--text-secondary)',
               fontWeight: 700
             }}>
-              🛠️ Skills & Technical Expertise
+               Skills & Technical Expertise
             </h4>
             {profile.skills && profile.skills.length > 0 ? (
               <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap' }}>

@@ -54,7 +54,7 @@ export async function parseExcelFile(file) {
           // Validate required fields
           if (!mapped.ps_code) mapped.ps_code = `SAH2026_PS${String(index + 1).padStart(2, '0')}`;
           if (!mapped.title) {
-            throw new Error(`Row ${index + 2}: Missing "Title" column.`);
+            throw new Error(`Row ${index + 2}: Missing "Title"column.`);
           }
           if (!mapped.category) mapped.category = 'Software';
           if (!mapped.organization) mapped.organization = 'Not specified';

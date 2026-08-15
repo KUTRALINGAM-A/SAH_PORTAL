@@ -69,13 +69,13 @@ export default function VerificationQueue() {
       await sendNotification({
         userId: m.student_id,
         type: 'team_verified',
-        title: 'Team Verified by SPOC! 🏆',
-        message: `Your team "${team.team_name}" has been verified and authorized for SIH National Portal submission.`,
+        title: 'Team Verified by SPOC! ',
+        message: `Your team "${team.team_name}"has been verified and authorized for SIH National Portal submission.`,
         metadata: { team_id: team.id }
       });
     }
 
-    showToast('success', `Team "${team.team_name}" verified and authorized for SIH submission!`);
+    showToast('success', `Team "${team.team_name}"verified and authorized for SIH submission!`);
     fetchData();
   };
 
@@ -98,11 +98,11 @@ export default function VerificationQueue() {
       userId: team.leader_id,
       type: 'request_declined',
       title: 'Team Verification Rejected',
-      message: `Your team "${team.team_name}" was rejected by SPOC. Reason: ${reason}. Team has been unlocked for modification.`,
+      message: `Your team "${team.team_name}"was rejected by SPOC. Reason: ${reason}. Team has been unlocked for modification.`,
       metadata: { team_id: team.id }
     });
 
-    showToast('info', `Team "${team.team_name}" rejected and unlocked.`);
+    showToast('info', `Team "${team.team_name}"rejected and unlocked.`);
     fetchData();
   };
 
@@ -119,21 +119,21 @@ export default function VerificationQueue() {
   return (
     <div className="page-container">
       <div className="page-header">
-        <h1 className="page-title">✅ SPOC Verification Queue</h1>
+        <h1 className="page-title"> SPOC Verification Queue</h1>
         <p className="page-subtitle">
           Verify locked teams for SIH National Portal submission (Deadline: Sept 10, 2026)
         </p>
       </div>
 
       {/* Summary */}
-      <div className="stats-row" style={{ marginBottom: '24px' }}>
+      <div className="stats-row"style={{ marginBottom: '24px' }}>
         <div className="stat-card">
           <div className="stat-number">{pendingTeams.length}</div>
           <div className="stat-label">Pending Verification</div>
         </div>
         <div className="stat-card orange-accent">
           <div className="stat-number">{verifiedTeams.length}</div>
-          <div className="stat-label">Verified ✅</div>
+          <div className="stat-label">Verified </div>
         </div>
         <div className="stat-card">
           <div className="stat-number">{teams.length}</div>
@@ -142,9 +142,9 @@ export default function VerificationQueue() {
       </div>
 
       {/* Pending Teams */}
-      <h3 style={{ marginBottom: '12px' }}>⏳ Pending Verification ({pendingTeams.length})</h3>
+      <h3 style={{ marginBottom: '12px' }}> Pending Verification ({pendingTeams.length})</h3>
       {pendingTeams.length === 0 ? (
-        <div className="empty-state" style={{ padding: '40px' }}>
+        <div className="empty-state"style={{ padding: '40px' }}>
           <h3>No teams pending verification</h3>
           <p>All locked teams have been verified, or no teams are locked yet.</p>
         </div>
@@ -154,8 +154,8 @@ export default function VerificationQueue() {
           const teamMembers = members[team.id] || [];
 
           return (
-            <div key={team.id} className="card" style={{ marginBottom: '16px' }}>
-              <div className="flex-between" style={{ marginBottom: '14px', flexWrap: 'wrap', gap: '10px' }}>
+            <div key={team.id} className="card"style={{ marginBottom: '16px' }}>
+              <div className="flex-between"style={{ marginBottom: '14px', flexWrap: 'wrap', gap: '10px' }}>
                 <div>
                   <h3 style={{ marginBottom: '2px' }}>{team.team_name}</h3>
                   <span style={{ fontSize: '0.82rem', color: 'var(--text-secondary)' }}>
@@ -168,16 +168,16 @@ export default function VerificationQueue() {
                     onClick={() => handleVerify(team)}
                     disabled={!compliance.allPass}
                   >
-                    ✅ Authorize for SIH
+                     Authorize for SIH
                   </button>
-                  <button className="btn btn-danger" onClick={() => handleReject(team)}>
+                  <button className="btn btn-danger"onClick={() => handleReject(team)}>
                     ✗ Reject
                   </button>
                 </div>
               </div>
 
               {/* Compliance Checklist */}
-              <ul className="compliance-checklist" style={{ marginBottom: '14px' }}>
+              <ul className="compliance-checklist"style={{ marginBottom: '14px' }}>
                 <li className="compliance-item">
                   <span className={`check-icon ${compliance.hasSixMembers ? 'pass' : 'fail'}`}>
                     {compliance.hasSixMembers ? '✓' : '✗'}
@@ -217,7 +217,7 @@ export default function VerificationQueue() {
               </ul>
 
               {/* Member Table */}
-              <table className="data-table" style={{ fontSize: '0.82rem' }}>
+              <table className="data-table"style={{ fontSize: '0.82rem' }}>
                 <thead><tr><th>Name</th><th>Roll No</th><th>Gender</th><th>Dept</th><th>Role</th></tr></thead>
                 <tbody>
                   {teamMembers.map(m => (
@@ -235,9 +235,9 @@ export default function VerificationQueue() {
               {/* Solution Links */}
               {(team.ppt_url || team.github_url || team.video_url) && (
                 <div style={{ marginTop: '12px', display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
-                  {team.ppt_url && <a href={team.ppt_url} target="_blank" rel="noreferrer" className="btn btn-ghost btn-sm">📊 PPT</a>}
-                  {team.github_url && <a href={team.github_url} target="_blank" rel="noreferrer" className="btn btn-ghost btn-sm">💻 GitHub</a>}
-                  {team.video_url && <a href={team.video_url} target="_blank" rel="noreferrer" className="btn btn-ghost btn-sm">🎥 Video</a>}
+                  {team.ppt_url && <a href={team.ppt_url} target="_blank"rel="noreferrer"className="btn btn-ghost btn-sm"> PPT</a>}
+                  {team.github_url && <a href={team.github_url} target="_blank"rel="noreferrer"className="btn btn-ghost btn-sm"> GitHub</a>}
+                  {team.video_url && <a href={team.video_url} target="_blank"rel="noreferrer"className="btn btn-ghost btn-sm"> Video</a>}
                 </div>
               )}
             </div>
@@ -248,9 +248,9 @@ export default function VerificationQueue() {
       {/* Verified Teams */}
       {verifiedTeams.length > 0 && (
         <>
-          <h3 style={{ marginTop: '30px', marginBottom: '12px' }}>✅ Verified Teams ({verifiedTeams.length})</h3>
+          <h3 style={{ marginTop: '30px', marginBottom: '12px' }}> Verified Teams ({verifiedTeams.length})</h3>
           {verifiedTeams.map(team => (
-            <div key={team.id} className="card" style={{ marginBottom: '10px', padding: '14px 18px', opacity: 0.8 }}>
+            <div key={team.id} className="card"style={{ marginBottom: '10px', padding: '14px 18px', opacity: 0.8 }}>
               <div className="flex-between">
                 <div>
                   <strong>{team.team_name}</strong>
@@ -258,7 +258,7 @@ export default function VerificationQueue() {
                     {team.problem_statements?.ps_code}
                   </span>
                 </div>
-                <span className="pill-badge status-verified">✅ Authorized for SIH</span>
+                <span className="pill-badge status-verified"> Authorized for SIH</span>
               </div>
             </div>
           ))}

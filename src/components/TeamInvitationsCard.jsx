@@ -124,13 +124,13 @@ export default function TeamInvitationsCard({ onUpdate }) {
         await sendNotification({
           userId: invitation.teams.leader_id,
           type: 'invite_accepted',
-          title: 'Invitation Accepted! 🎉',
+          title: 'Invitation Accepted! ',
           message: `${profile.full_name} accepted your team invitation and joined "${invitation.teams.team_name}"!`,
           metadata: { team_id: invitation.team_id }
         });
       }
 
-      setToastMsg(`You have joined "${invitation.teams.team_name}"! 🎉`);
+      setToastMsg(`You have joined "${invitation.teams.team_name}"! `);
       if (onUpdate) onUpdate();
       setTimeout(() => navigate('/my-team'), 1200);
     } catch (err) {
@@ -171,12 +171,12 @@ export default function TeamInvitationsCard({ onUpdate }) {
   }
 
   return (
-    <div className="card" style={{
+    <div className="card"style={{
       marginBottom: '24px',
       border: '2px solid var(--orange)',
       background: 'linear-gradient(135deg, rgba(255,107,53,0.04) 0%, rgba(255,255,255,1) 100%)'
     }}>
-      <div className="flex-between" style={{ marginBottom: '16px', flexWrap: 'wrap', gap: '8px' }}>
+      <div className="flex-between"style={{ marginBottom: '16px', flexWrap: 'wrap', gap: '8px' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
           <div style={{
             fontSize: '1.4rem',
@@ -188,7 +188,7 @@ export default function TeamInvitationsCard({ onUpdate }) {
             alignItems: 'center',
             justifyContent: 'center'
           }}>
-            📩
+            
           </div>
           <div>
             <h3 style={{ margin: 0, color: 'var(--navy)' }}>Team Invitations ({invitations.length})</h3>
@@ -234,23 +234,23 @@ export default function TeamInvitationsCard({ onUpdate }) {
                 <span style={{ fontWeight: 700, fontSize: '1.1rem', color: 'var(--navy)' }}>
                   {inv.teams?.team_name}
                 </span>
-                <span className="pill-badge status-open" style={{ fontSize: '0.72rem' }}>
+                <span className="pill-badge status-open"style={{ fontSize: '0.72rem' }}>
                   Invited You
                 </span>
               </div>
 
               <div style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', marginBottom: '4px' }}>
-                👑 Leader: <strong>{inv.teams?.leader?.full_name || 'Team Leader'}</strong>
+                 Leader: <strong>{inv.teams?.leader?.full_name || 'Team Leader'}</strong>
                 {inv.teams?.leader?.department && ` (${inv.teams.leader.department})`}
               </div>
 
               {inv.teams?.problem_statements ? (
                 <div style={{ fontSize: '0.82rem', color: 'var(--navy)', marginTop: '4px' }}>
-                  🎯 <strong>[{inv.teams.problem_statements.ps_code}]</strong> {inv.teams.problem_statements.title}
+                   <strong>[{inv.teams.problem_statements.ps_code}]</strong> {inv.teams.problem_statements.title}
                 </div>
               ) : (
                 <div style={{ fontSize: '0.82rem', color: 'var(--text-muted)', marginTop: '4px' }}>
-                  🎯 Problem Statement: Not selected yet
+                   Problem Statement: Not selected yet
                 </div>
               )}
             </div>
@@ -270,7 +270,7 @@ export default function TeamInvitationsCard({ onUpdate }) {
                 disabled={actionLoadingId === inv.id}
                 style={{ minWidth: '140px', background: 'var(--green)', borderColor: 'var(--green)' }}
               >
-                {actionLoadingId === inv.id ? 'Joining...' : '✅ Accept & Join'}
+                {actionLoadingId === inv.id ? 'Joining...' : 'Accept & Join'}
               </button>
             </div>
           </div>

@@ -13,12 +13,12 @@ export default function ProtectedRoute({ children, roles = [] }) {
   }
 
   if (!isAuthenticated) {
-    return <Navigate to="/login" replace />;
+    return <Navigate to="/login"replace />;
   }
 
   // If specific roles are required, check them
   if (roles.length > 0 && profile && !roles.includes(profile.role)) {
-    return <Navigate to="/dashboard" replace />;
+    return <Navigate to="/dashboard"replace />;
   }
 
   return children;

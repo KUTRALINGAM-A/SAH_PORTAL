@@ -28,18 +28,18 @@ export default function EvaluationHistory() {
   return (
     <div className="page-container">
       <div className="page-header">
-        <h1 className="page-title">📝 My Evaluations</h1>
+        <h1 className="page-title"> My Evaluations</h1>
         <p className="page-subtitle">Your submitted evaluations ({evaluations.length} teams scored)</p>
       </div>
 
       {evaluations.length === 0 ? (
         <div className="empty-state">
-          <div className="empty-icon">⚖️</div>
+          <div className="empty-icon"></div>
           <h3>No evaluations yet</h3>
-          <p>Go to "Evaluate Teams" to start scoring.</p>
+          <p>Go to "Evaluate Teams"to start scoring.</p>
         </div>
       ) : (
-        <div className="card" style={{ padding: 0, overflow: 'auto' }}>
+        <div className="card"style={{ padding: 0, overflow: 'auto' }}>
           <table className="data-table">
             <thead>
               <tr>

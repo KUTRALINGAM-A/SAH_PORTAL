@@ -212,7 +212,7 @@ export default function AnalyticsDashboard() {
 
   // Chart Data: Category (Software vs Hardware)
   const categoryData = {
-    labels: ['💻 Software', '⚡ Hardware'],
+    labels: ['Software', 'Hardware'],
     datasets: [{
       data: [stats.categoryCounts.Software || 0, stats.categoryCounts.Hardware || 0],
       backgroundColor: ['#3B82F6', '#E85D26'],
@@ -223,7 +223,7 @@ export default function AnalyticsDashboard() {
 
   // Chart Data: Team Status
   const teamStatusData = {
-    labels: ['🔒 Locked & Submitted', '📢 Recruiting / Open'],
+    labels: ['Locked & Submitted', 'Recruiting / Open'],
     datasets: [{
       data: [stats.lockedTeams, stats.openTeams],
       backgroundColor: ['#10B981', '#F59E0B'],
@@ -257,7 +257,7 @@ export default function AnalyticsDashboard() {
   return (
     <div className="page-container">
       <div className="page-header">
-        <h1 className="page-title">📊 Analytics & Intelligence Dashboard</h1>
+        <h1 className="page-title"> Analytics & Intelligence Dashboard</h1>
         <p className="page-subtitle">Live real-time statistics, branch splitting, diversity metrics, and problem statement allocation for SAH 2026</p>
       </div>
 
@@ -265,35 +265,35 @@ export default function AnalyticsDashboard() {
       <div className="stats-row">
         <StatCard number={stats.totalStudents} label="Registered Students" />
         <StatCard number={stats.totalTeams} label="Total Teams" />
-        <StatCard number={stats.openTeams} label="Open for Recruitment" accent />
+        <StatCard number={stats.openTeams} label="Open for Recruitment"accent />
         <StatCard number={stats.lockedTeams} label="Locked Teams" />
         <StatCard number={stats.verifiedTeams} label="SPOC Verified" />
       </div>
 
       {/* Row 2 Stats */}
-      <div className="stats-row" style={{ marginBottom: '32px' }}>
-        <StatCard number={stats.teamsWithPs} label="Teams with Problem Statement" accent />
+      <div className="stats-row"style={{ marginBottom: '32px' }}>
+        <StatCard number={stats.teamsWithPs} label="Teams with Problem Statement"accent />
         <StatCard number={stats.teamsWithoutPs} label="Teams Without Problem" />
         <StatCard number={stats.studentsInTeams} label="Students in Teams" />
-        <StatCard number={stats.studentsWithoutTeam} label="Students Without Team" accent />
+        <StatCard number={stats.studentsWithoutTeam} label="Students Without Team"accent />
         <StatCard number={`${stats.femaleRatio}%`} label="Female Participation" />
       </div>
 
       {/* BIG CHARTS SECTION: Department Wise Splitting & Domain Preferences */}
       <div style={{ display: 'flex', flexDirection: 'column', gap: '28px', marginBottom: '32px' }}>
         {/* Department Splitting Full-Width Card */}
-        <div className="card" style={{ padding: '24px' }}>
+        <div className="card"style={{ padding: '24px' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '12px', marginBottom: '20px' }}>
             <div>
               <h3 style={{ margin: 0, fontSize: '1.25rem', color: 'var(--navy)', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <span>🏛️</span> Department-Wise Student & Team Splitting
+                <span></span> Department-Wise Student & Team Splitting
               </h3>
               <p style={{ margin: '4px 0 0', fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
                 Compare assigned vs unassigned students and female diversity across all academic departments.
               </p>
             </div>
             <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
-              <span className="pill-badge" style={{ background: '#EFF6FF', color: '#1E40AF', padding: '4px 10px', fontSize: '0.8rem' }}>
+              <span className="pill-badge"style={{ background: '#EFF6FF', color: '#1E40AF', padding: '4px 10px', fontSize: '0.8rem' }}>
                 {deptLabels.length} Departments Registered
               </span>
             </div>
@@ -334,9 +334,9 @@ export default function AnalyticsDashboard() {
         {/* Domain Preferences & Doughnut Trio */}
         <div className="grid-2">
           {/* Domain Chart */}
-          <div className="card" style={{ padding: '24px' }}>
+          <div className="card"style={{ padding: '24px' }}>
             <h3 style={{ margin: '0 0 4px', fontSize: '1.2rem', color: 'var(--navy)', display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <span>🚀</span> Domain Preferences (Teams by Domain)
+              <span></span> Domain Preferences (Teams by Domain)
             </h3>
             <p style={{ margin: '0 0 16px', fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
               Distribution of teams across core technical innovation tracks.
@@ -369,9 +369,9 @@ export default function AnalyticsDashboard() {
           </div>
 
           {/* Breakdown Doughnuts Cards (3-column layout inside card) */}
-          <div className="card" style={{ padding: '24px' }}>
+          <div className="card"style={{ padding: '24px' }}>
             <h3 style={{ margin: '0 0 4px', fontSize: '1.2rem', color: 'var(--navy)', display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <span>📈</span> Composition & Diversity Distribution
+              <span></span> Composition & Diversity Distribution
             </h3>
             <p style={{ margin: '0 0 16px', fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
               Breakdown of student gender diversity, software/hardware tracks, and team locks.
@@ -381,7 +381,7 @@ export default function AnalyticsDashboard() {
               {/* Gender Doughnut */}
               <div style={{ textAlign: 'center' }}>
                 <div style={{ fontSize: '0.82rem', fontWeight: 700, color: 'var(--text-secondary)', marginBottom: '8px' }}>
-                  ♀️ Gender Ratio
+                   Gender Ratio
                 </div>
                 <div style={{ height: '170px', position: 'relative' }}>
                   <Doughnut
@@ -398,7 +398,7 @@ export default function AnalyticsDashboard() {
               {/* Category Doughnut */}
               <div style={{ textAlign: 'center' }}>
                 <div style={{ fontSize: '0.82rem', fontWeight: 700, color: 'var(--text-secondary)', marginBottom: '8px' }}>
-                  💻 Track Split
+                   Track Split
                 </div>
                 <div style={{ height: '170px', position: 'relative' }}>
                   <Doughnut
@@ -415,7 +415,7 @@ export default function AnalyticsDashboard() {
               {/* Team Status Doughnut */}
               <div style={{ textAlign: 'center' }}>
                 <div style={{ fontSize: '0.82rem', fontWeight: 700, color: 'var(--text-secondary)', marginBottom: '8px' }}>
-                  🔒 Team Locks
+                   Team Locks
                 </div>
                 <div style={{ height: '170px', position: 'relative' }}>
                   <Doughnut
@@ -434,11 +434,11 @@ export default function AnalyticsDashboard() {
       </div>
 
       {/* SECTION: PROBLEM STATEMENT TO TEAM ALLOCATION MATRIX */}
-      <div className="card" style={{ marginBottom: '30px', padding: '24px' }}>
+      <div className="card"style={{ marginBottom: '30px', padding: '24px' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '16px', marginBottom: '20px' }}>
           <div>
             <h2 style={{ margin: 0, fontSize: '1.3rem', color: 'var(--navy)', display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <span>🎯</span> Problem Statement Allocation Explorer
+              <span></span> Problem Statement Allocation Explorer
             </h2>
             <p style={{ margin: '4px 0 0', fontSize: '0.88rem', color: 'var(--text-secondary)' }}>
               Inspect which teams are solving which problem statements, track team competition, and spot unassigned statements.
@@ -446,15 +446,15 @@ export default function AnalyticsDashboard() {
           </div>
 
           <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
-            <span className="pill-badge" style={{ background: '#EFF6FF', color: '#1E40AF', padding: '6px 12px', fontSize: '0.82rem', fontWeight: 600 }}>
-              📋 {allProblemStatements.length} Total Problem Statements
+            <span className="pill-badge"style={{ background: '#EFF6FF', color: '#1E40AF', padding: '6px 12px', fontSize: '0.82rem', fontWeight: 600 }}>
+               {allProblemStatements.length} Total Problem Statements
             </span>
-            <span className="pill-badge" style={{ background: '#ECFDF5', color: '#065F46', padding: '6px 12px', fontSize: '0.82rem', fontWeight: 600 }}>
-              ✅ {stats.teamsWithPs} Teams Assigned
+            <span className="pill-badge"style={{ background: '#ECFDF5', color: '#065F46', padding: '6px 12px', fontSize: '0.82rem', fontWeight: 600 }}>
+               {stats.teamsWithPs} Teams Assigned
             </span>
             {unassignedTeams.length > 0 && (
-              <span className="pill-badge" style={{ background: '#FEF3C7', color: '#B45309', padding: '6px 12px', fontSize: '0.82rem', fontWeight: 600 }}>
-                ⚠️ {unassignedTeams.length} Teams Need Problem
+              <span className="pill-badge"style={{ background: '#FEF3C7', color: '#B45309', padding: '6px 12px', fontSize: '0.82rem', fontWeight: 600 }}>
+                 {unassignedTeams.length} Teams Need Problem
               </span>
             )}
           </div>
@@ -474,7 +474,7 @@ export default function AnalyticsDashboard() {
           <input
             type="text"
             className="form-input"
-            placeholder="🔍 Search PS Code, Title, Domain, or Team Name..."
+            placeholder="Search PS Code, Title, Domain, or Team Name..."
             value={psSearch}
             onChange={(e) => setPsSearch(e.target.value)}
             style={{ flex: '1 1 280px' }}
@@ -498,8 +498,8 @@ export default function AnalyticsDashboard() {
             style={{ flex: '0 1 160px' }}
           >
             <option value="">All Categories</option>
-            <option value="Software">💻 Software</option>
-            <option value="Hardware">⚡ Hardware</option>
+            <option value="Software"> Software</option>
+            <option value="Hardware"> Hardware</option>
           </select>
 
           <select
@@ -525,7 +525,7 @@ export default function AnalyticsDashboard() {
             marginBottom: '20px'
           }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '10px' }}>
-              <span style={{ fontSize: '1.2rem' }}>⚠️</span>
+              <span style={{ fontSize: '1.2rem' }}></span>
               <strong style={{ color: '#92400E', fontSize: '0.95rem' }}>
                 {unassignedTeams.length} Team(s) Have NOT Selected a Problem Statement Yet:
               </strong>
@@ -559,7 +559,7 @@ export default function AnalyticsDashboard() {
         <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
           {filteredProblemStatements.length === 0 ? (
             <div style={{ textAlign: 'center', padding: '40px', background: '#F8FAFC', borderRadius: '12px' }}>
-              <div style={{ fontSize: '2rem', marginBottom: '8px' }}>🔍</div>
+              <div style={{ fontSize: '2rem', marginBottom: '8px' }}></div>
               <p style={{ color: 'var(--text-secondary)', margin: 0 }}>
                 No problem statements match your filter criteria.
               </p>
@@ -588,15 +588,15 @@ export default function AnalyticsDashboard() {
                         <span className={`pill-badge ${ps.category === 'Hardware' ? 'domain' : 'skill'}`} style={{ fontSize: '0.72rem' }}>
                           {ps.category}
                         </span>
-                        <span className="pill-badge domain" style={{ background: '#E0F2FE', color: '#0369A1', fontSize: '0.72rem' }}>
+                        <span className="pill-badge domain"style={{ background: '#E0F2FE', color: '#0369A1', fontSize: '0.72rem' }}>
                           {ps.domain}
                         </span>
                         {assignedTeams.length > 0 ? (
-                          <span className="pill-badge status-verified" style={{ fontSize: '0.75rem', fontWeight: 700 }}>
-                            🎯 {assignedTeams.length} Team{assignedTeams.length > 1 ? 's' : ''} Competing
+                          <span className="pill-badge status-verified"style={{ fontSize: '0.75rem', fontWeight: 700 }}>
+                             {assignedTeams.length} Team{assignedTeams.length > 1 ? 's' : ''} Competing
                           </span>
                         ) : (
-                          <span className="pill-badge" style={{ background: '#F1F5F9', color: '#64748B', fontSize: '0.72rem' }}>
+                          <span className="pill-badge"style={{ background: '#F1F5F9', color: '#64748B', fontSize: '0.72rem' }}>
                             0 Teams Assigned
                           </span>
                         )}
@@ -607,7 +607,7 @@ export default function AnalyticsDashboard() {
                       </h3>
 
                       <div style={{ fontSize: '0.82rem', color: 'var(--text-secondary)' }}>
-                        🏛️ <strong>Organization:</strong> {ps.organization || 'Government of India'}
+                         <strong>Organization:</strong> {ps.organization || 'Government of India'}
                       </div>
                     </div>
                   </div>
@@ -616,7 +616,7 @@ export default function AnalyticsDashboard() {
                   {assignedTeams.length > 0 ? (
                     <div style={{ marginTop: '16px', paddingTop: '14px', borderTop: '1px solid #F1F5F9' }}>
                       <h4 style={{ margin: '0 0 10px', fontSize: '0.8rem', textTransform: 'uppercase', letterSpacing: '0.5px', color: 'var(--text-secondary)' }}>
-                        👥 Teams Solving This Problem ({assignedTeams.length})
+                         Teams Solving This Problem ({assignedTeams.length})
                       </h4>
 
                       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '10px' }}>
@@ -640,7 +640,7 @@ export default function AnalyticsDashboard() {
                               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                                 <strong style={{ fontSize: '0.92rem', color: 'var(--navy)' }}>{team.team_name}</strong>
                                 <span className={`pill-badge ${team.is_locked ? 'status-locked' : 'status-open'}`} style={{ fontSize: '0.68rem', padding: '1px 6px' }}>
-                                  {team.is_locked ? '🔒 Locked' : `📢 ${mList.length}/6`}
+                                  {team.is_locked ? 'Locked' : ` ${mList.length}/6`}
                                 </span>
                               </div>
 
@@ -655,7 +655,7 @@ export default function AnalyticsDashboard() {
                                     onClick={() => setViewingProfile(leader)}
                                     style={{ fontSize: '0.72rem', padding: '2px 6px' }}
                                   >
-                                    👤 Leader Profile
+                                     Leader Profile
                                   </button>
                                 )}
                                 {team.ppt_url && (
@@ -665,7 +665,7 @@ export default function AnalyticsDashboard() {
                                     rel="noreferrer"
                                     style={{ fontSize: '0.72rem', color: 'var(--blue)', textDecoration: 'none', fontWeight: 600 }}
                                   >
-                                    📊 Pitch PPT ↗
+                                     Pitch PPT 
                                   </a>
                                 )}
                               </div>

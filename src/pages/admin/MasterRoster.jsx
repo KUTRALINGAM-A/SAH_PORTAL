@@ -72,10 +72,10 @@ export default function MasterRoster() {
     <div className="page-container">
       <div className="page-header flex-between">
         <div>
-          <h1 className="page-title">📑 Master Team Roster</h1>
+          <h1 className="page-title"> Master Team Roster</h1>
           <p className="page-subtitle">{teams.length} teams registered</p>
         </div>
-        <button className="btn btn-navy" onClick={handleExportCSV}>📥 Export CSV</button>
+        <button className="btn btn-navy"onClick={handleExportCSV}> Export CSV</button>
       </div>
 
       <div className="filter-bar">
@@ -92,8 +92,8 @@ export default function MasterRoster() {
         const femaleCount = teamMembers.filter(m => m.profiles?.gender === 'Female').length;
 
         return (
-          <div key={team.id} className="card" style={{ marginBottom: '16px' }}>
-            <div className="flex-between" style={{ marginBottom: '12px', flexWrap: 'wrap', gap: '8px' }}>
+          <div key={team.id} className="card"style={{ marginBottom: '16px' }}>
+            <div className="flex-between"style={{ marginBottom: '12px', flexWrap: 'wrap', gap: '8px' }}>
               <div>
                 <h3 style={{ marginBottom: '2px' }}>{team.team_name}</h3>
                 <span style={{ fontSize: '0.82rem', color: 'var(--text-secondary)' }}>
@@ -102,17 +102,17 @@ export default function MasterRoster() {
               </div>
               <div style={{ display: 'flex', gap: '6px' }}>
                 <span className={`pill-badge ${team.is_locked ? 'status-locked' : 'status-open'}`}>
-                  {team.is_locked ? '🔒 Locked' : '🟢 Open'}
+                  {team.is_locked ? 'Locked' : 'Open'}
                 </span>
-                {team.is_spoc_verified && <span className="pill-badge status-verified">✅ Verified</span>}
+                {team.is_spoc_verified && <span className="pill-badge status-verified"> Verified</span>}
                 <span className="pill-badge role-member">{teamMembers.length}/6 Members</span>
                 <span className={`pill-badge ${femaleCount >= 1 ? 'status-verified' : 'needs-female'}`}>
-                  {femaleCount}♀
+                  {femaleCount}
                 </span>
               </div>
             </div>
 
-            <table className="data-table" style={{ fontSize: '0.82rem' }}>
+            <table className="data-table"style={{ fontSize: '0.82rem' }}>
               <thead>
                 <tr>
                   <th>Name</th>
@@ -137,7 +137,7 @@ export default function MasterRoster() {
                   </tr>
                 ))}
                 {teamMembers.length === 0 && (
-                  <tr><td colSpan="5" style={{ textAlign: 'center', color: 'var(--text-muted)' }}>No members yet</td></tr>
+                  <tr><td colSpan="5"style={{ textAlign: 'center', color: 'var(--text-muted)' }}>No members yet</td></tr>
                 )}
               </tbody>
             </table>

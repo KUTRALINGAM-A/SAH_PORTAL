@@ -117,17 +117,17 @@ export default function AdminDashboardDetailsModal({
 
   // Tab definitions
   const tabs = [
-    { id: 'recruiting', label: '📢 Recruiting Teams', count: recruitingTeams.length, accent: true },
-    { id: 'unassigned', label: '🔍 Students Without Team', count: unassignedStudents.length, accent: true },
-    { id: 'ps_mapping', label: '🎯 Problem Statements & Teams', count: problemStatements.length, accent: true },
-    { id: 'all_teams', label: '👥 All Teams', count: teams.length },
-    { id: 'locked', label: '🔒 Locked Teams', count: lockedTeams.length },
-    { id: 'all_students', label: '🎓 All Students', count: profiles.length },
-    { id: 'gender', label: '♀️ Female & SIH Rule', count: `${Math.round((femaleStudents.length / Math.max(1, profiles.length)) * 100)}%` }
+    { id: 'recruiting', label: 'Recruiting Teams', count: recruitingTeams.length, accent: true },
+    { id: 'unassigned', label: 'Students Without Team', count: unassignedStudents.length, accent: true },
+    { id: 'ps_mapping', label: 'Problem Statements & Teams', count: problemStatements.length, accent: true },
+    { id: 'all_teams', label: 'All Teams', count: teams.length },
+    { id: 'locked', label: 'Locked Teams', count: lockedTeams.length },
+    { id: 'all_students', label: 'All Students', count: profiles.length },
+    { id: 'gender', label: 'Female & SIH Rule', count: `${Math.round((femaleStudents.length / Math.max(1, profiles.length)) * 100)}%` }
   ];
 
   return (
-    <div className="modal-overlay" onClick={onClose}>
+    <div className="modal-overlay"onClick={onClose}>
       <div
         className="modal-card"
         style={{
@@ -156,9 +156,9 @@ export default function AdminDashboardDetailsModal({
           <div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
               <h2 style={{ margin: 0, fontSize: '1.35rem', fontWeight: 700, color: '#ffffff' }}>
-                📊 Hackathon Live Intelligence & Team Directory
+                 Hackathon Live Intelligence & Team Directory
               </h2>
-              <span className="pill-badge" style={{ background: 'rgba(255,255,255,0.2)', color: '#ffffff', fontSize: '0.75rem' }}>
+              <span className="pill-badge"style={{ background: 'rgba(255,255,255,0.2)', color: '#ffffff', fontSize: '0.75rem' }}>
                 Admin / SPOC Access
               </span>
             </div>
@@ -281,8 +281,8 @@ export default function AdminDashboardDetailsModal({
               style={{ flex: '0 1 140px' }}
             >
               <option value="">All Genders</option>
-              <option value="Female">♀️ Female Only</option>
-              <option value="Male">♂️ Male Only</option>
+              <option value="Female">Female Only</option>
+              <option value="Male">Male Only</option>
             </select>
           )}
         </div>
@@ -311,7 +311,7 @@ export default function AdminDashboardDetailsModal({
                 gap: '8px'
               }}>
                 <div>
-                  <strong>📢 {recruitingTeams.length} Open Teams Looking for Members</strong>
+                  <strong> {recruitingTeams.length} Open Teams Looking for Members</strong>
                   <span style={{ display: 'block', fontSize: '0.8rem', opacity: 0.85 }}>
                     These teams have open member slots (&lt; 6 members) or are actively recruiting.
                   </span>
@@ -321,7 +321,7 @@ export default function AdminDashboardDetailsModal({
                   onClick={() => setActiveTab('unassigned')}
                   style={{ background: '#ffffff', borderColor: '#3B82F6', color: '#1D4ED8', fontWeight: 600 }}
                 >
-                  🔍 View Unassigned Students to Match ➔
+                   View Unassigned Students to Match ➔
                 </button>
               </div>
 
@@ -362,12 +362,12 @@ export default function AdminDashboardDetailsModal({
                           <h3 style={{ margin: 0, fontSize: '1.1rem', fontWeight: 700, color: 'var(--navy)' }}>
                             {team.team_name}
                           </h3>
-                          <span className="pill-badge" style={{ background: '#FEF3C7', color: '#B45309', fontWeight: 700, fontSize: '0.75rem' }}>
-                            🎯 {slotsOpen} Slot{slotsOpen > 1 ? 's' : ''} Open ({mList.length}/6)
+                          <span className="pill-badge"style={{ background: '#FEF3C7', color: '#B45309', fontWeight: 700, fontSize: '0.75rem' }}>
+                             {slotsOpen} Slot{slotsOpen > 1 ? 's' : ''} Open ({mList.length}/6)
                           </span>
                           {!hasFemale && (
-                            <span className="pill-badge" style={{ background: '#FCE7F3', color: '#BE185D', fontSize: '0.72rem', fontWeight: 600 }}>
-                              ⚠️ Needs ♀️ Female Member (SIH Rule)
+                            <span className="pill-badge"style={{ background: '#FCE7F3', color: '#BE185D', fontSize: '0.72rem', fontWeight: 600 }}>
+                               Needs Female Member (SIH Rule)
                             </span>
                           )}
                         </div>
@@ -379,7 +379,7 @@ export default function AdminDashboardDetailsModal({
                         )}
 
                         <div style={{ fontSize: '0.83rem', color: 'var(--text-muted)', marginTop: '4px' }}>
-                          👑 Leader: <strong>{leader?.full_name || 'Unknown'}</strong> ({leader?.department || 'Student'}{leader?.year_of_study ? ` · ${leader.year_of_study}` : ''})
+                           Leader: <strong>{leader?.full_name || 'Unknown'}</strong> ({leader?.department || 'Student'}{leader?.year_of_study ? ` · ${leader.year_of_study}` : ''})
                         </div>
                       </div>
 
@@ -393,7 +393,7 @@ export default function AdminDashboardDetailsModal({
                             className="btn btn-sm btn-outline"
                             style={{ color: '#25D366', borderColor: '#25D366', fontSize: '0.78rem', display: 'inline-flex', alignItems: 'center', gap: '4px' }}
                           >
-                            <span>📱</span> WhatsApp Leader
+                            <span></span> WhatsApp Leader
                           </a>
                         )}
                         {leader && (
@@ -402,7 +402,7 @@ export default function AdminDashboardDetailsModal({
                             onClick={() => setViewingProfile(leader)}
                             style={{ fontSize: '0.78rem' }}
                           >
-                            👤 Leader Profile
+                             Leader Profile
                           </button>
                         )}
                         <button
@@ -419,10 +419,10 @@ export default function AdminDashboardDetailsModal({
                     {team.skills_needed && team.skills_needed.length > 0 && (
                       <div style={{ marginTop: '12px', paddingTop: '10px', borderTop: '1px dashed #E2E8F0', display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
                         <span style={{ fontSize: '0.75rem', fontWeight: 600, color: 'var(--text-secondary)' }}>
-                          🛠️ Desired Skills:
+                           Desired Skills:
                         </span>
                         {team.skills_needed.map(sk => (
-                          <span key={sk} className="pill-badge skill" style={{ fontSize: '0.72rem', padding: '2px 8px' }}>
+                          <span key={sk} className="pill-badge skill"style={{ fontSize: '0.72rem', padding: '2px 8px' }}>
                             {sk}
                           </span>
                         ))}
@@ -474,7 +474,7 @@ export default function AdminDashboardDetailsModal({
                                 </div>
                                 <div style={{ overflow: 'hidden', flex: 1 }}>
                                   <div style={{ fontWeight: 600, fontSize: '0.85rem', whiteSpace: 'nowrap', textOverflow: 'ellipsis', overflow: 'hidden' }}>
-                                    {p?.full_name || 'Loading...'} {m.member_role === 'Leader' && '👑'}
+                                    {p?.full_name || 'Loading...'} {m.member_role === 'Leader' && ''}
                                   </div>
                                   <div style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>
                                     {p?.department || 'Student'} · {p?.gender || ''}
@@ -509,12 +509,12 @@ export default function AdminDashboardDetailsModal({
                 gap: '8px'
               }}>
                 <div>
-                  <strong>🔍 {unassignedStudents.length} Students Not in Any Team Yet</strong>
+                  <strong> {unassignedStudents.length} Students Not in Any Team Yet</strong>
                   <span style={{ display: 'block', fontSize: '0.8rem', opacity: 0.9 }}>
                     These students are registered on the portal and looking for teams to join.
                   </span>
                 </div>
-                <span className="pill-badge" style={{ background: '#B45309', color: 'white', fontWeight: 700 }}>
+                <span className="pill-badge"style={{ background: '#B45309', color: 'white', fontWeight: 700 }}>
                   Ready to Match
                 </span>
               </div>
@@ -565,7 +565,7 @@ export default function AdminDashboardDetailsModal({
                         <div style={{ flex: 1 }}>
                           <div style={{ fontWeight: 600, fontSize: '0.95rem', display: 'flex', alignItems: 'center', gap: '6px' }}>
                             <span>{student.full_name}</span>
-                            {student.gender === 'Female' && <span title="Female Candidate">♀️</span>}
+                            {student.gender === 'Female' && <span title="Female Candidate"></span>}
                           </div>
                           <div style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>
                             {student.roll_no ? `${student.roll_no} · ` : ''}{student.department || 'Student'}
@@ -577,12 +577,12 @@ export default function AdminDashboardDetailsModal({
                       {student.skills && student.skills.length > 0 && (
                         <div style={{ display: 'flex', gap: '4px', flexWrap: 'wrap', marginTop: '10px' }}>
                           {student.skills.slice(0, 4).map(sk => (
-                            <span key={sk} className="pill-badge skill" style={{ fontSize: '0.68rem', padding: '1px 6px' }}>
+                            <span key={sk} className="pill-badge skill"style={{ fontSize: '0.68rem', padding: '1px 6px' }}>
                               {sk}
                             </span>
                           ))}
                           {student.skills.length > 4 && (
-                            <span className="pill-badge skill" style={{ fontSize: '0.68rem', padding: '1px 4px' }}>
+                            <span className="pill-badge skill"style={{ fontSize: '0.68rem', padding: '1px 4px' }}>
                               +{student.skills.length - 4}
                             </span>
                           )}
@@ -599,7 +599,7 @@ export default function AdminDashboardDetailsModal({
                           className="btn btn-sm btn-ghost"
                           style={{ color: '#25D366', fontSize: '0.75rem', padding: '4px 8px' }}
                         >
-                          📱 WhatsApp
+                           WhatsApp
                         </a>
                       ) : (
                         <span style={{ fontSize: '0.72rem', color: 'var(--text-muted)' }}>No Phone</span>
@@ -609,7 +609,7 @@ export default function AdminDashboardDetailsModal({
                         onClick={() => setViewingProfile(student)}
                         style={{ fontSize: '0.75rem', padding: '4px 10px' }}
                       >
-                        👤 View Profile
+                         View Profile
                       </button>
                     </div>
                   </div>
@@ -635,7 +635,7 @@ export default function AdminDashboardDetailsModal({
                 gap: '8px'
               }}>
                 <div>
-                  <strong>🎯 Problem Statement Allocation & Team Competition</strong>
+                  <strong> Problem Statement Allocation & Team Competition</strong>
                   <span style={{ display: 'block', fontSize: '0.8rem', opacity: 0.85 }}>
                     See which teams have selected each problem statement and which statements have 0 teams.
                   </span>
@@ -673,15 +673,15 @@ export default function AdminDashboardDetailsModal({
                           <span className={`pill-badge ${ps.category === 'Hardware' ? 'domain' : 'skill'}`} style={{ fontSize: '0.72rem' }}>
                             {ps.category}
                           </span>
-                          <span className="pill-badge domain" style={{ background: '#E0F2FE', color: '#0369A1', fontSize: '0.72rem' }}>
+                          <span className="pill-badge domain"style={{ background: '#E0F2FE', color: '#0369A1', fontSize: '0.72rem' }}>
                             {ps.domain}
                           </span>
                           {assignedTeams.length > 0 ? (
-                            <span className="pill-badge status-verified" style={{ fontSize: '0.72rem', fontWeight: 700 }}>
-                              🎯 {assignedTeams.length} Team{assignedTeams.length > 1 ? 's' : ''} Competing
+                            <span className="pill-badge status-verified"style={{ fontSize: '0.72rem', fontWeight: 700 }}>
+                               {assignedTeams.length} Team{assignedTeams.length > 1 ? 's' : ''} Competing
                             </span>
                           ) : (
-                            <span className="pill-badge" style={{ background: '#F1F5F9', color: '#64748B', fontSize: '0.72rem' }}>
+                            <span className="pill-badge"style={{ background: '#F1F5F9', color: '#64748B', fontSize: '0.72rem' }}>
                               0 Teams Assigned
                             </span>
                           )}
@@ -690,7 +690,7 @@ export default function AdminDashboardDetailsModal({
                           {ps.title}
                         </h4>
                         <div style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>
-                          🏛️ {ps.organization || 'Government of India'}
+                           {ps.organization || 'Government of India'}
                         </div>
                       </div>
                     </div>
@@ -728,7 +728,7 @@ export default function AdminDashboardDetailsModal({
                                   onClick={() => setViewingProfile(leader)}
                                   style={{ fontSize: '0.72rem', padding: '2px 6px' }}
                                 >
-                                  👤 Profile
+                                   Profile
                                 </button>
                               )}
                             </div>
@@ -781,14 +781,14 @@ export default function AdminDashboardDetailsModal({
                             {team.team_name}
                           </span>
                           {team.is_locked ? (
-                            <span className="pill-badge status-locked" style={{ fontSize: '0.72rem' }}>🔒 Locked</span>
+                            <span className="pill-badge status-locked"style={{ fontSize: '0.72rem' }}> Locked</span>
                           ) : (
-                            <span className="pill-badge status-open" style={{ fontSize: '0.72rem' }}>📢 Recruiting ({mList.length}/6)</span>
+                            <span className="pill-badge status-open"style={{ fontSize: '0.72rem' }}> Recruiting ({mList.length}/6)</span>
                           )}
                           {hasFemale ? (
-                            <span className="pill-badge status-verified" style={{ fontSize: '0.72rem' }}>♀️ 1+ Female</span>
+                            <span className="pill-badge status-verified"style={{ fontSize: '0.72rem' }}> 1+ Female</span>
                           ) : (
-                            <span className="pill-badge" style={{ background: '#FCE7F3', color: '#BE185D', fontSize: '0.72rem' }}>0 Female</span>
+                            <span className="pill-badge"style={{ background: '#FCE7F3', color: '#BE185D', fontSize: '0.72rem' }}>0 Female</span>
                           )}
                         </div>
                         <div style={{ fontSize: '0.82rem', color: 'var(--text-secondary)', marginTop: '4px' }}>
@@ -817,7 +817,7 @@ export default function AdminDashboardDetailsModal({
                               className="btn btn-sm btn-outline"
                               style={{ fontSize: '0.78rem', padding: '4px 10px' }}
                             >
-                              {m.member_role === 'Leader' ? '👑' : '👤'} {p?.full_name || 'Member'} ({p?.department || 'Student'})
+                              {m.member_role === 'Leader' ? '' : ''} {p?.full_name || 'Member'} ({p?.department || 'Student'})
                             </button>
                           );
                         })}
@@ -843,7 +843,7 @@ export default function AdminDashboardDetailsModal({
                 justifyContent: 'space-between',
                 alignItems: 'center'
               }}>
-                <strong>🔒 {lockedTeams.length} Finalized & Locked Teams</strong>
+                <strong> {lockedTeams.length} Finalized & Locked Teams</strong>
                 <span style={{ fontSize: '0.8rem' }}>Ready for Verification Queue & Judge Evaluation</span>
               </div>
 
@@ -873,11 +873,11 @@ export default function AdminDashboardDetailsModal({
                         <span style={{ fontWeight: 700, fontSize: '1rem', color: 'var(--navy)' }}>
                           {team.team_name}
                         </span>
-                        <span className="pill-badge status-locked" style={{ fontSize: '0.72rem' }}>🔒 6/6 Members</span>
+                        <span className="pill-badge status-locked"style={{ fontSize: '0.72rem' }}> 6/6 Members</span>
                         {hasFemale ? (
-                          <span className="pill-badge status-verified" style={{ fontSize: '0.72rem' }}>✅ SIH Rule Compliant (♀️)</span>
+                          <span className="pill-badge status-verified"style={{ fontSize: '0.72rem' }}> SIH Rule Compliant ()</span>
                         ) : (
-                          <span className="pill-badge" style={{ background: '#FEE2E2', color: '#991B1B', fontSize: '0.72rem' }}>⚠️ 0 Female Members</span>
+                          <span className="pill-badge"style={{ background: '#FEE2E2', color: '#991B1B', fontSize: '0.72rem' }}> 0 Female Members</span>
                         )}
                       </div>
                       <div style={{ fontSize: '0.82rem', color: 'var(--text-secondary)', marginTop: '4px' }}>
@@ -893,7 +893,7 @@ export default function AdminDashboardDetailsModal({
                           onClick={() => setViewingProfile(leader)}
                           style={{ fontSize: '0.78rem' }}
                         >
-                          👤 Leader Profile
+                           Leader Profile
                         </button>
                       )}
                     </div>
@@ -951,7 +951,7 @@ export default function AdminDashboardDetailsModal({
                       </div>
                       <div style={{ flex: 1, overflow: 'hidden' }}>
                         <div style={{ fontWeight: 600, fontSize: '0.9rem', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                          {student.full_name} {student.gender === 'Female' && '♀️'}
+                          {student.full_name} {student.gender === 'Female' && ''}
                         </div>
                         <div style={{ fontSize: '0.78rem', color: 'var(--text-secondary)' }}>
                           {student.roll_no ? `${student.roll_no} · ` : ''}{student.department || 'Student'}
@@ -961,16 +961,16 @@ export default function AdminDashboardDetailsModal({
 
                     <div style={{ marginTop: '8px', paddingTop: '6px', borderTop: '1px solid #F1F5F9', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                       {teamInfo ? (
-                        <span className="pill-badge status-verified" style={{ fontSize: '0.7rem' }}>
-                          👥 {teamInfo.teamName} ({teamInfo.role})
+                        <span className="pill-badge status-verified"style={{ fontSize: '0.7rem' }}>
+                           {teamInfo.teamName} ({teamInfo.role})
                         </span>
                       ) : (
-                        <span className="pill-badge status-open" style={{ fontSize: '0.7rem', background: '#FEF3C7', color: '#B45309' }}>
-                          🔍 Looking for Team
+                        <span className="pill-badge status-open"style={{ fontSize: '0.7rem', background: '#FEF3C7', color: '#B45309' }}>
+                           Looking for Team
                         </span>
                       )}
                       <span style={{ fontSize: '0.72rem', color: 'var(--blue)', fontWeight: 600 }}>
-                        View 👤
+                        View 
                       </span>
                     </div>
                   </div>
@@ -1016,11 +1016,11 @@ export default function AdminDashboardDetailsModal({
               {/* Non-compliant teams */}
               <div style={{ background: '#ffffff', padding: '18px', borderRadius: '12px', border: '1px solid #E2E8F0' }}>
                 <h4 style={{ margin: '0 0 12px', fontSize: '0.9rem', color: '#991B1B', display: 'flex', alignItems: 'center', gap: '6px' }}>
-                  <span>⚠️</span> Teams Missing Female Member (SIH Rule Requirement)
+                  <span></span> Teams Missing Female Member (SIH Rule Requirement)
                 </h4>
                 {teamComplianceList.filter(t => !t.hasFemale).length === 0 ? (
                   <div style={{ color: 'var(--green)', fontSize: '0.88rem' }}>
-                    🎉 All teams currently comply with the female member requirement!
+                     All teams currently comply with the female member requirement!
                   </div>
                 ) : (
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
@@ -1054,7 +1054,7 @@ export default function AdminDashboardDetailsModal({
                               className="btn btn-sm btn-outline"
                               style={{ color: '#25D366', borderColor: '#25D366', fontSize: '0.75rem' }}
                             >
-                              📱 Alert Leader
+                               Alert Leader
                             </a>
                           )}
                         </div>
@@ -1077,9 +1077,9 @@ export default function AdminDashboardDetailsModal({
           alignItems: 'center'
         }}>
           <span style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>
-            💡 Tip: Click on any student or team member to inspect their full profile, contact info, and skills.
+             Tip: Click on any student or team member to inspect their full profile, contact info, and skills.
           </span>
-          <button className="btn btn-primary btn-sm" onClick={onClose} style={{ minWidth: '90px' }}>
+          <button className="btn btn-primary btn-sm"onClick={onClose} style={{ minWidth: '90px' }}>
             Close
           </button>
         </div>

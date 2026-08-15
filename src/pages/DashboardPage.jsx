@@ -119,7 +119,7 @@ export default function DashboardPage() {
     <div className="page-container">
       <div className="page-header">
         <h1 className="page-title">
-          Welcome back, {profile?.full_name?.split(' ')[0]}! 👋
+          Welcome back, {profile?.full_name?.split(' ')[0]}! 
         </h1>
         <p className="page-subtitle">
           {isAdmin ? 'Organizing Committee Dashboard' :
@@ -192,11 +192,11 @@ export default function DashboardPage() {
           marginBottom: '28px'
         }}>
           {/* Teams Looking for People */}
-          <div className="card" style={{ padding: '20px' }}>
+          <div className="card"style={{ padding: '20px' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '14px' }}>
               <div>
                 <h3 style={{ margin: 0, fontSize: '1.05rem', display: 'flex', alignItems: 'center', gap: '6px' }}>
-                  <span>📢</span> Teams Needing Members ({recruitingList.length})
+                  <span></span> Teams Needing Members ({recruitingList.length})
                 </h3>
                 <p style={{ margin: '2px 0 0', fontSize: '0.78rem', color: 'var(--text-secondary)' }}>
                   Teams with open slots seeking teammates
@@ -213,7 +213,7 @@ export default function DashboardPage() {
 
             {recruitingList.length === 0 ? (
               <div style={{ textAlign: 'center', padding: '20px', color: 'var(--text-secondary)', fontSize: '0.85rem' }}>
-                🎉 All teams currently have full 6/6 rosters!
+                 All teams currently have full 6/6 rosters!
               </div>
             ) : (
               <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
@@ -241,7 +241,7 @@ export default function DashboardPage() {
                       <div style={{ flex: 1, minWidth: '200px' }}>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
                           <strong style={{ fontSize: '0.92rem', color: 'var(--navy)' }}>{team.team_name}</strong>
-                          <span className="pill-badge" style={{ background: '#FEF3C7', color: '#B45309', fontSize: '0.7rem', padding: '1px 6px' }}>
+                          <span className="pill-badge"style={{ background: '#FEF3C7', color: '#B45309', fontSize: '0.7rem', padding: '1px 6px' }}>
                             {slotsOpen} slot{slotsOpen > 1 ? 's' : ''} open
                           </span>
                         </div>
@@ -252,7 +252,7 @@ export default function DashboardPage() {
                         {team.skills_needed && team.skills_needed.length > 0 && (
                           <div style={{ display: 'flex', gap: '4px', flexWrap: 'wrap', marginTop: '4px' }}>
                             {team.skills_needed.slice(0, 3).map(sk => (
-                              <span key={sk} className="pill-badge skill" style={{ fontSize: '0.65rem', padding: '0 6px' }}>{sk}</span>
+                              <span key={sk} className="pill-badge skill"style={{ fontSize: '0.65rem', padding: '0 6px' }}>{sk}</span>
                             ))}
                           </div>
                         )}
@@ -268,7 +268,7 @@ export default function DashboardPage() {
                             style={{ color: '#25D366', fontSize: '0.75rem', padding: '4px 8px' }}
                             title="Chat with team leader on WhatsApp"
                           >
-                            📱 WhatsApp
+                             WhatsApp
                           </a>
                         )}
                         <button
@@ -287,11 +287,11 @@ export default function DashboardPage() {
           </div>
 
           {/* Students Looking for Teams */}
-          <div className="card" style={{ padding: '20px' }}>
+          <div className="card"style={{ padding: '20px' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '14px' }}>
               <div>
                 <h3 style={{ margin: 0, fontSize: '1.05rem', display: 'flex', alignItems: 'center', gap: '6px' }}>
-                  <span>🔍</span> Students Without a Team ({unassignedList.length})
+                  <span></span> Students Without a Team ({unassignedList.length})
                 </h3>
                 <p style={{ margin: '2px 0 0', fontSize: '0.78rem', color: 'var(--text-secondary)' }}>
                   Registered candidates available to be matched
@@ -308,7 +308,7 @@ export default function DashboardPage() {
 
             {unassignedList.length === 0 ? (
               <div style={{ textAlign: 'center', padding: '20px', color: 'var(--green)', fontSize: '0.85rem' }}>
-                🎉 Every registered student is currently in a team!
+                 Every registered student is currently in a team!
               </div>
             ) : (
               <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
@@ -346,7 +346,7 @@ export default function DashboardPage() {
                       <div>
                         <div style={{ fontWeight: 600, fontSize: '0.9rem', display: 'flex', alignItems: 'center', gap: '4px' }}>
                           <span>{student.full_name}</span>
-                          {student.gender === 'Female' && <span title="Female Candidate">♀️</span>}
+                          {student.gender === 'Female' && <span title="Female Candidate"></span>}
                         </div>
                         <div style={{ fontSize: '0.76rem', color: 'var(--text-secondary)' }}>
                           {student.roll_no ? `${student.roll_no} · ` : ''}{student.department || 'Student'}
@@ -354,7 +354,7 @@ export default function DashboardPage() {
                         {student.skills && student.skills.length > 0 && (
                           <div style={{ display: 'flex', gap: '4px', flexWrap: 'wrap', marginTop: '2px' }}>
                             {student.skills.slice(0, 2).map(sk => (
-                              <span key={sk} className="pill-badge skill" style={{ fontSize: '0.65rem', padding: '0 6px' }}>{sk}</span>
+                              <span key={sk} className="pill-badge skill"style={{ fontSize: '0.65rem', padding: '0 6px' }}>{sk}</span>
                             ))}
                           </div>
                         )}
@@ -366,7 +366,7 @@ export default function DashboardPage() {
                       onClick={() => setViewingProfile(student)}
                       style={{ fontSize: '0.75rem', padding: '4px 10px' }}
                     >
-                      👤 Profile
+                       Profile
                     </button>
                   </div>
                 ))}
@@ -381,13 +381,13 @@ export default function DashboardPage() {
       <div className="quick-actions">
         {!isAdmin && !isJudge && !isSpoc && !myTeam && (
           <>
-            <Link to="/create-team" className="quick-action-card">
-              <div className="action-icon">🚀</div>
+            <Link to="/create-team"className="quick-action-card">
+              <div className="action-icon"></div>
               <div className="action-title">Create a Team</div>
               <div className="action-desc">Start your own team and become the leader</div>
             </Link>
-            <Link to="/marketplace" className="quick-action-card">
-              <div className="action-icon">🔍</div>
+            <Link to="/marketplace"className="quick-action-card">
+              <div className="action-icon"></div>
               <div className="action-title">Join a Team</div>
               <div className="action-desc">Browse open teams and send join requests</div>
             </Link>
@@ -395,8 +395,8 @@ export default function DashboardPage() {
         )}
 
         {!isAdmin && !isJudge && !isSpoc && myTeam && (
-          <Link to="/my-team" className="quick-action-card">
-            <div className="action-icon">{myTeam.is_locked ? '🔒' : '👥'}</div>
+          <Link to="/my-team"className="quick-action-card">
+            <div className="action-icon">{myTeam.is_locked ? '' : ''}</div>
             <div className="action-title">{myTeam.team_name}</div>
             <div className="action-desc">
               {myTeam.is_locked ? 'Team is locked — awaiting SPOC verification' : 'Manage your team and submit pitch'}
@@ -404,37 +404,37 @@ export default function DashboardPage() {
           </Link>
         )}
 
-        <Link to="/problem-statements" className="quick-action-card">
-          <div className="action-icon">📋</div>
+        <Link to="/problem-statements"className="quick-action-card">
+          <div className="action-icon"></div>
           <div className="action-title">Problem Statements</div>
           <div className="action-desc">Browse all available problem statements</div>
         </Link>
 
         {(isAdmin || isSpoc) && (
           <>
-            <Link to="/admin/roster" className="quick-action-card">
-              <div className="action-icon">📑</div>
+            <Link to="/admin/roster"className="quick-action-card">
+              <div className="action-icon"></div>
               <div className="action-title">Master Roster</div>
               <div className="action-desc">View and export all teams, students & members data</div>
             </Link>
-            <Link to="/spoc/verify" className="quick-action-card">
-              <div className="action-icon">✅</div>
+            <Link to="/spoc/verify"className="quick-action-card">
+              <div className="action-icon"></div>
               <div className="action-title">Verification Queue</div>
               <div className="action-desc">Verify locked teams and review compliance</div>
             </Link>
-            <Link to="/admin/analytics" className="quick-action-card">
-              <div className="action-icon">📊</div>
+            <Link to="/admin/analytics"className="quick-action-card">
+              <div className="action-icon"></div>
               <div className="action-title">Analytics Dashboard</div>
               <div className="action-desc">Live statistics and department participation</div>
             </Link>
-            <Link to="/admin/bootcamp" className="quick-action-card">
-              <div className="action-icon">🏆</div>
+            <Link to="/admin/bootcamp"className="quick-action-card">
+              <div className="action-icon"></div>
               <div className="action-title">Top 50 Shortlist</div>
               <div className="action-desc">Z-Score rankings and bootcamp selection</div>
             </Link>
             {isAdmin && (
-              <Link to="/admin/problem-statements" className="quick-action-card">
-                <div className="action-icon">📤</div>
+              <Link to="/admin/problem-statements"className="quick-action-card">
+                <div className="action-icon"></div>
                 <div className="action-title">Upload Problem Statements</div>
                 <div className="action-desc">Manage & import problem statements</div>
               </Link>
@@ -444,29 +444,29 @@ export default function DashboardPage() {
 
         {isJudge && (
           <>
-            <Link to="/judge/evaluate" className="quick-action-card">
-              <div className="action-icon">⚖️</div>
+            <Link to="/judge/evaluate"className="quick-action-card">
+              <div className="action-icon"></div>
               <div className="action-title">Evaluate Teams</div>
               <div className="action-desc">Score teams on the 100-point SIH rubric</div>
             </Link>
-            <Link to="/judge/history" className="quick-action-card">
-              <div className="action-icon">📝</div>
+            <Link to="/judge/history"className="quick-action-card">
+              <div className="action-icon"></div>
               <div className="action-title">My Evaluations</div>
               <div className="action-desc">View and edit your submitted scores</div>
             </Link>
           </>
         )}
 
-        <Link to="/profile" className="quick-action-card">
-          <div className="action-icon">👤</div>
+        <Link to="/profile"className="quick-action-card">
+          <div className="action-icon"></div>
           <div className="action-title">My Profile</div>
           <div className="action-desc">View and edit your account details & skills</div>
         </Link>
       </div>
 
       {/* Deadlines Timeline */}
-      <div className="card" style={{ marginTop: '24px' }}>
-        <h3 style={{ marginBottom: '16px' }}>📅 SAH 2026 Timeline</h3>
+      <div className="card"style={{ marginTop: '24px' }}>
+        <h3 style={{ marginBottom: '16px' }}> SAH 2026 Timeline</h3>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
           {[
             { date: 'Aug 13, 2026', event: 'Portal Opens — Team Formation Begins', status: 'active' },

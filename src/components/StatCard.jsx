@@ -38,7 +38,7 @@ export default function StatCard({ number, label, accent = false, onClick, activ
           justifyContent: 'center',
           gap: '4px'
         }}>
-          <span>👆 View details</span>
+          <span> View details</span>
         </div>
       )}
     </div>

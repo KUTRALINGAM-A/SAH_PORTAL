@@ -176,8 +176,8 @@ export default function MyTeamPage() {
     await sendNotification({
       userId: request.student_id,
       type: 'request_accepted',
-      title: 'Join Request Accepted! 🎉',
-      message: `Your request to join team "${team.team_name}" has been accepted!`,
+      title: 'Join Request Accepted! ',
+      message: `Your request to join team "${team.team_name}"has been accepted!`,
       metadata: { team_id: team.id }
     });
 
@@ -196,7 +196,7 @@ export default function MyTeamPage() {
         userId: request.student_id,
         type: 'request_declined',
         title: 'Join Request Declined',
-        message: `Your request to join team "${team.team_name}" was declined.`,
+        message: `Your request to join team "${team.team_name}"was declined.`,
         metadata: { team_id: team.id }
       });
     }
@@ -312,7 +312,7 @@ export default function MyTeamPage() {
       await sendNotification({
         userId: student.id,
         type: 'team_invite',
-        title: 'Team Invitation 📩',
+        title: 'Team Invitation ',
         message: `${profile.full_name} invited you to join team "${team.team_name}"! Check your invitations to accept.`,
         metadata: {
           team_id: team.id,
@@ -402,8 +402,8 @@ export default function MyTeamPage() {
         await sendNotification({
           userId: member.student_id,
           type: 'team_locked',
-          title: 'Team Locked! 🔒',
-          message: `Team "${team.team_name}" has been locked and is pending SPOC verification.`,
+          title: 'Team Locked! ',
+          message: `Team "${team.team_name}"has been locked and is pending SPOC verification.`,
           metadata: { team_id: team.id }
         });
       }
@@ -415,7 +415,7 @@ export default function MyTeamPage() {
   // Unlock team for editing (Leader only)
   const handleUnlockTeam = async () => {
     const confirmUnlock = window.confirm(
-      `Are you sure you want to unlock team "${team.team_name}" for editing?\n\nThis will allow you to:\n• Change or select a different Problem Statement\n• Invite or remove team members\n• Update PPT & Demo URLs\n\nNote: If previously SPOC verified, SPOC will re-verify after you re-lock.`
+      `Are you sure you want to unlock team "${team.team_name}"for editing?\n\nThis will allow you to:\n• Change or select a different Problem Statement\n• Invite or remove team members\n• Update PPT & Demo URLs\n\nNote: If previously SPOC verified, SPOC will re-verify after you re-lock.`
     );
     if (!confirmUnlock) return;
 
@@ -432,7 +432,7 @@ export default function MyTeamPage() {
       if (error) {
         showToast('error', error.message);
       } else {
-        showToast('success', '🔓 Team unlocked! All editing controls are now enabled.');
+        showToast('success', 'Team unlocked! All editing controls are now enabled.');
 
         // Notify members
         for (const member of members) {
@@ -440,8 +440,8 @@ export default function MyTeamPage() {
             await sendNotification({
               userId: member.student_id,
               type: 'team_unlocked',
-              title: 'Team Unlocked for Editing 🔓',
-              message: `Team Leader ${profile.full_name} unlocked "${team.team_name}" to make updates.`,
+              title: 'Team Unlocked for Editing ',
+              message: `Team Leader ${profile.full_name} unlocked "${team.team_name}"to make updates.`,
               metadata: { team_id: team.id }
             });
           }
@@ -494,15 +494,15 @@ export default function MyTeamPage() {
         <TeamInvitationsCard onUpdate={fetchTeamData} />
 
         <div className="empty-state">
-          <div className="empty-icon">👥</div>
+          <div className="empty-icon"></div>
           <h3>You're not on a team yet</h3>
           <p>Create your own team or browse the marketplace to join one.</p>
           <div style={{ display: 'flex', gap: '12px', justifyContent: 'center', marginTop: '20px' }}>
-            <button className="btn btn-orange" onClick={() => navigate('/create-team')}>
-              🚀 Create a Team
+            <button className="btn btn-orange"onClick={() => navigate('/create-team')}>
+               Create a Team
             </button>
-            <button className="btn btn-outline" onClick={() => navigate('/marketplace')}>
-              🔍 Browse Teams
+            <button className="btn btn-outline"onClick={() => navigate('/marketplace')}>
+               Browse Teams
             </button>
           </div>
         </div>
@@ -512,7 +512,7 @@ export default function MyTeamPage() {
 
   return (
     <div className="page-container">
-      <div className="page-header flex-between" style={{ flexWrap: 'wrap', gap: '16px' }}>
+      <div className="page-header flex-between"style={{ flexWrap: 'wrap', gap: '16px' }}>
         <div>
           <h1 className="page-title">{team.team_name}</h1>
           <p className="page-subtitle">
@@ -521,10 +521,10 @@ export default function MyTeamPage() {
               : 'No problem statement assigned'}
             {' · '}
             <span className={`pill-badge ${team.is_locked ? 'status-locked' : 'status-open'}`}>
-              {team.is_locked ? '🔒 Locked' : '🟢 Open'}
+              {team.is_locked ? 'Locked' : 'Open'}
             </span>
             {team.is_spoc_verified && (
-              <span className="pill-badge status-verified" style={{ marginLeft: '6px' }}>✅ SPOC Verified</span>
+              <span className="pill-badge status-verified"style={{ marginLeft: '6px' }}> SPOC Verified</span>
             )}
           </p>
         </div>
@@ -536,18 +536,18 @@ export default function MyTeamPage() {
               style={{ borderColor: 'var(--orange)', color: 'var(--orange)', fontWeight: 700, display: 'inline-flex', alignItems: 'center', gap: '6px' }}
               title="Unlock team to edit members, change problem statement, or update pitch links"
             >
-              <span>🔓</span> Unlock Team for Editing
+              <span></span> Unlock Team for Editing
             </button>
           ) : (
-            <button className="btn btn-navy" onClick={handleLockTeam}>
-              🔒 Lock Team for SIH Submission
+            <button className="btn btn-navy"onClick={handleLockTeam}>
+               Lock Team for SIH Submission
             </button>
           )
         )}
       </div>
 
       {/* Compliance Status */}
-      <div className="card" style={{ marginBottom: '24px' }}>
+      <div className="card"style={{ marginBottom: '24px' }}>
         <h3 style={{ marginBottom: '12px' }}>SIH Compliance Status</h3>
         <ul className="compliance-checklist">
           <li className="compliance-item">
@@ -560,7 +560,7 @@ export default function MyTeamPage() {
             <span className={`check-icon ${femaleCount >= 1 ? 'pass' : 'fail'}`}>
               {femaleCount >= 1 ? '✓' : '✗'}
             </span>
-            <span>At least 1 Female Member — Current: {femaleCount} ♀</span>
+            <span>At least 1 Female Member — Current: {femaleCount} </span>
           </li>
           <li className="compliance-item">
             <span className={`check-icon ${team.ps_id ? 'pass' : 'fail'}`}>
@@ -572,8 +572,8 @@ export default function MyTeamPage() {
       </div>
 
       {/* Team Roster */}
-      <div className="card" style={{ marginBottom: '24px' }}>
-        <div className="flex-between" style={{ marginBottom: '16px', flexWrap: 'wrap', gap: '10px' }}>
+      <div className="card"style={{ marginBottom: '24px' }}>
+        <div className="flex-between"style={{ marginBottom: '16px', flexWrap: 'wrap', gap: '10px' }}>
           <div>
             <h3 style={{ marginBottom: '4px' }}>Team Roster ({members.length}/6)</h3>
             <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
@@ -581,8 +581,8 @@ export default function MyTeamPage() {
             </p>
           </div>
           {isLeader && !team.is_locked && members.length < 6 && (
-            <button className="btn btn-orange" onClick={handleOpenInviteModal}>
-              ➕ Invite / Add Members
+            <button className="btn btn-orange"onClick={handleOpenInviteModal}>
+               Invite / Add Members
             </button>
           )}
         </div>
@@ -614,8 +614,8 @@ export default function MyTeamPage() {
 
       {/* Sent Team Invitations (Leader only) */}
       {isLeader && !team.is_locked && sentInvitations.length > 0 && (
-        <div className="card" style={{ marginBottom: '24px' }}>
-          <h3 style={{ marginBottom: '16px' }}>📤 Sent Invitations ({sentInvitations.length})</h3>
+        <div className="card"style={{ marginBottom: '24px' }}>
+          <h3 style={{ marginBottom: '16px' }}> Sent Invitations ({sentInvitations.length})</h3>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
             {sentInvitations.map(inv => (
               <div
@@ -661,7 +661,7 @@ export default function MyTeamPage() {
                   <div>
                     <div style={{ fontWeight: 600, fontSize: '0.95rem', display: 'flex', alignItems: 'center', gap: '6px' }}>
                       <span>{inv.profiles?.full_name || 'Invited Student'}</span>
-                      <span style={{ fontSize: '0.72rem', opacity: 0.5 }}>👤 View Profile</span>
+                      <span style={{ fontSize: '0.72rem', opacity: 0.5 }}> View Profile</span>
                     </div>
                     <div style={{ fontSize: '0.82rem', color: 'var(--text-secondary)' }}>
                       {inv.profiles?.roll_no ? `${inv.profiles.roll_no} · ` : ''}{inv.profiles?.department || 'Student'}
@@ -670,8 +670,8 @@ export default function MyTeamPage() {
                 </div>
 
                 <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }} onClick={(e) => e.stopPropagation()}>
-                  <span className="pill-badge status-open" style={{ fontSize: '0.75rem' }}>
-                    ⏳ Awaiting Student Acceptance
+                  <span className="pill-badge status-open"style={{ fontSize: '0.75rem' }}>
+                     Awaiting Student Acceptance
                   </span>
                   <button
                     className="btn btn-sm btn-ghost"
@@ -689,8 +689,8 @@ export default function MyTeamPage() {
 
       {/* Join Requests (Leader only) */}
       {isLeader && !team.is_locked && requests.length > 0 && (
-        <div className="card" style={{ marginBottom: '24px' }}>
-          <h3 style={{ marginBottom: '16px' }}>📩 Pending Join Requests ({requests.length})</h3>
+        <div className="card"style={{ marginBottom: '24px' }}>
+          <h3 style={{ marginBottom: '16px' }}> Pending Join Requests ({requests.length})</h3>
           {requests.map(req => (
             <JoinRequestCard
               key={req.id}
@@ -708,10 +708,10 @@ export default function MyTeamPage() {
       )}
 
       {/* Problem Statement Selection & Details */}
-      <div className="card" style={{ marginBottom: '24px' }}>
-        <div className="flex-between" style={{ marginBottom: '16px', flexWrap: 'wrap', gap: '10px' }}>
+      <div className="card"style={{ marginBottom: '24px' }}>
+        <div className="flex-between"style={{ marginBottom: '16px', flexWrap: 'wrap', gap: '10px' }}>
           <div>
-            <h3 style={{ marginBottom: '4px' }}>🎯 Problem Statement</h3>
+            <h3 style={{ marginBottom: '4px' }}> Problem Statement</h3>
             <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
               {team.is_locked 
                 ? 'Team is locked — Problem statement is finalized for SIH / SAH evaluation.' 
@@ -721,7 +721,7 @@ export default function MyTeamPage() {
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
             {team.ps_id && (
               <span className="pill-badge status-verified">
-                ✅ Assigned: {currentPs?.ps_code || 'Assigned'}
+                 Assigned: {currentPs?.ps_code || 'Assigned'}
               </span>
             )}
             {isLeader && team.is_locked && (
@@ -730,7 +730,7 @@ export default function MyTeamPage() {
                 onClick={handleUnlockTeam}
                 style={{ borderColor: 'var(--orange)', color: 'var(--orange)', fontWeight: 600, fontSize: '0.75rem' }}
               >
-                🔓 Unlock to Change
+                 Unlock to Change
               </button>
             )}
           </div>
@@ -738,7 +738,7 @@ export default function MyTeamPage() {
 
         {isLeader && !team.is_locked && (
           <div style={{ marginBottom: '20px', background: '#F8FAFC', padding: '16px', borderRadius: 'var(--radius-md)', border: '1px solid #E2E8F0' }}>
-            <label className="form-label" style={{ fontWeight: 600 }}>
+            <label className="form-label"style={{ fontWeight: 600 }}>
               Choose / Change Problem Statement <span className="required">*</span>
             </label>
             <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
@@ -760,7 +760,7 @@ export default function MyTeamPage() {
                 onClick={handleSaveProblemStatement}
                 disabled={savingPs || !selectedPsId || selectedPsId === team.ps_id}
               >
-                {savingPs ? 'Saving...' : '💾 Save Problem Statement'}
+                {savingPs ? 'Saving...' : 'Save Problem Statement'}
               </button>
             </div>
           </div>
@@ -781,7 +781,7 @@ export default function MyTeamPage() {
               <span className={`pill-badge ${currentPs.category === 'Hardware' ? 'domain' : 'skill'}`}>
                 {currentPs.category}
               </span>
-              <span className="pill-badge domain" style={{ background: '#E3F2FD', color: '#1565C0' }}>
+              <span className="pill-badge domain"style={{ background: '#E3F2FD', color: '#1565C0' }}>
                 {currentPs.domain}
               </span>
             </div>
@@ -789,7 +789,7 @@ export default function MyTeamPage() {
               {currentPs.title}
             </h4>
             <div style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', marginBottom: '12px' }}>
-              🏛️ <strong>Organization / Ministry:</strong> {currentPs.organization || 'Government of India'}
+               <strong>Organization / Ministry:</strong> {currentPs.organization || 'Government of India'}
             </div>
             {currentPs.description && (
               <p style={{ fontSize: '0.88rem', lineHeight: 1.6, color: 'var(--text-primary)', margin: 0 }}>
@@ -806,23 +806,23 @@ export default function MyTeamPage() {
             color: '#E65100',
             fontSize: '0.9rem'
           }}>
-            ⚠️ No problem statement chosen yet. {isLeader ? 'Please select one from the dropdown above to satisfy SIH compliance.' : 'Ask your Team Leader to assign a problem statement.'}
+             No problem statement chosen yet. {isLeader ? 'Please select one from the dropdown above to satisfy SIH compliance.' : 'Ask your Team Leader to assign a problem statement.'}
           </div>
         )}
       </div>
 
       {/* Pitch & Solution URLs */}
       {isLeader && (
-        <div className="card" style={{ marginBottom: '24px' }}>
-          <div className="flex-between" style={{ marginBottom: '16px', flexWrap: 'wrap', gap: '10px' }}>
-            <h3 style={{ margin: 0 }}>📎 Solution & Pitch URLs</h3>
+        <div className="card"style={{ marginBottom: '24px' }}>
+          <div className="flex-between"style={{ marginBottom: '16px', flexWrap: 'wrap', gap: '10px' }}>
+            <h3 style={{ margin: 0 }}> Solution & Pitch URLs</h3>
             {team.is_locked && (
               <button
                 className="btn btn-sm btn-outline"
                 onClick={handleUnlockTeam}
                 style={{ borderColor: 'var(--orange)', color: 'var(--orange)', fontWeight: 600, fontSize: '0.75rem' }}
               >
-                🔓 Unlock to Edit Pitch Links
+                 Unlock to Edit Pitch Links
               </button>
             )}
           </div>
@@ -860,8 +860,8 @@ export default function MyTeamPage() {
             />
           </div>
           {!team.is_locked && (
-            <button className="btn btn-primary" onClick={handleSaveUrls}>
-              💾 Save Pitch & URLs
+            <button className="btn btn-primary"onClick={handleSaveUrls}>
+               Save Pitch & URLs
             </button>
           )}
         </div>
@@ -869,15 +869,15 @@ export default function MyTeamPage() {
 
       {/* Invite / Add Team Members Modal */}
       {showInviteModal && (
-        <div className="modal-overlay" onClick={() => setShowInviteModal(false)}>
+        <div className="modal-overlay"onClick={() => setShowInviteModal(false)}>
           <div
             className="modal-card"
             style={{ maxWidth: '780px', width: '92%', maxHeight: '85vh', display: 'flex', flexDirection: 'column' }}
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="modal-header flex-between" style={{ paddingBottom: '16px', borderBottom: '1px solid var(--border-light)' }}>
+            <div className="modal-header flex-between"style={{ paddingBottom: '16px', borderBottom: '1px solid var(--border-light)' }}>
               <div>
-                <h3 style={{ margin: 0 }}>➕ Invite / Add Team Members</h3>
+                <h3 style={{ margin: 0 }}> Invite / Add Team Members</h3>
                 <p style={{ margin: '4px 0 0', fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
                   Search and recruit registered students for team <strong>{team.team_name}</strong> ({members.length}/6 members)
                 </p>
@@ -896,7 +896,7 @@ export default function MyTeamPage() {
               <input
                 type="text"
                 className="form-input"
-                placeholder="🔍 Search student name, roll number, or skills..."
+                placeholder="Search student name, roll number, or skills..."
                 value={candidateSearch}
                 onChange={(e) => setCandidateSearch(e.target.value)}
                 style={{ flex: '1 1 240px' }}
@@ -918,7 +918,7 @@ export default function MyTeamPage() {
                   checked={candidateFemaleOnly}
                   onChange={(e) => setCandidateFemaleOnly(e.target.checked)}
                 />
-                <span>♀️ Female Candidates Only (SIH Requirement)</span>
+                <span>Female Candidates Only (SIH Requirement)</span>
               </label>
             </div>
 
@@ -926,12 +926,12 @@ export default function MyTeamPage() {
             <div style={{ flex: 1, overflowY: 'auto', paddingRight: '4px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
               {loadingCandidates ? (
                 <div style={{ textAlign: 'center', padding: '40px' }}>
-                  <div className="spinner" style={{ margin: '0 auto 12px' }} />
+                  <div className="spinner"style={{ margin: '0 auto 12px' }} />
                   <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem' }}>Loading registered candidates...</p>
                 </div>
               ) : filteredCandidates.length === 0 ? (
                 <div style={{ textAlign: 'center', padding: '40px', background: 'var(--off-white)', borderRadius: 'var(--radius-md)' }}>
-                  <div style={{ fontSize: '2rem', marginBottom: '8px' }}>🔍</div>
+                  <div style={{ fontSize: '2rem', marginBottom: '8px' }}></div>
                   <p style={{ color: 'var(--text-secondary)', margin: 0 }}>
                     No students match your search criteria. Try modifying your filters.
                   </p>
@@ -982,8 +982,8 @@ export default function MyTeamPage() {
                         <div>
                           <div style={{ fontWeight: 600, fontSize: '0.95rem', display: 'flex', alignItems: 'center', gap: '6px' }}>
                             <span>{student.full_name}</span>
-                            {student.gender === 'Female' && <span title="Female candidate">♀️</span>}
-                            <span style={{ fontSize: '0.72rem', opacity: 0.5 }}>👤 Profile</span>
+                            {student.gender === 'Female' && <span title="Female candidate"></span>}
+                            <span style={{ fontSize: '0.72rem', opacity: 0.5 }}> Profile</span>
                           </div>
                           <div style={{ fontSize: '0.82rem', color: 'var(--text-secondary)' }}>
                             {student.roll_no ? `${student.roll_no} · ` : ''}{student.department} · {student.year_of_study || 'Student'}
@@ -991,7 +991,7 @@ export default function MyTeamPage() {
                           {student.skills && student.skills.length > 0 && (
                             <div style={{ display: 'flex', gap: '4px', flexWrap: 'wrap', marginTop: '4px' }}>
                               {student.skills.slice(0, 4).map(s => (
-                                <span key={s} className="pill-badge skill" style={{ fontSize: '0.68rem', padding: '1px 6px' }}>
+                                <span key={s} className="pill-badge skill"style={{ fontSize: '0.68rem', padding: '1px 6px' }}>
                                   {s}
                                 </span>
                               ))}
@@ -1003,8 +1003,8 @@ export default function MyTeamPage() {
                       <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }} onClick={(e) => e.stopPropagation()}>
                         {isAssigned ? (
                           <div style={{ textAlign: 'right' }}>
-                            <span className="pill-badge status-locked" style={{ fontSize: '0.75rem' }}>
-                              ⛔ In Team: {assignedTeam}
+                            <span className="pill-badge status-locked"style={{ fontSize: '0.75rem' }}>
+                               In Team: {assignedTeam}
                             </span>
                             <button
                               className="btn btn-sm btn-ghost"
@@ -1016,8 +1016,8 @@ export default function MyTeamPage() {
                           </div>
                         ) : pendingInviteMap[student.id] ? (
                           <div style={{ textAlign: 'right' }}>
-                            <span className="pill-badge status-open" style={{ fontSize: '0.75rem' }}>
-                              ⏳ Invite Sent
+                            <span className="pill-badge status-open"style={{ fontSize: '0.75rem' }}>
+                               Invite Sent
                             </span>
                             <button
                               className="btn btn-sm btn-ghost"
@@ -1034,7 +1034,7 @@ export default function MyTeamPage() {
                             disabled={invitingId === student.id || members.length >= 6}
                             style={{ minWidth: '130px' }}
                           >
-                            {invitingId === student.id ? 'Sending...' : '✉️ Send Invite'}
+                            {invitingId === student.id ? 'Sending...' : 'Send Invite'}
                           </button>
                         )}
                       </div>
@@ -1046,9 +1046,9 @@ export default function MyTeamPage() {
 
             <div style={{ paddingTop: '16px', borderTop: '1px solid var(--border-light)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
               <span style={{ fontSize: '0.82rem', color: 'var(--text-muted)' }}>
-                ℹ️ Students already in another team cannot be invited to comply with SIH single-team policy.
+                 Students already in another team cannot be invited to comply with SIH single-team policy.
               </span>
-              <button className="btn btn-outline btn-sm" onClick={() => setShowInviteModal(false)}>
+              <button className="btn btn-outline btn-sm"onClick={() => setShowInviteModal(false)}>
                 Done
               </button>
             </div>
@@ -1071,7 +1071,7 @@ export default function MyTeamPage() {
       {/* Toast */}
       {toast && (
         <div className={`toast ${toast.type}`}>
-          {toast.type === 'success' ? '✅' : toast.type === 'error' ? '⚠️' : 'ℹ️'} {toast.message}
+          {toast.type === 'success' ? '' : toast.type === 'error' ? '' : ''} {toast.message}
         </div>
       )}
     </div>

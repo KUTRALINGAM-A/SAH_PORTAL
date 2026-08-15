@@ -23,7 +23,7 @@ export default function TeamCard({ team, problemStatement, memberCount, onJoinRe
 
         <div className="skills-row">
           {needsFemale && (
-            <span className="pill-badge needs-female">♀ Female Member Needed</span>
+            <span className="pill-badge needs-female"> Female Member Needed</span>
           )}
           {team.needed_skills?.filter(s => s !== 'Female Member Required').slice(0, 4).map(skill => (
             <span key={skill} className="pill-badge skill">{skill}</span>
@@ -36,7 +36,7 @@ export default function TeamCard({ team, problemStatement, memberCount, onJoinRe
 
       <div className="team-card-footer">
         <span className={`pill-badge ${team.is_locked ? 'status-locked' : 'status-open'}`}>
-          {team.is_locked ? '🔒 Locked' : '🟢 Open'}
+          {team.is_locked ? 'Locked' : 'Open'}
         </span>
 
         {!team.is_locked && team.is_open_for_recruitment && currentUserId && team.leader_id !== currentUserId && (
@@ -45,12 +45,12 @@ export default function TeamCard({ team, problemStatement, memberCount, onJoinRe
             onClick={() => onJoinRequest(team.id)}
             disabled={hasExistingRequest}
           >
-            {hasExistingRequest ? '⏳ Request Sent' : '📩 Request to Join'}
+            {hasExistingRequest ? 'Request Sent' : 'Request to Join'}
           </button>
         )}
 
         {team.leader_id === currentUserId && (
-          <span className="pill-badge role-leader">👑 Your Team</span>
+          <span className="pill-badge role-leader"> Your Team</span>
         )}
       </div>
     </div>

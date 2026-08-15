@@ -78,11 +78,11 @@ export default function ProblemStatementsAdmin() {
     <div className="page-container">
       <div className="page-header flex-between">
         <div>
-          <h1 className="page-title">📋 Problem Statements Manager</h1>
+          <h1 className="page-title"> Problem Statements Manager</h1>
           <p className="page-subtitle">Upload, manage, and review all SAH 2026 problem statements</p>
         </div>
-        <button className="btn btn-outline" onClick={downloadTemplate}>
-          📥 Download Excel Template
+        <button className="btn btn-outline"onClick={downloadTemplate}>
+           Download Excel Template
         </button>
       </div>
 
@@ -95,7 +95,7 @@ export default function ProblemStatementsAdmin() {
         onClick={() => document.getElementById('excel-input').click()}
         style={{ marginBottom: '24px' }}
       >
-        <div className="upload-icon">📤</div>
+        <div className="upload-icon"></div>
         <div className="upload-text">
           Drag & drop your Excel file here, or click to browse
         </div>
@@ -113,13 +113,13 @@ export default function ProblemStatementsAdmin() {
 
       {/* Preview Table */}
       {preview && (
-        <div className="card" style={{ marginBottom: '24px' }}>
-          <div className="flex-between" style={{ marginBottom: '16px' }}>
-            <h3>📄 Preview ({preview.length} statements)</h3>
+        <div className="card"style={{ marginBottom: '24px' }}>
+          <div className="flex-between"style={{ marginBottom: '16px' }}>
+            <h3> Preview ({preview.length} statements)</h3>
             <div style={{ display: 'flex', gap: '8px' }}>
-              <button className="btn btn-ghost" onClick={() => setPreview(null)}>Cancel</button>
-              <button className="btn btn-primary" onClick={handleUpload} disabled={uploading}>
-                {uploading ? 'Uploading...' : `✅ Confirm Upload (${preview.length})`}
+              <button className="btn btn-ghost"onClick={() => setPreview(null)}>Cancel</button>
+              <button className="btn btn-primary"onClick={handleUpload} disabled={uploading}>
+                {uploading ? 'Uploading...' : `Confirm Upload (${preview.length})`}
               </button>
             </div>
           </div>
@@ -151,7 +151,7 @@ export default function ProblemStatementsAdmin() {
       )}
 
       {/* Existing Statements */}
-      <div className="card" style={{ padding: 0 }}>
+      <div className="card"style={{ padding: 0 }}>
         <div style={{ padding: '16px 20px', borderBottom: '1px solid var(--border-light)' }}>
           <h3>Existing Problem Statements ({statements.length})</h3>
         </div>
@@ -169,7 +169,7 @@ export default function ProblemStatementsAdmin() {
             </thead>
             <tbody>
               {statements.length === 0 ? (
-                <tr><td colSpan="6" style={{ textAlign: 'center', padding: '30px', color: 'var(--text-muted)' }}>No problem statements yet. Upload an Excel file to get started.</td></tr>
+                <tr><td colSpan="6"style={{ textAlign: 'center', padding: '30px', color: 'var(--text-muted)' }}>No problem statements yet. Upload an Excel file to get started.</td></tr>
               ) : (
                 statements.map(ps => (
                   <tr key={ps.id}>
@@ -179,7 +179,7 @@ export default function ProblemStatementsAdmin() {
                     <td>{ps.domain}</td>
                     <td style={{ fontSize: '0.82rem' }}>{ps.organization}</td>
                     <td>
-                      <button className="btn btn-ghost btn-sm" onClick={() => handleDelete(ps.id)} style={{ color: 'var(--red)' }}>🗑️</button>
+                      <button className="btn btn-ghost btn-sm"onClick={() => handleDelete(ps.id)} style={{ color: 'var(--red)' }}></button>
                     </td>
                   </tr>
                 ))

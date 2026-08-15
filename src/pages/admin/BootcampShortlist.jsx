@@ -53,9 +53,9 @@ export default function BootcampShortlist() {
 
   return (
     <div className="page-container">
-      <div className="page-header flex-between" style={{ flexWrap: 'wrap', gap: '16px' }}>
+      <div className="page-header flex-between"style={{ flexWrap: 'wrap', gap: '16px' }}>
         <div>
-          <h1 className="page-title">🏆 Top {topN} Bootcamp Shortlist</h1>
+          <h1 className="page-title"> Top {topN} Bootcamp Shortlist</h1>
           <p className="page-subtitle">Z-Score normalized rankings across all judges</p>
         </div>
         <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
@@ -68,18 +68,18 @@ export default function BootcampShortlist() {
             style={{ width: '80px' }}
             min={1}
           />
-          <button className="btn btn-orange" onClick={() => setShortlistGenerated(true)}>
-            🎯 Generate Shortlist
+          <button className="btn btn-orange"onClick={() => setShortlistGenerated(true)}>
+             Generate Shortlist
           </button>
-          <button className="btn btn-navy" onClick={handleExportCSV}>
-            📥 Export CSV
+          <button className="btn btn-navy"onClick={handleExportCSV}>
+             Export CSV
           </button>
         </div>
       </div>
 
       {rankings.length === 0 ? (
         <div className="empty-state">
-          <div className="empty-icon">⚖️</div>
+          <div className="empty-icon"></div>
           <h3>No evaluations yet</h3>
           <p>Judges need to evaluate teams before rankings can be generated.</p>
         </div>
@@ -91,12 +91,12 @@ export default function BootcampShortlist() {
               borderRadius: 'var(--radius-md)', padding: '14px 20px',
               marginBottom: '20px', display: 'flex', alignItems: 'center', gap: '10px'
             }}>
-              <span>🎉</span>
+              <span></span>
               <span><strong>Top {topN} Shortlist Generated!</strong> Showing {Math.min(topN, rankings.length)} of {rankings.length} evaluated teams.</span>
             </div>
           )}
 
-          <div className="card" style={{ padding: 0, overflow: 'auto' }}>
+          <div className="card"style={{ padding: 0, overflow: 'auto' }}>
             <table className="data-table">
               <thead>
                 <tr>
@@ -113,7 +113,7 @@ export default function BootcampShortlist() {
                   <tr key={r.team_id} style={i < 3 ? { background: i === 0 ? '#FFF8E1' : i === 1 ? '#F5F5F5' : '#FBE9E7' } : {}}>
                     <td>
                       <strong style={{ fontSize: '1.1rem' }}>
-                        {r.rank === 1 ? '🥇' : r.rank === 2 ? '🥈' : r.rank === 3 ? '🥉' : `#${r.rank}`}
+                        {r.rank === 1 ? '' : r.rank === 2 ? '' : r.rank === 3 ? '' : `#${r.rank}`}
                       </strong>
                     </td>
                     <td><strong>{teamNames[r.team_id] || r.team_id.slice(0, 8)}</strong></td>
@@ -124,7 +124,7 @@ export default function BootcampShortlist() {
                     <td>{r.judge_count}</td>
                     <td>
                       <span className={`pill-badge ${i < topN && shortlistGenerated ? 'status-verified' : 'role-member'}`}>
-                        {i < topN && shortlistGenerated ? '✅ Shortlisted' : 'Evaluated'}
+                        {i < topN && shortlistGenerated ? 'Shortlisted' : 'Evaluated'}
                       </span>
                     </td>
                   </tr>
