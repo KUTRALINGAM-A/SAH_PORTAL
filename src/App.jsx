@@ -18,6 +18,7 @@ import ProblemStatementsPage from './pages/ProblemStatementsPage';
 
 // Admin Pages
 import ProblemStatementsAdmin from './pages/admin/ProblemStatementsAdmin';
+import JudgePanelsAdmin from './pages/admin/JudgePanelsAdmin';
 import AnalyticsDashboard from './pages/admin/AnalyticsDashboard';
 import MasterRoster from './pages/admin/MasterRoster';
 import BootcampShortlist from './pages/admin/BootcampShortlist';
@@ -59,43 +60,11 @@ function HomePage() {
         </p>
       </div>
 
-      {/* How it Works Flowchart Section */}
+      {/* How it Works Section */}
       <section className="how-it-works-section">
         {/* Header Pill */}
         <div className="flowchart-header">
           <span className="flowchart-pill">HOW IT WORKS</span>
-        </div>
-
-        {/* Tree Org-Chart Connector (Desktop) */}
-        <div className="flowchart-tree" aria-hidden="true">
-          {/* Central Stem from bottom of pill */}
-          <div className="flowchart-trunk" />
-
-          {/* 3-Branch Tree Grid (matching the 3-column cards grid exactly) */}
-          <div className="flowchart-branches">
-            {/* Branch 1: Left */}
-            <div className="tree-branch branch-1">
-              <div className="branch-h-line" />
-              <div className="branch-v-line">
-                <span className="branch-arrow" />
-              </div>
-            </div>
-
-            {/* Branch 2: Center */}
-            <div className="tree-branch branch-2">
-              <div className="branch-v-line">
-                <span className="branch-arrow" />
-              </div>
-            </div>
-
-            {/* Branch 3: Right */}
-            <div className="tree-branch branch-3">
-              <div className="branch-h-line" />
-              <div className="branch-v-line">
-                <span className="branch-arrow" />
-              </div>
-            </div>
-          </div>
         </div>
 
         {/* 3 Steps Row */}
@@ -121,12 +90,6 @@ function HomePage() {
             }
           ].map((item, i) => (
             <div key={i} className={`how-it-works-column ${item.colorTheme}`}>
-              {/* Mobile vertical flow connector */}
-              <div className="mobile-step-connector" aria-hidden="true">
-                <span className="connector-line" />
-                <span className="branch-arrow" />
-              </div>
-
               {/* Step Card */}
               <div className="how-it-works-card">
                 {/* Circular Badge */}
@@ -191,8 +154,9 @@ export default function App() {
               <Route path="/profile"element={<ProtectedRoute><ProfilePage /></ProtectedRoute>} />
 
               {/* Admin & SPOC Shared Management */}
-              <Route path="/admin/problem-statements"element={<ProtectedRoute roles={['admin', 'spoc']}><ProblemStatementsAdmin /></ProtectedRoute>} />
-              <Route path="/admin/analytics"element={<ProtectedRoute roles={['admin', 'spoc']}><AnalyticsDashboard /></ProtectedRoute>} />
+              <Route path="/admin/problem-statements" element={<ProtectedRoute roles={['admin', 'spoc']}><ProblemStatementsAdmin /></ProtectedRoute>} />
+              <Route path="/admin/judge-panels" element={<ProtectedRoute roles={['admin']}><JudgePanelsAdmin /></ProtectedRoute>} />
+              <Route path="/admin/analytics" element={<ProtectedRoute roles={['admin', 'spoc']}><AnalyticsDashboard /></ProtectedRoute>} />
               <Route path="/admin/roster"element={<ProtectedRoute roles={['admin', 'spoc']}><MasterRoster /></ProtectedRoute>} />
               <Route path="/admin/bootcamp"element={<ProtectedRoute roles={['admin', 'spoc']}><BootcampShortlist /></ProtectedRoute>} />
               <Route path="/spoc/verify"element={<ProtectedRoute roles={['spoc', 'admin']}><VerificationQueue /></ProtectedRoute>} />

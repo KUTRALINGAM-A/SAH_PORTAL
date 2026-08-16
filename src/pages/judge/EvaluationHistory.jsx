@@ -39,17 +39,19 @@ export default function EvaluationHistory() {
           <p>Go to "Evaluate Teams"to start scoring.</p>
         </div>
       ) : (
-        <div className="card"style={{ padding: 0, overflow: 'auto' }}>
+        <div className="card" style={{ padding: 0, overflow: 'auto' }}>
           <table className="data-table">
             <thead>
               <tr>
                 <th>Team</th>
                 <th>Problem Statement</th>
-                <th>Understanding (25)</th>
-                <th>Execution (30)</th>
-                <th>Impact (25)</th>
-                <th>Pitch (20)</th>
-                <th>Total</th>
+                <th>Understanding (5)</th>
+                <th>Innovation (10)</th>
+                <th>Technical (10)</th>
+                <th>Prototype (15)</th>
+                <th>Impact (5)</th>
+                <th>Presentation (5)</th>
+                <th>Total (50)</th>
                 <th>Date</th>
               </tr>
             </thead>
@@ -60,13 +62,15 @@ export default function EvaluationHistory() {
                   <td style={{ fontSize: '0.82rem' }}>
                     {ev.teams?.problem_statements?.ps_code || '—'}
                   </td>
-                  <td>{ev.understanding_score}</td>
-                  <td>{ev.execution_score}</td>
-                  <td>{ev.impact_score}</td>
-                  <td>{ev.pitch_score}</td>
+                  <td>{ev.understanding_score ?? '—'}</td>
+                  <td>{ev.innovation_score ?? '—'}</td>
+                  <td>{ev.technical_score ?? '—'}</td>
+                  <td>{ev.prototype_score ?? '—'}</td>
+                  <td>{ev.impact_score ?? '—'}</td>
+                  <td>{ev.presentation_score ?? '—'}</td>
                   <td>
                     <strong style={{ color: 'var(--orange)', fontSize: '1.05rem' }}>
-                      {ev.total_raw}/100
+                      {ev.total_raw}/50
                     </strong>
                   </td>
                   <td style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>

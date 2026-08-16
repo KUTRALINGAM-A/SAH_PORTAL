@@ -107,17 +107,19 @@ CREATE POLICY "Update invitations" ON team_invitations FOR UPDATE USING (true);
 CREATE POLICY "Delete invitations" ON team_invitations FOR DELETE USING (true);
 
 -- ============================================================
--- 6. EVALUATIONS TABLE
+-- 6. EVALUATIONS TABLE (Official SAH 6-Parameter Rubric / 50 Marks)
 -- ============================================================
 CREATE TABLE IF NOT EXISTS evaluations (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     team_id UUID REFERENCES teams(id) ON DELETE CASCADE NOT NULL,
     judge_id UUID REFERENCES profiles(id) ON DELETE RESTRICT NOT NULL,
-    understanding_score INT CHECK (understanding_score BETWEEN 0 AND 25) NOT NULL,
-    execution_score INT CHECK (execution_score BETWEEN 0 AND 30) NOT NULL,
-    impact_score INT CHECK (impact_score BETWEEN 0 AND 25) NOT NULL,
-    pitch_score INT CHECK (pitch_score BETWEEN 0 AND 20) NOT NULL,
-    total_raw INT GENERATED ALWAYS AS (understanding_score + execution_score + impact_score + pitch_score) STORED,
+    understanding_score INT CHECK (understanding_score BETWEEN 0 AND 5) NOT NULL,
+    innovation_score INT CHECK (innovation_score BETWEEN 0 AND 10) DEFAULT 0,
+    technical_score INT CHECK (technical_score BETWEEN 0 AND 10) DEFAULT 0,
+    prototype_score INT CHECK (prototype_score BETWEEN 0 AND 15) DEFAULT 0,
+    impact_score INT CHECK (impact_score BETWEEN 0 AND 5) NOT NULL,
+    presentation_score INT CHECK (presentation_score BETWEEN 0 AND 5) DEFAULT 0,
+    total_raw INT DEFAULT 0,
     remarks TEXT,
     created_at TIMESTAMPTZ DEFAULT NOW(),
     UNIQUE(team_id, judge_id)
@@ -391,3 +393,68 @@ BEGIN
     ALTER PUBLICATION supabase_realtime ADD TABLE notifications;
   END IF;
 END $$;
+
+-- ============================================================
+-- 8. JUDGE PANELS & ASSIGNMENTS TABLES
+-- ============================================================
+CREATE TABLE IF NOT EXISTS judge_panels (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    name TEXT NOT NULL UNIQUE,
+    created_by UUID REFERENCES profiles(id) ON DELETE SET NULL,
+    created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+CREATE TABLE IF NOT EXISTS panel_judges (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    panel_id UUID REFERENCES judge_panels(id) ON DELETE CASCADE NOT NULL,
+    judge_id UUID REFERENCES profiles(id) ON DELETE CASCADE NOT NULL,
+    assigned_at TIMESTAMPTZ DEFAULT NOW(),
+    UNIQUE(panel_id, judge_id)
+);
+
+CREATE TABLE IF NOT EXISTS panel_problem_statements (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    panel_id UUID REFERENCES judge_panels(id) ON DELETE CASCADE NOT NULL,
+    ps_id UUID REFERENCES problem_statements(id) ON DELETE CASCADE NOT NULL,
+    assigned_at TIMESTAMPTZ DEFAULT NOW(),
+    UNIQUE(ps_id) -- Enforces one panel per problem statement rule
+);
+
+-- ENABLE ROW LEVEL SECURITY
+ALTER TABLE judge_panels ENABLE ROW LEVEL SECURITY;
+ALTER TABLE panel_judges ENABLE ROW LEVEL SECURITY;
+ALTER TABLE panel_problem_statements ENABLE ROW LEVEL SECURITY;
+
+-- POLICIES FOR judge_panels
+DROP POLICY IF EXISTS "Read judge_panels" ON judge_panels;
+DROP POLICY IF EXISTS "Admin insert judge_panels" ON judge_panels;
+DROP POLICY IF EXISTS "Admin update judge_panels" ON judge_panels;
+DROP POLICY IF EXISTS "Admin delete judge_panels" ON judge_panels;
+
+CREATE POLICY "Read judge_panels" ON judge_panels FOR SELECT USING (true);
+CREATE POLICY "Admin insert judge_panels" ON judge_panels FOR INSERT WITH CHECK (true);
+CREATE POLICY "Admin update judge_panels" ON judge_panels FOR UPDATE USING (true);
+CREATE POLICY "Admin delete judge_panels" ON judge_panels FOR DELETE USING (true);
+
+-- POLICIES FOR panel_judges
+DROP POLICY IF EXISTS "Read panel_judges" ON panel_judges;
+DROP POLICY IF EXISTS "Admin insert panel_judges" ON panel_judges;
+DROP POLICY IF EXISTS "Admin update panel_judges" ON panel_judges;
+DROP POLICY IF EXISTS "Admin delete panel_judges" ON panel_judges;
+
+CREATE POLICY "Read panel_judges" ON panel_judges FOR SELECT USING (true);
+CREATE POLICY "Admin insert panel_judges" ON panel_judges FOR INSERT WITH CHECK (true);
+CREATE POLICY "Admin update panel_judges" ON panel_judges FOR UPDATE USING (true);
+CREATE POLICY "Admin delete panel_judges" ON panel_judges FOR DELETE USING (true);
+
+-- POLICIES FOR panel_problem_statements
+DROP POLICY IF EXISTS "Read panel_problem_statements" ON panel_problem_statements;
+DROP POLICY IF EXISTS "Admin insert panel_problem_statements" ON panel_problem_statements;
+DROP POLICY IF EXISTS "Admin update panel_problem_statements" ON panel_problem_statements;
+DROP POLICY IF EXISTS "Admin delete panel_problem_statements" ON panel_problem_statements;
+
+CREATE POLICY "Read panel_problem_statements" ON panel_problem_statements FOR SELECT USING (true);
+CREATE POLICY "Admin insert panel_problem_statements" ON panel_problem_statements FOR INSERT WITH CHECK (true);
+CREATE POLICY "Admin update panel_problem_statements" ON panel_problem_statements FOR UPDATE USING (true);
+CREATE POLICY "Admin delete panel_problem_statements" ON panel_problem_statements FOR DELETE USING (true);
+

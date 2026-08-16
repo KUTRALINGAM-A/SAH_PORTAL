@@ -19,6 +19,7 @@ export default function Navbar() {
   const adminTabs = [
     { path: '/dashboard', label: 'Dashboard' },
     { path: '/admin/problem-statements', label: 'Problem Statements' },
+    { path: '/admin/judge-panels', label: 'Judge Panels' },
     { path: '/admin/roster', label: 'Master Roster' },
     { path: '/admin/analytics', label: 'Analytics' },
     { path: '/spoc/verify', label: 'Verification Queue' },
