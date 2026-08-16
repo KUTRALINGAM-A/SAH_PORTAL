@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import { supabase } from '../../lib/supabase';
-import RubricNumberInput from '../../components/RubricNumberInput';
+import RubricRadioGroup from '../../components/RubricRadioGroup';
 
 export default function EvaluationPage() {
   const { profile } = useAuth();
@@ -15,41 +15,41 @@ export default function EvaluationPage() {
   const [judgePanelName, setJudgePanelName] = useState(null);
   const [judgePanelAssigned, setJudgePanelAssigned] = useState(true);
 
-  // 6 Official Rubric scoring parameters (numeric input scores)
-  const [understanding, setUnderstanding] = useState(''); // Max 5
-  const [innovation, setInnovation] = useState('');       // Max 10
-  const [technical, setTechnical] = useState('');         // Max 10
-  const [prototype, setPrototype] = useState('');         // Max 15
-  const [impact, setImpact] = useState('');               // Max 5
-  const [presentation, setPresentation] = useState('');   // Max 5
+  // 6 Official Rubric scoring parameters (initially null - no option selected)
+  const [understanding, setUnderstanding] = useState(null); // Max 5
+  const [innovation, setInnovation] = useState(null);       // Max 10
+  const [technical, setTechnical] = useState(null);         // Max 10
+  const [prototype, setPrototype] = useState(null);         // Max 15
+  const [impact, setImpact] = useState(null);               // Max 5
+  const [presentation, setPresentation] = useState(null);   // Max 5
   const [remarks, setRemarks] = useState('');
 
-  // Check if all 6 parameters have entered scores
+  // Check if all 6 parameters have a selected score
   const isAllSelected =
-    understanding !== '' && understanding !== null &&
-    innovation !== '' && innovation !== null &&
-    technical !== '' && technical !== null &&
-    prototype !== '' && prototype !== null &&
-    impact !== '' && impact !== null &&
-    presentation !== '' && presentation !== null;
+    understanding !== null &&
+    innovation !== null &&
+    technical !== null &&
+    prototype !== null &&
+    impact !== null &&
+    presentation !== null;
 
   // Total Score (Max 50)
   const total =
-    (Number(understanding) || 0) +
-    (Number(innovation) || 0) +
-    (Number(technical) || 0) +
-    (Number(prototype) || 0) +
-    (Number(impact) || 0) +
-    (Number(presentation) || 0);
+    (understanding ?? 0) +
+    (innovation ?? 0) +
+    (technical ?? 0) +
+    (prototype ?? 0) +
+    (impact ?? 0) +
+    (presentation ?? 0);
 
-  const enteredCount = [
+  const selectedCount = [
     understanding,
     innovation,
     technical,
     prototype,
     impact,
     presentation
-  ].filter(v => v !== '' && v !== null && v !== undefined).length;
+  ].filter(v => v !== null).length;
 
   useEffect(() => {
     fetchData();
@@ -135,21 +135,21 @@ export default function EvaluationPage() {
     const existing = evaluationsMap[team.id];
     if (existing) {
       // Pre-fill existing submitted evaluation for this judge
-      setUnderstanding(existing.understanding_score ?? '');
-      setInnovation(existing.innovation_score ?? '');
-      setTechnical(existing.technical_score ?? '');
-      setPrototype(existing.prototype_score ?? existing.execution_score ?? '');
-      setImpact(existing.impact_score ?? '');
-      setPresentation(existing.presentation_score ?? existing.pitch_score ?? '');
+      setUnderstanding(existing.understanding_score ?? null);
+      setInnovation(existing.innovation_score ?? null);
+      setTechnical(existing.technical_score ?? null);
+      setPrototype(existing.prototype_score ?? existing.execution_score ?? null);
+      setImpact(existing.impact_score ?? null);
+      setPresentation(existing.presentation_score ?? existing.pitch_score ?? null);
       setRemarks(existing.remarks || '');
     } else {
-      // Reset all 6 parameters to empty (ready for input)
-      setUnderstanding('');
-      setInnovation('');
-      setTechnical('');
-      setPrototype('');
-      setImpact('');
-      setPresentation('');
+      // Reset all 6 parameters to null (unselected)
+      setUnderstanding(null);
+      setInnovation(null);
+      setTechnical(null);
+      setPrototype(null);
+      setImpact(null);
+      setPresentation(null);
       setRemarks('');
     }
   };
@@ -157,29 +157,22 @@ export default function EvaluationPage() {
   const handleSubmit = async () => {
     if (!selectedTeam || !profile) return;
 
-    // Strict validation: all 6 parameters must have a value entered
+    // Strict validation: all 6 parameters must have a selected radio score
     if (!isAllSelected) {
-      showToast('error', 'Please enter a score for all evaluation parameters.');
+      showToast('error', 'Please select a score for all evaluation parameters.');
       return;
     }
 
-    const intUnderstanding = Number(understanding);
-    const intInnovation = Number(innovation);
-    const intTechnical = Number(technical);
-    const intPrototype = Number(prototype);
-    const intImpact = Number(impact);
-    const intPresentation = Number(presentation);
-
     // Strict range verification
     if (
-      intUnderstanding < 0 || intUnderstanding > 5 ||
-      intInnovation < 0 || intInnovation > 10 ||
-      intTechnical < 0 || intTechnical > 10 ||
-      intPrototype < 0 || intPrototype > 15 ||
-      intImpact < 0 || intImpact > 5 ||
-      intPresentation < 0 || intPresentation > 5
+      understanding < 0 || understanding > 5 ||
+      innovation < 0 || innovation > 10 ||
+      technical < 0 || technical > 10 ||
+      prototype < 0 || prototype > 15 ||
+      impact < 0 || impact > 5 ||
+      presentation < 0 || presentation > 5
     ) {
-      showToast('error', 'Invalid score entered. Please stay within the official rubric ranges.');
+      showToast('error', 'Invalid score selected. Please stay within the official rubric ranges.');
       return;
     }
 
@@ -188,12 +181,12 @@ export default function EvaluationPage() {
     const payload = {
       team_id: selectedTeam.id,
       judge_id: profile.id,
-      understanding_score: intUnderstanding,
-      innovation_score: intInnovation,
-      technical_score: intTechnical,
-      prototype_score: intPrototype,
-      impact_score: intImpact,
-      presentation_score: intPresentation,
+      understanding_score: understanding,
+      innovation_score: innovation,
+      technical_score: technical,
+      prototype_score: prototype,
+      impact_score: impact,
+      presentation_score: presentation,
       remarks: remarks?.trim() || null
     };
 
@@ -206,10 +199,10 @@ export default function EvaluationPage() {
       const legacyPayload = {
         team_id: selectedTeam.id,
         judge_id: profile.id,
-        understanding_score: intUnderstanding,
-        execution_score: intTechnical + intPrototype,
-        impact_score: intImpact,
-        pitch_score: intPresentation + intInnovation,
+        understanding_score: understanding,
+        execution_score: technical + prototype,
+        impact_score: impact,
+        pitch_score: presentation + innovation,
         remarks: remarks?.trim() || null
       };
       const fallbackRes = await supabase
@@ -324,7 +317,7 @@ export default function EvaluationPage() {
             )}
           </div>
 
-          {/* Official Rubric Form with Direct Number Inputs */}
+          {/* Official Rubric Radio Form */}
           {selectedTeam && (
             <div className="card card-elevated" style={{ position: 'sticky', top: '90px', alignSelf: 'start' }}>
               {/* Team & Judge Metadata Header */}
@@ -358,7 +351,8 @@ export default function EvaluationPage() {
               </div>
 
               {/* 1. Understanding of the Problem (0-5) */}
-              <RubricNumberInput
+              <RubricRadioGroup
+                name="understanding"
                 label="1. Understanding of the Problem"
                 max={5}
                 value={understanding}
@@ -366,7 +360,8 @@ export default function EvaluationPage() {
               />
 
               {/* 2. Innovation & Originality (0-10) */}
-              <RubricNumberInput
+              <RubricRadioGroup
+                name="innovation"
                 label="2. Innovation & Originality"
                 max={10}
                 value={innovation}
@@ -374,7 +369,8 @@ export default function EvaluationPage() {
               />
 
               {/* 3. Technical Solution (0-10) */}
-              <RubricNumberInput
+              <RubricRadioGroup
+                name="technical"
                 label="3. Technical Solution"
                 max={10}
                 value={technical}
@@ -382,7 +378,8 @@ export default function EvaluationPage() {
               />
 
               {/* 4. Prototype / Demo (0-15) */}
-              <RubricNumberInput
+              <RubricRadioGroup
+                name="prototype"
                 label="4. Prototype / Demo"
                 max={15}
                 value={prototype}
@@ -390,7 +387,8 @@ export default function EvaluationPage() {
               />
 
               {/* 5. Impact & Future Scope (0-5) */}
-              <RubricNumberInput
+              <RubricRadioGroup
+                name="impact"
                 label="5. Impact & Future Scope"
                 max={5}
                 value={impact}
@@ -398,7 +396,8 @@ export default function EvaluationPage() {
               />
 
               {/* 6. Presentation & Template (0-5) */}
-              <RubricNumberInput
+              <RubricRadioGroup
+                name="presentation"
                 label="6. Presentation & Template"
                 max={5}
                 value={presentation}
@@ -422,7 +421,7 @@ export default function EvaluationPage() {
                   {total}<span style={{ fontSize: '1.3rem', opacity: 0.6 }}> / 50</span>
                 </div>
                 <div style={{ fontSize: '0.76rem', color: isAllSelected ? '#86efac' : '#fed7aa', fontWeight: 600 }}>
-                  {isAllSelected ? '✓ All 6 parameters scored' : `${enteredCount} of 6 parameters entered`}
+                  {isAllSelected ? '✓ All 6 parameters scored' : `${selectedCount} of 6 parameters selected`}
                 </div>
               </div>
 
@@ -457,7 +456,7 @@ export default function EvaluationPage() {
                   ? 'Submitting Evaluation...'
                   : isAllSelected
                     ? `Submit Evaluation (${total}/50)`
-                    : 'Enter Scores for All 6 Parameters to Submit'}
+                    : 'Select Scores for All 6 Parameters to Submit'}
               </button>
             </div>
           )}
