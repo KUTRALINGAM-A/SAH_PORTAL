@@ -1,5 +1,13 @@
-export default function TeamCard({ team, problemStatement, memberCount, onJoinRequest, currentUserId, hasExistingRequest }) {
-  const openSlots = 6 - (memberCount || 0);
+export default function TeamCard({
+  team,
+  problemStatement,
+  memberCount,
+  onJoinRequest,
+  currentUserId,
+  hasExistingRequest,
+  isAlreadyInTeam,
+  isMyTeam
+}) {
   const needsFemale = team.needed_skills?.includes('Female Member Required');
 
   return (
@@ -39,7 +47,18 @@ export default function TeamCard({ team, problemStatement, memberCount, onJoinRe
           {team.is_locked ? 'Locked' : 'Open'}
         </span>
 
-        {!team.is_locked && team.is_open_for_recruitment && currentUserId && team.leader_id !== currentUserId && (
+        {isMyTeam || team.leader_id === currentUserId ? (
+          <span className="pill-badge role-leader"> Your Team</span>
+        ) : isAlreadyInTeam ? (
+          <button
+            className="btn btn-sm"
+            disabled
+            style={{ opacity: 0.65, background: 'var(--border)', color: 'var(--text-secondary)', cursor: 'not-allowed' }}
+            title="You are already a member of a team. Students can only belong to one team."
+          >
+            Already in a Team
+          </button>
+        ) : !team.is_locked && team.is_open_for_recruitment && currentUserId ? (
           <button
             className="btn btn-orange btn-sm"
             onClick={() => onJoinRequest(team.id)}
@@ -47,11 +66,7 @@ export default function TeamCard({ team, problemStatement, memberCount, onJoinRe
           >
             {hasExistingRequest ? 'Request Sent' : 'Request to Join'}
           </button>
-        )}
-
-        {team.leader_id === currentUserId && (
-          <span className="pill-badge role-leader"> Your Team</span>
-        )}
+        ) : null}
       </div>
     </div>
   );

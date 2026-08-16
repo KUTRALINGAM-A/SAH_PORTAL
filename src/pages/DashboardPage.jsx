@@ -234,14 +234,23 @@ export default function DashboardPage() {
   }, [allPanels, allPanelJudges, allPanelPS, allTeams, allEvaluations]);
 
   // Judge specific evaluation stats
+  const judgeAssignedTeamsCount = useMemo(() => {
+    if (!judgePanelInfo?.problemStatements?.length) return 0;
+    const assignedPsSet = new Set(judgePanelInfo.problemStatements.map(ps => ps.id));
+    return allTeams.filter(t => t.ps_id && assignedPsSet.has(t.ps_id)).length;
+  }, [allTeams, judgePanelInfo]);
+
   const judgeEvaluatedCount = useMemo(() => {
     if (!profile) return 0;
-    return allEvaluations.filter(e => e.judge_id === profile.id).length;
+    const evaluatedTeamsSet = new Set(
+      allEvaluations.filter(e => e.judge_id === profile.id).map(e => e.team_id)
+    );
+    return evaluatedTeamsSet.size;
   }, [allEvaluations, profile]);
 
   const judgePendingCount = useMemo(() => {
-    return Math.max(0, stats.lockedTeams - judgeEvaluatedCount);
-  }, [stats.lockedTeams, judgeEvaluatedCount]);
+    return Math.max(0, judgeAssignedTeamsCount - judgeEvaluatedCount);
+  }, [judgeAssignedTeamsCount, judgeEvaluatedCount]);
 
   if (loading) {
     return <div className="loading-spinner"><div className="spinner" /></div>;
@@ -258,7 +267,7 @@ export default function DashboardPage() {
   allProblemStatements.forEach(ps => { psMap[ps.id] = ps; });
 
   const assignedStudentIdSet = new Set(allMembers.map(m => m.student_id));
-  const unassignedList = allProfiles.filter(p => !assignedStudentIdSet.has(p.id));
+  const unassignedList = allProfiles.filter(p => p.role === 'student' && !assignedStudentIdSet.has(p.id));
 
   const teamMemberCountMap = {};
   allMembers.forEach(m => {
@@ -268,155 +277,113 @@ export default function DashboardPage() {
 
   return (
     <div className="page-container">
-      <div className="page-header">
-        <h1 className="page-title">
-          Welcome back, {profile?.full_name?.split(' ')[0]}! 
-        </h1>
-        <p className="page-subtitle">
-          {isAdmin ? 'Organizing Committee Dashboard' :
-           isJudge ? 'Judge Evaluation Dashboard' :
-           isSpoc ? 'SPOC Verification Dashboard' :
-           myTeam ? `Team: ${myTeam.team_name} (${myTeam.role})` :
-           'Find or create a team to get started'}
+      {/* Welcome Banner */}
+      <div className="hero-banner">
+        <h1>Welcome back, {profile?.full_name || 'Innovator'}!</h1>
+        <p>
+          {isAdmin && 'Admin Portal — Live system telemetry, judge panels, verification queue & analytics.'}
+          {isJudge && (judgePanelInfo ? `Judge Dashboard — Assigned to ${judgePanelInfo.panel?.name || 'Panel'} · Official 50-Mark Rubric Evaluation.` : 'Judge Dashboard — Evaluate assigned teams on the official 50-mark SAH rubric.')}
+          {isSpoc && 'SPOC Dashboard — Team verification, member compliance & SIH guardrails.'}
+          {!isAdmin && !isJudge && !isSpoc && (
+            myTeam
+              ? `You are a ${myTeam.role} in "${myTeam.team_name}". Check your team status below.`
+              : 'Smart Amrita Hackathon 2026 Internal Portal. Form your team of 6 and select a Problem Statement.'
+          )}
         </p>
       </div>
 
-      {/* ADMIN & SPOC: Live Judge Panel Details Section (Above Stats Cards) */}
+      {/* ADMIN & SPOC: Live Panel Details Section (placed above the stats cards) */}
       {(isAdmin || isSpoc) && (
-        <div className="card" style={{ padding: '24px', marginBottom: '24px' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '18px', flexWrap: 'wrap', gap: '10px' }}>
+        <div style={{ marginBottom: '28px' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '14px' }}>
             <div>
-              <h3 style={{ margin: 0, fontSize: '1.15rem', color: 'var(--navy)', display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <h3 style={{ margin: 0, fontSize: '1.2rem', color: 'var(--navy)', display: 'flex', alignItems: 'center', gap: '8px' }}>
                 <span>Live Judge Panel Details</span>
-                <span className="pill-badge" style={{ background: '#E8F5E9', color: 'var(--green)', fontSize: '0.72rem', display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
-                  <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: 'var(--green)', display: 'inline-block' }} /> Live Updates
-                </span>
+                <span className="live-pill" style={{ fontSize: '0.7rem', padding: '2px 8px' }}>● Live Sync</span>
               </h3>
-              <p style={{ margin: '4px 0 0', fontSize: '0.82rem', color: 'var(--text-secondary)' }}>
-                Real-time panel tracking: judges, assigned teams, and completed evaluations
+              <p style={{ margin: '3px 0 0', fontSize: '0.84rem', color: 'var(--text-secondary)' }}>
+                Real-time panel evaluation telemetry and judge status
               </p>
             </div>
-
             {isAdmin && (
-              <Link to="/admin/judge-panels" className="btn btn-outline btn-sm" style={{ fontSize: '0.78rem' }}>
+              <Link to="/admin/judge-panels" className="btn btn-outline btn-sm" style={{ fontSize: '0.8rem' }}>
                 Manage Panels ➔
               </Link>
             )}
           </div>
 
           {livePanelDetails.length === 0 ? (
-            <div style={{
-              padding: '24px',
-              background: 'var(--off-white)',
-              borderRadius: 'var(--radius-md)',
-              border: '1px dashed var(--border)',
-              textAlign: 'center',
-              color: 'var(--text-secondary)',
-              fontSize: '0.88rem'
-            }}>
-              No judge panels created yet.{' '}
-              {isAdmin && (
-                <Link to="/admin/judge-panels" style={{ color: 'var(--orange)', fontWeight: 600 }}>
-                  Create your first panel
-                </Link>
-              )}
+            <div className="card" style={{ padding: '24px 20px', textAlign: 'center', color: 'var(--text-secondary)' }}>
+              <p style={{ margin: 0, fontSize: '0.92rem' }}>
+                No judge panels created yet. {isAdmin && <Link to="/admin/judge-panels" style={{ color: 'var(--orange)', fontWeight: 600 }}>Create your first panel</Link>}
+              </p>
             </div>
           ) : (
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: '16px' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '16px' }}>
               {livePanelDetails.map(panel => {
+                const isFullyEvaluated = panel.assignedTeamsCount > 0 && panel.evaluationsCompletedCount >= panel.assignedTeamsCount;
+                const pendingCount = Math.max(0, panel.assignedTeamsCount - panel.evaluationsCompletedCount);
+
                 return (
                   <div
                     key={panel.id}
-                    onClick={() => setSelectedPanelDetailId(panel.id)}
+                    className="card"
                     style={{
-                      padding: '16px 18px',
-                      background: 'var(--off-white)',
-                      border: '1px solid var(--border-light)',
-                      borderRadius: 'var(--radius-md)',
+                      padding: '18px 20px',
                       display: 'flex',
                       flexDirection: 'column',
                       justifyContent: 'space-between',
-                      gap: '12px',
-                      cursor: 'pointer',
-                      boxShadow: 'var(--shadow-sm)',
-                      transition: 'transform 0.15s, box-shadow 0.15s, border-color 0.15s'
-                    }}
-                    onMouseEnter={(e) => {
-                      e.currentTarget.style.transform = 'translateY(-2px)';
-                      e.currentTarget.style.boxShadow = 'var(--shadow-md)';
-                      e.currentTarget.style.borderColor = 'var(--navy-light)';
-                    }}
-                    onMouseLeave={(e) => {
-                      e.currentTarget.style.transform = 'none';
-                      e.currentTarget.style.boxShadow = 'var(--shadow-sm)';
-                      e.currentTarget.style.borderColor = 'var(--border-light)';
+                      borderLeft: isFullyEvaluated ? '4px solid var(--green)' : '4px solid var(--orange)',
+                      transition: 'transform 0.15s, box-shadow 0.15s'
                     }}
                   >
                     <div>
-                      {/* Panel Name */}
-                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
-                        <strong style={{ fontSize: '1.05rem', color: 'var(--navy)' }}>
+                      <div className="flex-between" style={{ marginBottom: '8px' }}>
+                        <h4 style={{ margin: 0, fontSize: '1.08rem', color: 'var(--navy)' }}>
                           {panel.name}
-                        </strong>
-                        <span
-                          className="pill-badge"
-                          style={{
-                            fontSize: '0.72rem',
-                            background: panel.evaluationsCompletedCount === panel.assignedTeamsCount && panel.assignedTeamsCount > 0 ? '#E8F5E9' : '#FFFBEB',
-                            color: panel.evaluationsCompletedCount === panel.assignedTeamsCount && panel.assignedTeamsCount > 0 ? 'var(--green)' : '#B45309'
-                          }}
-                        >
-                          {panel.evaluationsCompletedCount} / {panel.assignedTeamsCount} Teams Evaluated
+                        </h4>
+                        <span className={`pill-badge ${isFullyEvaluated ? 'status-verified' : 'status-open'}`} style={{ fontSize: '0.72rem' }}>
+                          {isFullyEvaluated ? '✓ All Evaluated' : `${panel.evaluationsCompletedCount}/${panel.assignedTeamsCount} Teams`}
                         </span>
                       </div>
 
-                      {/* Judges */}
-                      <div style={{ fontSize: '0.84rem', color: 'var(--text-primary)', marginBottom: '8px', lineHeight: 1.4 }}>
-                        <span style={{ fontWeight: 600, color: 'var(--navy)' }}>Judges: </span>
+                      <div style={{ fontSize: '0.84rem', color: 'var(--text-secondary)', marginBottom: '12px', lineHeight: 1.4 }}>
+                        <strong style={{ color: 'var(--text-primary)' }}>Judges: </strong>
                         {panel.judgeNames}
                       </div>
                     </div>
 
-                    <div>
-                      {/* Stats */}
-                      <div style={{
-                        display: 'grid',
-                        gridTemplateColumns: '1fr 1fr',
-                        gap: '10px',
-                        paddingTop: '10px',
-                        borderTop: '1px solid var(--border-light)',
-                        fontSize: '0.82rem',
-                        marginBottom: '10px'
-                      }}>
-                        <div style={{ background: '#FFFFFF', padding: '8px 10px', borderRadius: 'var(--radius-sm)', border: '1px solid var(--border-light)' }}>
-                          <div style={{ color: 'var(--text-secondary)', fontSize: '0.72rem', textTransform: 'uppercase', fontWeight: 600 }}>
-                            Assigned Teams
-                          </div>
-                          <div style={{ fontSize: '1.2rem', fontWeight: 800, color: 'var(--navy)', fontFamily: 'var(--font-heading)' }}>
-                            {panel.assignedTeamsCount}
-                          </div>
+                    <div style={{
+                      paddingTop: '12px',
+                      borderTop: '1px solid var(--border-light)',
+                      display: 'flex',
+                      justifyContent: 'space-between',
+                      alignItems: 'center',
+                      fontSize: '0.84rem'
+                    }}>
+                      <div style={{ display: 'flex', gap: '14px' }}>
+                        <div>
+                          <span style={{ color: 'var(--text-secondary)', display: 'block', fontSize: '0.72rem', textTransform: 'uppercase' }}>Assigned</span>
+                          <strong style={{ color: 'var(--navy)', fontSize: '1rem' }}>{panel.assignedTeamsCount}</strong>
                         </div>
-
-                        <div style={{ background: '#FFFFFF', padding: '8px 10px', borderRadius: 'var(--radius-sm)', border: '1px solid var(--border-light)' }}>
-                          <div style={{ color: 'var(--text-secondary)', fontSize: '0.72rem', textTransform: 'uppercase', fontWeight: 600 }}>
-                            Evaluations Done
-                          </div>
-                          <div style={{ fontSize: '1.2rem', fontWeight: 800, color: 'var(--orange)', fontFamily: 'var(--font-heading)' }}>
-                            {panel.evaluationsCompletedCount}
-                          </div>
+                        <div>
+                          <span style={{ color: 'var(--text-secondary)', display: 'block', fontSize: '0.72rem', textTransform: 'uppercase' }}>Completed</span>
+                          <strong style={{ color: 'var(--green)', fontSize: '1rem' }}>{panel.evaluationsCompletedCount}</strong>
+                        </div>
+                        <div>
+                          <span style={{ color: 'var(--text-secondary)', display: 'block', fontSize: '0.72rem', textTransform: 'uppercase' }}>Pending</span>
+                          <strong style={{ color: pendingCount > 0 ? 'var(--orange)' : 'var(--text-secondary)', fontSize: '1rem' }}>
+                            {pendingCount}
+                          </strong>
                         </div>
                       </div>
 
-                      {/* View Details Button */}
                       <button
-                        className="btn btn-outline btn-sm"
-                        style={{ width: '100%', fontSize: '0.78rem', justifyContent: 'center' }}
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          setSelectedPanelDetailId(panel.id);
-                        }}
+                        className="btn btn-sm btn-outline"
+                        onClick={() => setSelectedPanelDetailId(panel.id)}
+                        style={{ fontSize: '0.75rem', padding: '4px 10px' }}
                       >
-                        View Details →
+                        View Details ➔
                       </button>
                     </div>
                   </div>
@@ -430,30 +397,11 @@ export default function DashboardPage() {
       {/* Stats Cards */}
       {isJudge ? (
         <div className="stats-row-2col">
-          {/* Row 1: Total Teams | Recruiting */}
+          {/* Row 1: Assigned Teams | Evaluated Teams */}
           <StatCard
-            number={stats.totalTeams}
-            label="Total Teams"
-            onClick={() => setDetailsModalTab('all_teams')}
-            active={detailsModalTab === 'all_teams'}
-            hint="Click to view all registered teams & members"
-          />
-          <StatCard
-            number={stats.openTeams}
-            label="Recruiting"
-            accent
-            onClick={() => setDetailsModalTab('recruiting')}
-            active={detailsModalTab === 'recruiting'}
-            hint="Click to see teams looking for members"
-          />
-
-          {/* Row 2: Locked Teams | Evaluated Teams */}
-          <StatCard
-            number={stats.lockedTeams}
-            label="Locked Teams"
-            onClick={() => setDetailsModalTab('locked')}
-            active={detailsModalTab === 'locked'}
-            hint="Click to see finalized teams ready for verification"
+            number={judgeAssignedTeamsCount}
+            label="Assigned Teams"
+            hint="Teams registered under your panel's problem statements"
           />
           <StatCard
             number={judgeEvaluatedCount}
@@ -461,22 +409,20 @@ export default function DashboardPage() {
             hint="Teams evaluated by you"
           />
 
-          {/* Row 3: Pending Evaluations | Registered Students */}
+          {/* Row 2: Pending Evaluations | Assigned PS */}
           <StatCard
             number={judgePendingCount}
             label="Pending Evaluations"
             accent={judgePendingCount > 0}
-            hint="Locked teams awaiting your evaluation"
+            hint="Teams awaiting your evaluation"
           />
           <StatCard
-            number={stats.totalStudents}
-            label="Registered Students"
-            onClick={() => setDetailsModalTab('all_students')}
-            active={detailsModalTab === 'all_students'}
-            hint="Click to view all registered students"
+            number={judgePanelInfo?.problemStatements?.length || 0}
+            label="Assigned Problem Statements"
+            hint="Problem statements assigned to your panel"
           />
         </div>
-      ) : (
+      ) : (isAdmin || isSpoc) ? (
         <div className="stats-row">
           <StatCard
             number={stats.totalTeams}
@@ -499,6 +445,39 @@ export default function DashboardPage() {
             onClick={() => setDetailsModalTab('locked')}
             active={detailsModalTab === 'locked'}
             hint="Click to see finalized teams ready for verification"
+          />
+          <StatCard
+            number={stats.totalStudents}
+            label="Registered Students"
+            onClick={() => setDetailsModalTab('all_students')}
+            active={detailsModalTab === 'all_students'}
+            hint="Click to view all registered students"
+          />
+          <StatCard
+            number={stats.unassignedStudents}
+            label="Students Without Team"
+            accent
+            onClick={() => setDetailsModalTab('unassigned')}
+            active={detailsModalTab === 'unassigned'}
+            hint="Click to view students not in any team yet"
+          />
+          <StatCard
+            number={stats.femaleRatio}
+            label="Female Participation"
+            onClick={() => setDetailsModalTab('gender')}
+            active={detailsModalTab === 'gender'}
+            hint="Click to check SIH female member compliance"
+          />
+        </div>
+      ) : (
+        /* Student Stats Row — Recruiting and Locked Teams removed */
+        <div className="stats-row">
+          <StatCard
+            number={stats.totalTeams}
+            label="Total Teams"
+            onClick={() => setDetailsModalTab('all_teams')}
+            active={detailsModalTab === 'all_teams'}
+            hint="Click to view all registered teams & members"
           />
           <StatCard
             number={stats.totalStudents}
@@ -547,7 +526,7 @@ export default function DashboardPage() {
               fontSize: '0.9rem',
               lineHeight: 1.5
             }}>
-              You have not been assigned to a Judge Panel yet. Please contact an Admin.
+              You have not been assigned to a Judge Panel yet. Please contact an Admin to receive problem statement assignments.
             </div>
           ) : (
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '20px' }}>
@@ -629,11 +608,11 @@ export default function DashboardPage() {
           marginBottom: '28px'
         }}>
           {/* Teams Looking for People */}
-          <div className="card"style={{ padding: '20px' }}>
+          <div className="card" style={{ padding: '20px' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '14px' }}>
               <div>
                 <h3 style={{ margin: 0, fontSize: '1.05rem', display: 'flex', alignItems: 'center', gap: '6px' }}>
-                  <span></span> Teams Needing Members ({recruitingList.length})
+                  <span>Teams Needing Members ({recruitingList.length})</span>
                 </h3>
                 <p style={{ margin: '2px 0 0', fontSize: '0.78rem', color: 'var(--text-secondary)' }}>
                   Teams with open slots seeking teammates
@@ -650,7 +629,7 @@ export default function DashboardPage() {
 
             {recruitingList.length === 0 ? (
               <div style={{ textAlign: 'center', padding: '20px', color: 'var(--text-secondary)', fontSize: '0.85rem' }}>
-                 All teams currently have full 6/6 rosters!
+                All teams currently have full 6/6 rosters!
               </div>
             ) : (
               <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
@@ -678,7 +657,7 @@ export default function DashboardPage() {
                       <div style={{ flex: 1, minWidth: '200px' }}>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
                           <strong style={{ fontSize: '0.92rem', color: 'var(--navy)' }}>{team.team_name}</strong>
-                          <span className="pill-badge"style={{ background: '#FEF3C7', color: '#B45309', fontSize: '0.7rem', padding: '1px 6px' }}>
+                          <span className="pill-badge" style={{ background: '#FEF3C7', color: '#B45309', fontSize: '0.7rem', padding: '1px 6px' }}>
                             {slotsOpen} slot{slotsOpen > 1 ? 's' : ''} open
                           </span>
                         </div>
@@ -689,7 +668,7 @@ export default function DashboardPage() {
                         {team.skills_needed && team.skills_needed.length > 0 && (
                           <div style={{ display: 'flex', gap: '4px', flexWrap: 'wrap', marginTop: '4px' }}>
                             {team.skills_needed.slice(0, 3).map(sk => (
-                              <span key={sk} className="pill-badge skill"style={{ fontSize: '0.65rem', padding: '0 6px' }}>{sk}</span>
+                              <span key={sk} className="pill-badge skill" style={{ fontSize: '0.65rem', padding: '0 6px' }}>{sk}</span>
                             ))}
                           </div>
                         )}
@@ -705,7 +684,7 @@ export default function DashboardPage() {
                             style={{ color: '#25D366', fontSize: '0.75rem', padding: '4px 8px' }}
                             title="Chat with team leader on WhatsApp"
                           >
-                             WhatsApp
+                            WhatsApp
                           </a>
                         )}
                         <button
@@ -724,11 +703,11 @@ export default function DashboardPage() {
           </div>
 
           {/* Students Looking for Teams */}
-          <div className="card"style={{ padding: '20px' }}>
+          <div className="card" style={{ padding: '20px' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '14px' }}>
               <div>
                 <h3 style={{ margin: 0, fontSize: '1.05rem', display: 'flex', alignItems: 'center', gap: '6px' }}>
-                  <span></span> Students Without a Team ({unassignedList.length})
+                  <span>Students Without a Team ({unassignedList.length})</span>
                 </h3>
                 <p style={{ margin: '2px 0 0', fontSize: '0.78rem', color: 'var(--text-secondary)' }}>
                   Registered candidates available to be matched
@@ -745,7 +724,7 @@ export default function DashboardPage() {
 
             {unassignedList.length === 0 ? (
               <div style={{ textAlign: 'center', padding: '20px', color: 'var(--green)', fontSize: '0.85rem' }}>
-                 Every registered student is currently in a team!
+                Every registered student is currently in a team!
               </div>
             ) : (
               <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
@@ -783,7 +762,6 @@ export default function DashboardPage() {
                       <div>
                         <div style={{ fontWeight: 600, fontSize: '0.9rem', display: 'flex', alignItems: 'center', gap: '4px' }}>
                           <span>{student.full_name}</span>
-                          {student.gender === 'Female' && <span title="Female Candidate"></span>}
                         </div>
                         <div style={{ fontSize: '0.76rem', color: 'var(--text-secondary)' }}>
                           {student.roll_no ? `${student.roll_no} · ` : ''}{student.department || 'Student'}
@@ -791,7 +769,7 @@ export default function DashboardPage() {
                         {student.skills && student.skills.length > 0 && (
                           <div style={{ display: 'flex', gap: '4px', flexWrap: 'wrap', marginTop: '2px' }}>
                             {student.skills.slice(0, 2).map(sk => (
-                              <span key={sk} className="pill-badge skill"style={{ fontSize: '0.65rem', padding: '0 6px' }}>{sk}</span>
+                              <span key={sk} className="pill-badge skill" style={{ fontSize: '0.65rem', padding: '0 6px' }}>{sk}</span>
                             ))}
                           </div>
                         )}
@@ -803,7 +781,7 @@ export default function DashboardPage() {
                       onClick={() => setViewingProfile(student)}
                       style={{ fontSize: '0.75rem', padding: '4px 10px' }}
                     >
-                       Profile
+                      Profile
                     </button>
                   </div>
                 ))}
@@ -816,68 +794,168 @@ export default function DashboardPage() {
       {/* Quick Actions */}
       <h3 style={{ marginBottom: '16px' }}>Quick Actions</h3>
       <div className="quick-actions">
-        {!isAdmin && !isJudge && !isSpoc && !myTeam && (
+        {/* STUDENT ACTIONS */}
+        {!isAdmin && !isJudge && !isSpoc && (
           <>
-            <Link to="/create-team"className="quick-action-card">
-              <div className="action-icon"></div>
-              <div className="action-title">Create a Team</div>
-              <div className="action-desc">Start your own team and become the leader</div>
-            </Link>
-            <Link to="/marketplace"className="quick-action-card">
-              <div className="action-icon"></div>
-              <div className="action-title">Join a Team</div>
-              <div className="action-desc">Browse open teams and send join requests</div>
+            {!myTeam ? (
+              <>
+                <Link to="/create-team" className="quick-action-card">
+                  <div className="action-icon">
+                    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
+                      <circle cx="9" cy="7" r="4" />
+                      <line x1="19" y1="8" x2="19" y2="14" />
+                      <line x1="22" y1="11" x2="16" y2="11" />
+                    </svg>
+                  </div>
+                  <div className="action-title">Create a Team</div>
+                  <div className="action-desc">Start your team, invite members & register for a problem statement</div>
+                </Link>
+                <Link to="/marketplace" className="quick-action-card">
+                  <div className="action-icon">
+                    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                      <circle cx="9" cy="7" r="4" />
+                      <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+                      <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+                    </svg>
+                  </div>
+                  <div className="action-title">Join a Team</div>
+                  <div className="action-desc">Browse recruiting teams and send join requests</div>
+                </Link>
+              </>
+            ) : (
+              <Link to="/my-team" className="quick-action-card">
+                <div className="action-icon">
+                  <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                  </svg>
+                </div>
+                <div className="action-title">My Team: {myTeam.team_name}</div>
+                <div className="action-desc">
+                  {myTeam.is_locked ? 'Team is locked — awaiting SPOC review & evaluation' : 'Manage your team members and submit solution pitch'}
+                </div>
+              </Link>
+            )}
+
+            <Link to="/problem-statements" className="quick-action-card">
+              <div className="action-icon">
+                <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                  <polyline points="14 2 14 8 20 8" />
+                  <line x1="16" y1="13" x2="8" y2="13" />
+                  <line x1="16" y1="17" x2="8" y2="17" />
+                </svg>
+              </div>
+              <div className="action-title">Problem Statements</div>
+              <div className="action-desc">Explore official Smart Amrita Hackathon challenge statements</div>
             </Link>
           </>
         )}
 
-        {!isAdmin && !isJudge && !isSpoc && myTeam && (
-          <Link to="/my-team"className="quick-action-card">
-            <div className="action-icon">{myTeam.is_locked ? '' : ''}</div>
-            <div className="action-title">{myTeam.team_name}</div>
-            <div className="action-desc">
-              {myTeam.is_locked ? 'Team is locked — awaiting SPOC verification' : 'Manage your team and submit pitch'}
-            </div>
-          </Link>
+        {/* JUDGE ACTIONS */}
+        {isJudge && (
+          <>
+            <Link to="/judge/evaluate" className="quick-action-card">
+              <div className="action-icon">
+                <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M9 11l3 3L22 4" />
+                  <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11" />
+                </svg>
+              </div>
+              <div className="action-title">Evaluate Teams</div>
+              <div className="action-desc">Score assigned teams on the official 50-mark rubric</div>
+            </Link>
+            <Link to="/judge/history" className="quick-action-card">
+              <div className="action-icon">
+                <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <circle cx="12" cy="12" r="10" />
+                  <polyline points="12 6 12 12 16 14" />
+                </svg>
+              </div>
+              <div className="action-title">My Evaluation History</div>
+              <div className="action-desc">Review and inspect your submitted scores</div>
+            </Link>
+            <Link to="/problem-statements" className="quick-action-card">
+              <div className="action-icon">
+                <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                  <polyline points="14 2 14 8 20 8" />
+                  <line x1="16" y1="13" x2="8" y2="13" />
+                  <line x1="16" y1="17" x2="8" y2="17" />
+                </svg>
+              </div>
+              <div className="action-title">Problem Statements</div>
+              <div className="action-desc">View challenge details and evaluation guidelines</div>
+            </Link>
+          </>
         )}
 
-        <Link to="/problem-statements"className="quick-action-card">
-          <div className="action-icon"></div>
-          <div className="action-title">Problem Statements</div>
-          <div className="action-desc">Browse all available problem statements</div>
-        </Link>
-
+        {/* ADMIN & SPOC ACTIONS */}
         {(isAdmin || isSpoc) && (
           <>
-            <Link to="/admin/roster"className="quick-action-card">
-              <div className="action-icon"></div>
+            <Link to="/admin/roster" className="quick-action-card">
+              <div className="action-icon">
+                <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
+                  <line x1="3" y1="9" x2="21" y2="9" />
+                  <line x1="9" y1="21" x2="9" y2="9" />
+                </svg>
+              </div>
               <div className="action-title">Master Roster</div>
-              <div className="action-desc">View and export all teams, students & members data</div>
+              <div className="action-desc">Team-wise & Problem-Statement-wise evaluation scores matrix</div>
             </Link>
-            <Link to="/spoc/verify"className="quick-action-card">
-              <div className="action-icon"></div>
+            <Link to="/spoc/verify" className="quick-action-card">
+              <div className="action-icon">
+                <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
+                  <polyline points="22 4 12 14.01 9 11.01" />
+                </svg>
+              </div>
               <div className="action-title">Verification Queue</div>
               <div className="action-desc">Verify locked teams and review compliance</div>
             </Link>
-            <Link to="/admin/analytics"className="quick-action-card">
-              <div className="action-icon"></div>
+            <Link to="/admin/analytics" className="quick-action-card">
+              <div className="action-icon">
+                <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <line x1="18" y1="20" x2="18" y2="10" />
+                  <line x1="12" y1="20" x2="12" y2="4" />
+                  <line x1="6" y1="20" x2="6" y2="14" />
+                </svg>
+              </div>
               <div className="action-title">Analytics Dashboard</div>
               <div className="action-desc">Live statistics and department participation</div>
             </Link>
-            <Link to="/admin/bootcamp"className="quick-action-card">
-              <div className="action-icon"></div>
+            <Link to="/admin/bootcamp" className="quick-action-card">
+              <div className="action-icon">
+                <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+                </svg>
+              </div>
               <div className="action-title">Top 50 Shortlist</div>
               <div className="action-desc">Z-Score rankings and bootcamp selection</div>
             </Link>
             {isAdmin && (
               <>
                 <Link to="/admin/judge-panels" className="quick-action-card">
-                  <div className="action-icon">⚖️</div>
+                  <div className="action-icon">
+                    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M16 16v1a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2h11a2 2 0 0 1 2 2v1" />
+                      <line x1="18" y1="8" x2="23" y2="13" />
+                      <line x1="23" y1="8" x2="18" y2="13" />
+                    </svg>
+                  </div>
                   <div className="action-title">Judge Panels</div>
                   <div className="action-desc">Create panels & assign problem statements</div>
                 </Link>
                 <Link to="/admin/problem-statements" className="quick-action-card">
-                  <div className="action-icon"></div>
+                  <div className="action-icon">
+                    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                      <polyline points="17 8 12 3 7 8" />
+                      <line x1="12" y1="3" x2="12" y2="15" />
+                    </svg>
+                  </div>
                   <div className="action-title">Upload Problem Statements</div>
                   <div className="action-desc">Manage & import problem statements</div>
                 </Link>
@@ -886,30 +964,21 @@ export default function DashboardPage() {
           </>
         )}
 
-        {isJudge && (
-          <>
-            <Link to="/judge/evaluate"className="quick-action-card">
-              <div className="action-icon"></div>
-              <div className="action-title">Evaluate Teams</div>
-              <div className="action-desc">Score teams on the 100-point SIH rubric</div>
-            </Link>
-            <Link to="/judge/history"className="quick-action-card">
-              <div className="action-icon"></div>
-              <div className="action-title">My Evaluations</div>
-              <div className="action-desc">View and edit your submitted scores</div>
-            </Link>
-          </>
-        )}
-
-        <Link to="/profile"className="quick-action-card">
-          <div className="action-icon"></div>
+        {/* PROFILE ACTION FOR EVERYONE */}
+        <Link to="/profile" className="quick-action-card">
+          <div className="action-icon">
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+              <circle cx="12" cy="7" r="4" />
+            </svg>
+          </div>
           <div className="action-title">My Profile</div>
           <div className="action-desc">View and edit your account details & skills</div>
         </Link>
       </div>
 
       {/* Deadlines Timeline */}
-      <div className="card"style={{ marginTop: '24px' }}>
+      <div className="card" style={{ marginTop: '24px' }}>
         <h3 style={{ marginBottom: '16px' }}> SAH 2026 Timeline</h3>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
           {[

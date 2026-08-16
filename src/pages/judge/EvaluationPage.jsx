@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import { supabase } from '../../lib/supabase';
 import RubricRadioGroup from '../../components/RubricRadioGroup';
+import { prepareEvaluationPayload, parseEvaluationScores } from '../../lib/evaluationHelper';
 
 export default function EvaluationPage() {
   const { profile } = useAuth();
@@ -115,7 +116,8 @@ export default function EvaluationPage() {
 
         const evalMap = {};
         (evalData || []).forEach(e => {
-          evalMap[e.team_id] = e;
+          const parsed = parseEvaluationScores(e);
+          evalMap[e.team_id] = { ...e, parsed };
         });
         setEvaluationsMap(evalMap);
         setEvaluatedTeams(new Set(Object.keys(evalMap)));
@@ -133,15 +135,16 @@ export default function EvaluationPage() {
   const handleSelectTeam = (team) => {
     setSelectedTeam(team);
     const existing = evaluationsMap[team.id];
-    if (existing) {
+    if (existing?.parsed) {
       // Pre-fill existing submitted evaluation for this judge
-      setUnderstanding(existing.understanding_score ?? null);
-      setInnovation(existing.innovation_score ?? null);
-      setTechnical(existing.technical_score ?? null);
-      setPrototype(existing.prototype_score ?? existing.execution_score ?? null);
-      setImpact(existing.impact_score ?? null);
-      setPresentation(existing.presentation_score ?? existing.pitch_score ?? null);
-      setRemarks(existing.remarks || '');
+      const { rubric, remarks: parsedRemarks } = existing.parsed;
+      setUnderstanding(rubric.understanding ?? null);
+      setInnovation(rubric.innovation ?? null);
+      setTechnical(rubric.technical ?? null);
+      setPrototype(rubric.prototype ?? null);
+      setImpact(rubric.impact ?? null);
+      setPresentation(rubric.presentation ?? null);
+      setRemarks(parsedRemarks || '');
     } else {
       // Reset all 6 parameters to null (unselected)
       setUnderstanding(null);
@@ -158,8 +161,16 @@ export default function EvaluationPage() {
     if (!selectedTeam || !profile) return;
 
     // Strict validation: all 6 parameters must have a selected radio score
-    if (!isAllSelected) {
-      showToast('error', 'Please select a score for all evaluation parameters.');
+    const missing = [];
+    if (understanding === null) missing.push('Understanding (0-5)');
+    if (innovation === null) missing.push('Innovation (0-10)');
+    if (technical === null) missing.push('Technical (0-10)');
+    if (prototype === null) missing.push('Prototype (0-15)');
+    if (impact === null) missing.push('Impact (0-5)');
+    if (presentation === null) missing.push('Presentation (0-5)');
+
+    if (missing.length > 0) {
+      showToast('error', `Please select scores for all 6 parameters. Missing: ${missing.join(', ')}`);
       return;
     }
 
@@ -178,48 +189,68 @@ export default function EvaluationPage() {
 
     setSubmitting(true);
 
-    const payload = {
-      team_id: selectedTeam.id,
-      judge_id: profile.id,
-      understanding_score: understanding,
-      innovation_score: innovation,
-      technical_score: technical,
-      prototype_score: prototype,
-      impact_score: impact,
-      presentation_score: presentation,
-      remarks: remarks?.trim() || null
-    };
+    const payload = prepareEvaluationPayload({
+      teamId: selectedTeam.id,
+      judgeId: profile.id,
+      understanding,
+      innovation,
+      technical,
+      prototype,
+      impact,
+      presentation,
+      remarks
+    });
 
-    let { error } = await supabase
-      .from('evaluations')
-      .upsert(payload, { onConflict: 'team_id,judge_id' });
-
-    // Fallback if live database schema only has the 4 standard columns
-    if (error && (error.message?.includes('column') || error.code === '42703' || error.code === 'PGRST204')) {
-      const legacyPayload = {
-        team_id: selectedTeam.id,
-        judge_id: profile.id,
-        understanding_score: understanding,
-        execution_score: technical + prototype,
-        impact_score: impact,
-        pitch_score: presentation + innovation,
-        remarks: remarks?.trim() || null
-      };
-      const fallbackRes = await supabase
+    try {
+      // Check if existing evaluation row exists
+      const { data: existingRow } = await supabase
         .from('evaluations')
-        .upsert(legacyPayload, { onConflict: 'team_id,judge_id' });
-      error = fallbackRes.error;
-    }
+        .select('id')
+        .eq('team_id', selectedTeam.id)
+        .eq('judge_id', profile.id)
+        .maybeSingle();
 
-    if (error) {
-      showToast('error', error.message);
-    } else {
-      showToast('success', `Evaluation submitted for "${selectedTeam.team_name}" — Score: ${total}/50`);
-      setEvaluationsMap(prev => ({ ...prev, [selectedTeam.id]: { ...payload, total_raw: total } }));
-      setEvaluatedTeams(prev => new Set([...prev, selectedTeam.id]));
-      setSelectedTeam(null);
+      let saveError = null;
+      let savedData = null;
+
+      if (existingRow?.id) {
+        // UPDATE existing evaluation
+        const res = await supabase
+          .from('evaluations')
+          .update(payload)
+          .eq('id', existingRow.id)
+          .select();
+        saveError = res.error;
+        savedData = res.data?.[0];
+      } else {
+        // INSERT new evaluation
+        const res = await supabase
+          .from('evaluations')
+          .insert(payload)
+          .select();
+        saveError = res.error;
+        savedData = res.data?.[0];
+      }
+
+      if (saveError) {
+        console.error('Evaluation save error:', saveError);
+        showToast('error', saveError.message);
+      } else {
+        showToast('success', `✓ Evaluation saved for "${selectedTeam.team_name}" — Score: ${total}/50`);
+        const parsed = parseEvaluationScores(savedData || payload);
+        setEvaluationsMap(prev => ({
+          ...prev,
+          [selectedTeam.id]: { ...(savedData || payload), parsed }
+        }));
+        setEvaluatedTeams(prev => new Set([...prev, selectedTeam.id]));
+        setSelectedTeam(null);
+      }
+    } catch (err) {
+      console.error('Unexpected save error:', err);
+      showToast('error', err.message || 'Failed to save evaluation');
+    } finally {
+      setSubmitting(false);
     }
-    setSubmitting(false);
   };
 
   const showToast = (type, message) => {

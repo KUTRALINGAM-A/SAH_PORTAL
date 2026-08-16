@@ -208,7 +208,10 @@ CREATE POLICY "Read own or team requests" ON join_requests FOR SELECT USING (
     auth.uid() = student_id OR
     EXISTS (SELECT 1 FROM teams WHERE id = team_id AND leader_id = auth.uid())
 );
-CREATE POLICY "Students create requests" ON join_requests FOR INSERT WITH CHECK (auth.uid() = student_id);
+CREATE POLICY "Students create requests" ON join_requests FOR INSERT WITH CHECK (
+    auth.uid() = student_id AND
+    NOT EXISTS (SELECT 1 FROM team_members WHERE student_id = auth.uid())
+);
 CREATE POLICY "Leader update requests" ON join_requests FOR UPDATE USING (
     EXISTS (SELECT 1 FROM teams WHERE id = team_id AND leader_id = auth.uid())
 );

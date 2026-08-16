@@ -1,4 +1,5 @@
 import { useState, useEffect, useMemo } from 'react';
+import { Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useNotifications } from '../context/NotificationContext';
 import { supabase } from '../lib/supabase';
@@ -12,6 +13,7 @@ export default function TeamMarketplace() {
   const [memberCounts, setMemberCounts] = useState({});
   const [problemStatements, setProblemStatements] = useState({});
   const [myRequests, setMyRequests] = useState([]);
+  const [myCurrentTeam, setMyCurrentTeam] = useState(null);
   const [loading, setLoading] = useState(true);
   const [toast, setToast] = useState(null);
 
@@ -46,8 +48,26 @@ export default function TeamMarketplace() {
       .from('team_members')
       .select('team_id');
 
-    // Fetch user's existing join requests
+    // Fetch user's current team membership and existing join requests
     if (profile) {
+      const { data: membershipData } = await supabase
+        .from('team_members')
+        .select('team_id, member_role, teams(id, team_name, is_locked)')
+        .eq('student_id', profile.id)
+        .limit(1)
+        .maybeSingle();
+
+      if (membershipData?.teams) {
+        setMyCurrentTeam({
+          id: membershipData.team_id,
+          name: membershipData.teams.team_name,
+          role: membershipData.member_role,
+          is_locked: membershipData.teams.is_locked
+        });
+      } else {
+        setMyCurrentTeam(null);
+      }
+
       const { data: requestsData } = await supabase
         .from('join_requests')
         .select('team_id, status')
@@ -113,6 +133,16 @@ export default function TeamMarketplace() {
   const handleJoinRequest = async (teamId) => {
     if (!profile) return;
 
+    // Strict backend/frontend validation: if student is already in a team, prevent request
+    if (myCurrentTeam) {
+      setToast({
+        type: 'error',
+        message: `You are already a member of "${myCurrentTeam.name}". Students can only belong to one team at a time.`
+      });
+      setTimeout(() => setToast(null), 5000);
+      return;
+    }
+
     const { error } = await supabase
       .from('join_requests')
       .insert({
@@ -154,6 +184,33 @@ export default function TeamMarketplace() {
         <p>Find your dream team or let them find you. Filter by skills, domain, or requirements.</p>
       </div>
 
+      {/* Warning/Info if user is already in a team */}
+      {myCurrentTeam && (
+        <div style={{
+          padding: '16px 20px',
+          background: '#EFF6FF',
+          border: '1px solid #BFDBFE',
+          borderRadius: 'var(--radius-md)',
+          color: '#1E40AF',
+          marginBottom: '20px',
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          flexWrap: 'wrap',
+          gap: '12px'
+        }}>
+          <div>
+            <strong>You are already a member of "{myCurrentTeam.name}" ({myCurrentTeam.role}).</strong>
+            <div style={{ fontSize: '0.84rem', marginTop: '2px', color: '#3B82F6' }}>
+              Per Smart Amrita Hackathon rules, students can only belong to one team at a time.
+            </div>
+          </div>
+          <Link to="/my-team" className="btn btn-navy btn-sm" style={{ fontSize: '0.78rem' }}>
+            Go to My Team ➔
+          </Link>
+        </div>
+      )}
+
       {/* Pending Team Invitations */}
       <TeamInvitationsCard onUpdate={fetchData} />
 
@@ -189,7 +246,7 @@ export default function TeamMarketplace() {
           className={`filter-toggle ${needsFemale ? 'active' : ''}`}
           onClick={() => setNeedsFemale(!needsFemale)}
         >
-           Needs Female Member
+          Needs Female Member
         </button>
       </div>
 
@@ -215,6 +272,8 @@ export default function TeamMarketplace() {
               currentUserId={profile?.id}
               onJoinRequest={handleJoinRequest}
               hasExistingRequest={myRequests.some(r => r.team_id === team.id)}
+              isAlreadyInTeam={Boolean(myCurrentTeam)}
+              isMyTeam={myCurrentTeam?.id === team.id}
             />
           ))}
         </div>
@@ -223,7 +282,7 @@ export default function TeamMarketplace() {
       {/* Toast */}
       {toast && (
         <div className={`toast ${toast.type}`}>
-          {toast.type === 'success' ? '' : ''} {toast.message}
+          {toast.type === 'success' ? '✓' : '⚠️'} {toast.message}
         </div>
       )}
     </div>
