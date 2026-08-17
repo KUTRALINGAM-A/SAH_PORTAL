@@ -121,7 +121,7 @@ export default function VerificationQueue() {
       <div className="page-header">
         <h1 className="page-title"> SPOC Verification Queue</h1>
         <p className="page-subtitle">
-          Verify locked teams for SIH National Portal submission (Deadline: Sept 10, 2026)
+          Verify locked teams for SIH National Portal submission (Deadline: By 24th Sept 2026)
         </p>
       </div>
 

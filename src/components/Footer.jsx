@@ -15,10 +15,11 @@ export default function Footer() {
 
         <div className="footer-section">
           <h4>Important Dates</h4>
-          <p> Internal Registration Deadline: <strong>Aug 21, 2026</strong></p>
-          <p> Top 50 Bootcamp: <strong>Aug 25–28, 2026</strong></p>
-          <p> SIH Portal Submission: <strong>Sept 10, 2026</strong></p>
-          <p> Grand Finale: <strong>Dec 2026</strong></p>
+          <p> PS Release: <strong>21st – 25th Aug 2026</strong></p>
+          <p> Team Registration: <strong>27th Aug – 5th Sept 2026</strong></p>
+          <p> Internal Hackathon: <strong>11th – 12th Sept 2026</strong></p>
+          <p> Mentorship Bootcamp: <strong>16th – 23rd Sept 2026</strong></p>
+          <p> SIH Portal Submission: <strong>By 24th Sept 2026</strong></p>
         </div>
 
         <div className="footer-section">

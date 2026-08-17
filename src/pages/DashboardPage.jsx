@@ -950,11 +950,13 @@ export default function DashboardPage() {
         <h3 style={{ marginBottom: '16px' }}> SAH 2026 Timeline</h3>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
           {[
-            { date: 'Aug 13, 2026', event: 'Portal Opens — Team Formation Begins', status: 'active' },
-            { date: 'Aug 21, 2026', event: 'Internal Registration Deadline', status: 'upcoming' },
-            { date: 'Aug 25–28, 2026', event: 'Top 50 Bootcamp', status: 'upcoming' },
-            { date: 'Sept 10, 2026', event: 'SIH National Portal Submission Deadline', status: 'upcoming' },
-            { date: 'Dec 2026', event: 'SIH Grand Finale', status: 'upcoming' },
+            { date: '21st – 25th Aug 2026', event: 'Stage 1: Problem Statement Release', status: 'active' },
+            { date: '27th Aug – 5th Sept 2026', event: 'Stage 2: Team Formation & Internal Registration', status: 'upcoming' },
+            { date: '11th – 12th Sept 2026', event: 'Stage 3: Smart Amrita Internal Hackathon', status: 'upcoming' },
+            { date: 'By 15th Sept 2026', event: 'Stage 4: Collegiate Result & Selection', status: 'upcoming' },
+            { date: '16th – 23rd Sept 2026', event: 'Stage 5: Intensive Campus Mentorship Bootcamp', status: 'upcoming' },
+            { date: '23rd – 24th Sept 2026', event: 'Stage 6: SIH Solution Screening & Verification', status: 'upcoming' },
+            { date: 'By 24th Sept 2026', event: 'Stage 7: National Portal Idea Submission', status: 'upcoming' },
           ].map((item, i) => (
             <div key={i} style={{
               display: 'flex', alignItems: 'center', gap: '16px',

@@ -4,10 +4,10 @@ export default function AnnouncementBanner() {
       <div className="banner-content">
         <span> Smart Amrita Hackathon 2026 — Amrita Chennai Campus</span>
         <span className="deadline-pill">
-           Internal Registration: Aug 21, 2026
+           Internal Registration: 27th Aug – 5th Sept 2026
         </span>
         <span className="deadline-pill urgent">
-           SIH Portal Submission: Sept 10, 2026
+           SIH Portal Submission: By 24th Sept 2026
         </span>
       </div>
     </div>
