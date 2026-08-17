@@ -24,7 +24,12 @@ export default function JudgePanelDetailModal({
       if (e.key === 'Escape') onClose();
     };
     window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
+    const originalOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+      document.body.style.overflow = originalOverflow;
+    };
   }, [onClose]);
 
   // Find target panel
@@ -206,13 +211,11 @@ export default function JudgePanelDetailModal({
         style={{
           maxWidth: '1020px',
           width: '95%',
-          maxHeight: '92vh',
-          display: 'flex',
-          flexDirection: 'column',
+          maxHeight: '90vh',
+          overflowY: 'auto',
           padding: 0,
           background: '#ffffff',
           borderRadius: '16px',
-          overflow: 'hidden',
           boxShadow: '0 25px 60px -15px rgba(0, 0, 0, 0.45)'
         }}
         onClick={(e) => e.stopPropagation()}
@@ -483,8 +486,8 @@ export default function JudgePanelDetailModal({
           </div>
         )}
 
-        {/* Scrollable Content Body */}
-        <div style={{ padding: '20px 28px', overflowY: 'auto', flex: 1, background: '#ffffff' }}>
+        {/* Content Body */}
+        <div style={{ padding: '20px 28px', background: '#ffffff' }}>
           {activeView === 'teams' ? (
             /* =================== VIEW 1: TEAM-WISE EVALUATION STATUS =================== */
             <div>

@@ -5,6 +5,8 @@ import Header from './components/Header';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import ProtectedRoute from './components/ProtectedRoute';
+import sahLogo from './assets/Logo.png';
+import flowchart from './assets/FLOWCHART.png';
 
 // Pages
 import LoginPage from './pages/LoginPage';
@@ -101,10 +103,9 @@ function HomePage() {
               </div>
             </div>
           ))}
+          
         </div>
-      </section>
-
-      {/* CTA */}
+      </section>{/* CTA */}
       <div style={{ textAlign: 'center', marginBottom: '30px' }}>
         <a href="/register" className="btn btn-orange btn-lg" style={{ marginRight: '12px' }}>
           Register Now
@@ -113,6 +114,50 @@ function HomePage() {
           View Problem Statements
         </a>
       </div>
+
+      {/* SAH Logo Showcase */}
+      <div className="sah-logo-showcase">
+        <img src={flowchart} alt="Smart Amrita Hackathon 2026" className="sah-logo-img" />
+      </div>
+
+      {/* Organizing Committee */}
+      <section className="organizing-committee-section">
+        <div className="flowchart-header">
+          <span className="flowchart-pill">ORGANIZING COMMITTEE</span>
+        </div>
+
+        {/* Patron — Principal */}
+        <div className="oc-tier">
+          <div className="oc-tier-label">Patron</div>
+          <div className="oc-cards-row oc-cards-center">
+            <div className="oc-card oc-card-patron">
+              <div className="oc-avatar oc-avatar-lg">
+                <span className="oc-avatar-initials">VJ</span>
+              </div>
+              <div className="oc-name">Dr. V. Jeyakumar</div>
+              <div className="oc-designation">Principal</div>
+              <div className="oc-institution">Amrita Vishwa Vidyapeetham, Chennai Campus</div>
+            </div>
+          </div>
+        </div>
+
+        {/* SPOC */}
+        <div className="oc-tier">
+          <div className="oc-tier-label">Single Point of Contact (SPOC)</div>
+          <div className="oc-cards-row oc-cards-center">
+            <div className="oc-card">
+              <div className="oc-avatar oc-avatar-md">
+                <span className="oc-avatar-initials">PP</span>
+              </div>
+              <div className="oc-name">Dr. Piyush Pratap Singh</div>
+              <div className="oc-designation">SPOC — Smart India Hackathon</div>
+              <div className="oc-institution">Amrita Vishwa Vidyapeetham, Chennai Campus</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      
     </div>
   );
 }

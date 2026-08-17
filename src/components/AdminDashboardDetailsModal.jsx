@@ -21,7 +21,12 @@ export default function AdminDashboardDetailsModal({
       if (e.key === 'Escape' && !viewingProfile) onClose();
     };
     window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
+    const originalOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+      document.body.style.overflow = originalOverflow;
+    };
   }, [onClose, viewingProfile]);
 
   // Build lookup maps
@@ -134,12 +139,10 @@ export default function AdminDashboardDetailsModal({
           maxWidth: '960px',
           width: '95%',
           maxHeight: '90vh',
-          display: 'flex',
-          flexDirection: 'column',
+          overflowY: 'auto',
           padding: 0,
           background: '#ffffff',
           borderRadius: '16px',
-          overflow: 'hidden',
           boxShadow: '0 25px 60px -15px rgba(0, 0, 0, 0.45)'
         }}
         onClick={(e) => e.stopPropagation()}
@@ -289,8 +292,6 @@ export default function AdminDashboardDetailsModal({
 
         {/* Modal Body / Tab Content */}
         <div style={{
-          flex: 1,
-          overflowY: 'auto',
           padding: '20px 24px',
           background: '#F8FAFC'
         }}>

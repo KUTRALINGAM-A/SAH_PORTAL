@@ -463,12 +463,14 @@ export default function MyTeamPage() {
   const femaleCount = members.filter(m => memberProfiles[m.student_id]?.gender === 'Female').length;
   const currentPs = allProblemStatements.find(p => p.id === (selectedPsId || team?.ps_id)) || team?.problem_statements;
 
-  // Filter candidate students for invite modal
+  // Filter candidate students for invite modal (only unassigned students not in ANY team)
   const filteredCandidates = useMemo(() => {
     const currentMemberIds = new Set(members.map(m => m.student_id));
     return candidateStudents.filter(student => {
       // Exclude members already in THIS team
       if (currentMemberIds.has(student.id)) return false;
+      // Exclude members already in ANY OTHER team
+      if (allTeamAssignments[student.id]) return false;
       if (candidateFemaleOnly && student.gender !== 'Female') return false;
       if (candidateDept && student.department !== candidateDept) return false;
       if (candidateSearch) {
@@ -481,7 +483,7 @@ export default function MyTeamPage() {
       }
       return true;
     });
-  }, [candidateStudents, members, candidateFemaleOnly, candidateDept, candidateSearch]);
+  }, [candidateStudents, members, allTeamAssignments, candidateFemaleOnly, candidateDept, candidateSearch]);
 
   if (loading) {
     return <div className="page-container"><div className="loading-spinner"><div className="spinner" /></div></div>;

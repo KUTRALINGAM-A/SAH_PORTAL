@@ -216,10 +216,31 @@ export default function DashboardPage() {
       const assignedTeamsCount = assignedTeams.length;
       const assignedTeamIdSet = new Set(assignedTeams.map(t => t.id));
 
-      // 4. Evaluations completed count (how many assigned teams have completed evaluation)
-      const panelEvaluations = allEvaluations.filter(e => assignedTeamIdSet.has(e.team_id));
-      const evaluatedTeamIds = new Set(panelEvaluations.map(e => e.team_id));
-      const evaluationsCompletedCount = evaluatedTeamIds.size;
+      // 4. Get this panel's judge IDs
+      const panelJudgeIds = new Set(
+        allPanelJudges
+          .filter(pj => pj.panel_id === panel.id)
+          .map(pj => pj.judge_id)
+      );
+      const panelJudgeCount = panelJudgeIds.size;
+
+      // 5. Evaluations completed — only count evals from THIS panel's judges for assigned teams
+      const panelEvaluations = allEvaluations.filter(
+        e => assignedTeamIdSet.has(e.team_id) && panelJudgeIds.has(e.judge_id)
+      );
+
+      // A team is "fully evaluated" only when ALL judges in this panel have submitted
+      let evaluationsCompletedCount = 0;
+      if (panelJudgeCount > 0) {
+        assignedTeams.forEach(team => {
+          const judgesWhoEvaluated = new Set(
+            panelEvaluations.filter(e => e.team_id === team.id).map(e => e.judge_id)
+          );
+          if (judgesWhoEvaluated.size >= panelJudgeCount) {
+            evaluationsCompletedCount++;
+          }
+        });
+      }
 
       return {
         id: panel.id,
@@ -294,32 +315,34 @@ export default function DashboardPage() {
 
       {/* ADMIN & SPOC: Live Panel Details Section (placed above the stats cards) */}
       {(isAdmin || isSpoc) && (
-        <div style={{ marginBottom: '28px' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '14px' }}>
+        <div className="live-sync-section">
+          <div className="live-sync-header">
             <div>
-              <h3 style={{ margin: 0, fontSize: '1.2rem', color: 'var(--navy)', display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <h3>
                 <span>Live Judge Panel Details</span>
-                <span className="live-pill" style={{ fontSize: '0.7rem', padding: '2px 8px' }}>● Live Sync</span>
+                <span className="live-pill">
+                  <span className="live-dot"></span>
+                  Live Sync
+                </span>
               </h3>
-              <p style={{ margin: '3px 0 0', fontSize: '0.84rem', color: 'var(--text-secondary)' }}>
-                Real-time panel evaluation telemetry and judge status
-              </p>
+              <p>Real-time panel evaluation telemetry and judge status</p>
             </div>
             {isAdmin && (
-              <Link to="/admin/judge-panels" className="btn btn-outline btn-sm" style={{ fontSize: '0.8rem' }}>
+              <Link to="/admin/judge-panels" className="btn-manage-panels">
                 Manage Panels ➔
               </Link>
             )}
           </div>
 
           {livePanelDetails.length === 0 ? (
-            <div className="card" style={{ padding: '24px 20px', textAlign: 'center', color: 'var(--text-secondary)' }}>
-              <p style={{ margin: 0, fontSize: '0.92rem' }}>
-                No judge panels created yet. {isAdmin && <Link to="/admin/judge-panels" style={{ color: 'var(--orange)', fontWeight: 600 }}>Create your first panel</Link>}
+            <div className="live-sync-empty">
+              <p style={{ margin: 0 }}>
+                No judge panels created yet.{' '}
+                {isAdmin && <Link to="/admin/judge-panels">Create your first panel</Link>}
               </p>
             </div>
           ) : (
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '16px' }}>
+            <div className="live-sync-grid">
               {livePanelDetails.map(panel => {
                 const isFullyEvaluated = panel.assignedTeamsCount > 0 && panel.evaluationsCompletedCount >= panel.assignedTeamsCount;
                 const pendingCount = Math.max(0, panel.assignedTeamsCount - panel.evaluationsCompletedCount);
@@ -327,61 +350,43 @@ export default function DashboardPage() {
                 return (
                   <div
                     key={panel.id}
-                    className="card"
-                    style={{
-                      padding: '18px 20px',
-                      display: 'flex',
-                      flexDirection: 'column',
-                      justifyContent: 'space-between',
-                      borderLeft: isFullyEvaluated ? '4px solid var(--green)' : '4px solid var(--orange)',
-                      transition: 'transform 0.15s, box-shadow 0.15s'
-                    }}
+                    className={`live-panel-card ${isFullyEvaluated ? 'fully-evaluated' : ''}`}
                   >
                     <div>
-                      <div className="flex-between" style={{ marginBottom: '8px' }}>
-                        <h4 style={{ margin: 0, fontSize: '1.08rem', color: 'var(--navy)' }}>
-                          {panel.name}
-                        </h4>
+                      <div className="flex-between" style={{ marginBottom: '4px' }}>
+                        <h4>{panel.name}</h4>
                         <span className={`pill-badge ${isFullyEvaluated ? 'status-verified' : 'status-open'}`} style={{ fontSize: '0.72rem' }}>
                           {isFullyEvaluated ? '✓ All Evaluated' : `${panel.evaluationsCompletedCount}/${panel.assignedTeamsCount} Teams`}
                         </span>
                       </div>
 
-                      <div style={{ fontSize: '0.84rem', color: 'var(--text-secondary)', marginBottom: '12px', lineHeight: 1.4 }}>
-                        <strong style={{ color: 'var(--text-primary)' }}>Judges: </strong>
+                      <div className="panel-judges-text">
+                        <strong>Judges: </strong>
                         {panel.judgeNames}
                       </div>
                     </div>
 
-                    <div style={{
-                      paddingTop: '12px',
-                      borderTop: '1px solid var(--border-light)',
-                      display: 'flex',
-                      justifyContent: 'space-between',
-                      alignItems: 'center',
-                      fontSize: '0.84rem'
-                    }}>
-                      <div style={{ display: 'flex', gap: '14px' }}>
-                        <div>
-                          <span style={{ color: 'var(--text-secondary)', display: 'block', fontSize: '0.72rem', textTransform: 'uppercase' }}>Assigned</span>
-                          <strong style={{ color: 'var(--navy)', fontSize: '1rem' }}>{panel.assignedTeamsCount}</strong>
+                    <div className="panel-stats-row">
+                      <div className="panel-stats">
+                        <div className="panel-stat">
+                          <span className="panel-stat-label">Assigned</span>
+                          <span className="panel-stat-value">{panel.assignedTeamsCount}</span>
                         </div>
-                        <div>
-                          <span style={{ color: 'var(--text-secondary)', display: 'block', fontSize: '0.72rem', textTransform: 'uppercase' }}>Completed</span>
-                          <strong style={{ color: 'var(--green)', fontSize: '1rem' }}>{panel.evaluationsCompletedCount}</strong>
+                        <div className="panel-stat">
+                          <span className="panel-stat-label">Completed</span>
+                          <span className="panel-stat-value green">{panel.evaluationsCompletedCount}</span>
                         </div>
-                        <div>
-                          <span style={{ color: 'var(--text-secondary)', display: 'block', fontSize: '0.72rem', textTransform: 'uppercase' }}>Pending</span>
-                          <strong style={{ color: pendingCount > 0 ? 'var(--orange)' : 'var(--text-secondary)', fontSize: '1rem' }}>
+                        <div className="panel-stat">
+                          <span className="panel-stat-label">Pending</span>
+                          <span className={`panel-stat-value ${pendingCount > 0 ? 'orange' : 'muted'}`}>
                             {pendingCount}
-                          </strong>
+                          </span>
                         </div>
                       </div>
 
                       <button
-                        className="btn btn-sm btn-outline"
+                        className="btn-view-panel"
                         onClick={() => setSelectedPanelDetailId(panel.id)}
-                        style={{ fontSize: '0.75rem', padding: '4px 10px' }}
                       >
                         View Details ➔
                       </button>
@@ -393,6 +398,7 @@ export default function DashboardPage() {
           )}
         </div>
       )}
+
 
       {/* Stats Cards */}
       {isJudge ? (
@@ -423,52 +429,7 @@ export default function DashboardPage() {
           />
         </div>
       ) : (isAdmin || isSpoc) ? (
-        <div className="stats-row">
-          <StatCard
-            number={stats.totalTeams}
-            label="Total Teams"
-            onClick={() => setDetailsModalTab('all_teams')}
-            active={detailsModalTab === 'all_teams'}
-            hint="Click to view all registered teams & members"
-          />
-          <StatCard
-            number={stats.openTeams}
-            label="Recruiting (Needs People)"
-            accent
-            onClick={() => setDetailsModalTab('recruiting')}
-            active={detailsModalTab === 'recruiting'}
-            hint="Click to see teams looking for members"
-          />
-          <StatCard
-            number={stats.lockedTeams}
-            label="Locked Teams"
-            onClick={() => setDetailsModalTab('locked')}
-            active={detailsModalTab === 'locked'}
-            hint="Click to see finalized teams ready for verification"
-          />
-          <StatCard
-            number={stats.totalStudents}
-            label="Registered Students"
-            onClick={() => setDetailsModalTab('all_students')}
-            active={detailsModalTab === 'all_students'}
-            hint="Click to view all registered students"
-          />
-          <StatCard
-            number={stats.unassignedStudents}
-            label="Students Without Team"
-            accent
-            onClick={() => setDetailsModalTab('unassigned')}
-            active={detailsModalTab === 'unassigned'}
-            hint="Click to view students not in any team yet"
-          />
-          <StatCard
-            number={stats.femaleRatio}
-            label="Female Participation"
-            onClick={() => setDetailsModalTab('gender')}
-            active={detailsModalTab === 'gender'}
-            hint="Click to check SIH female member compliance"
-          />
-        </div>
+        null
       ) : (
         /* Student Stats Row — Recruiting and Locked Teams removed */
         <div className="stats-row">
@@ -601,12 +562,16 @@ export default function DashboardPage() {
 
       {/* ADMIN & SPOC: Live Team Formation & Recruitment Matching Widget */}
       {(isAdmin || isSpoc) && (
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(360px, 1fr))',
-          gap: '20px',
-          marginBottom: '28px'
-        }}>
+        <div className="admin-section">
+          <div className="admin-section-header">
+            <h3>Team Formation Overview</h3>
+            <span className="section-count">{recruitingList.length + unassignedList.length}</span>
+          </div>
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(360px, 1fr))',
+            gap: '20px'
+          }}>
           {/* Teams Looking for People */}
           <div className="card" style={{ padding: '20px' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '14px' }}>
@@ -788,11 +753,14 @@ export default function DashboardPage() {
               </div>
             )}
           </div>
+          </div>
         </div>
       )}
 
       {/* Quick Actions */}
-      <h3 style={{ marginBottom: '16px' }}>Quick Actions</h3>
+      <div className="admin-section-header" style={{ marginTop: '8px' }}>
+        <h3>Quick Actions</h3>
+      </div>
       <div className="quick-actions">
         {/* STUDENT ACTIONS */}
         {!isAdmin && !isJudge && !isSpoc && (
