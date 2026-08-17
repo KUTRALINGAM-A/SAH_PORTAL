@@ -1,4 +1,5 @@
 import { useState, useMemo, useEffect } from 'react';
+import { parseEvaluationScores } from '../lib/evaluationHelper';
 
 export default function JudgePanelDetailModal({
   panelId,
@@ -77,30 +78,33 @@ export default function JudgePanelDetailModal({
       // Judge-by-judge status
       const judgeBreakdown = panelJudgesList.map(judge => {
         const ev = teamEvals.find(e => e.judge_id === judge.id);
+        const parsed = ev ? parseEvaluationScores(ev) : null;
         return {
           judgeId: judge.id,
           judgeName: judge.full_name,
           judgeEmail: judge.email,
           judgeDepartment: judge.department,
           isEvaluated: !!ev,
-          score: ev ? ev.total_raw : null,
-          understandingScore: ev ? ev.understanding_score : null,
-          innovationScore: ev ? (ev.innovation_score ?? '—') : null,
-          technicalScore: ev ? (ev.technical_score ?? '—') : null,
-          prototypeScore: ev ? (ev.prototype_score ?? ev.execution_score) : null,
-          impactScore: ev ? ev.impact_score : null,
-          presentationScore: ev ? (ev.presentation_score ?? ev.pitch_score) : null,
-          remarks: ev ? ev.remarks : null,
+          score: parsed ? parsed.total : null,
+          understandingScore: parsed ? parsed.rubric.understanding : null,
+          innovationScore: parsed ? parsed.rubric.innovation : null,
+          technicalScore: parsed ? parsed.rubric.technical : null,
+          prototypeScore: parsed ? parsed.rubric.prototype : null,
+          impactScore: parsed ? parsed.rubric.impact : null,
+          presentationScore: parsed ? parsed.rubric.presentation : null,
+          remarks: parsed ? parsed.remarks : null,
           evaluatedAt: ev ? ev.created_at : null
         };
       });
 
-      const completedJudgesCount = judgeBreakdown.filter(j => j.isEvaluated).length;
+      const evaluatedJudgesList = judgeBreakdown.filter(j => j.isEvaluated && j.score !== null);
+      const completedJudgesCount = evaluatedJudgesList.length;
       const isFullyEvaluated = panelJudgesList.length > 0 && completedJudgesCount === panelJudgesList.length;
       const hasAtLeastOneEvaluation = completedJudgesCount > 0;
 
-      const totalScoreSum = teamEvals.reduce((sum, e) => sum + (e.total_raw || 0), 0);
-      const avgScore = teamEvals.length > 0 ? Math.round(totalScoreSum / teamEvals.length) : null;
+      const avgScore = evaluatedJudgesList.length > 0
+        ? (evaluatedJudgesList.reduce((sum, j) => sum + j.score, 0) / evaluatedJudgesList.length).toFixed(1)
+        : null;
 
       return {
         ...team,

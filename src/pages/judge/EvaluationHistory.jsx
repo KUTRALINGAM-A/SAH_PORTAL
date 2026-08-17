@@ -1,11 +1,11 @@
 import { useState, useEffect } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import { supabase } from '../../lib/supabase';
+import { parseEvaluationScores } from '../../lib/evaluationHelper';
 
 export default function EvaluationHistory() {
   const { profile } = useAuth();
   const [evaluations, setEvaluations] = useState([]);
-  const [teams, setTeams] = useState({});
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -28,15 +28,15 @@ export default function EvaluationHistory() {
   return (
     <div className="page-container">
       <div className="page-header">
-        <h1 className="page-title"> My Evaluations</h1>
-        <p className="page-subtitle">Your submitted evaluations ({evaluations.length} teams scored)</p>
+        <h1 className="page-title">My Submitted Evaluations</h1>
+        <p className="page-subtitle">Your evaluated teams ({evaluations.length} teams scored out of 50)</p>
       </div>
 
       {evaluations.length === 0 ? (
         <div className="empty-state">
           <div className="empty-icon"></div>
           <h3>No evaluations yet</h3>
-          <p>Go to "Evaluate Teams"to start scoring.</p>
+          <p>Go to "Evaluate Teams" to start scoring.</p>
         </div>
       ) : (
         <div className="card" style={{ padding: 0, overflow: 'auto' }}>
@@ -45,39 +45,50 @@ export default function EvaluationHistory() {
               <tr>
                 <th>Team</th>
                 <th>Problem Statement</th>
-                <th>Understanding (5)</th>
-                <th>Innovation (10)</th>
-                <th>Technical (10)</th>
-                <th>Prototype (15)</th>
-                <th>Impact (5)</th>
-                <th>Presentation (5)</th>
-                <th>Total (50)</th>
+                <th style={{ textAlign: 'center' }}>Understanding (5)</th>
+                <th style={{ textAlign: 'center' }}>Innovation (10)</th>
+                <th style={{ textAlign: 'center' }}>Technical (10)</th>
+                <th style={{ textAlign: 'center' }}>Prototype (15)</th>
+                <th style={{ textAlign: 'center' }}>Impact (5)</th>
+                <th style={{ textAlign: 'center' }}>Presentation (5)</th>
+                <th style={{ textAlign: 'center' }}>Total Score (50)</th>
+                <th>Remarks</th>
                 <th>Date</th>
               </tr>
             </thead>
             <tbody>
-              {evaluations.map(ev => (
-                <tr key={ev.id}>
-                  <td><strong>{ev.teams?.team_name}</strong></td>
-                  <td style={{ fontSize: '0.82rem' }}>
-                    {ev.teams?.problem_statements?.ps_code || '—'}
-                  </td>
-                  <td>{ev.understanding_score ?? '—'}</td>
-                  <td>{ev.innovation_score ?? '—'}</td>
-                  <td>{ev.technical_score ?? '—'}</td>
-                  <td>{ev.prototype_score ?? '—'}</td>
-                  <td>{ev.impact_score ?? '—'}</td>
-                  <td>{ev.presentation_score ?? '—'}</td>
-                  <td>
-                    <strong style={{ color: 'var(--orange)', fontSize: '1.05rem' }}>
-                      {ev.total_raw}/50
-                    </strong>
-                  </td>
-                  <td style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>
-                    {new Date(ev.created_at).toLocaleDateString()}
-                  </td>
-                </tr>
-              ))}
+              {evaluations.map(ev => {
+                const parsed = parseEvaluationScores(ev);
+                return (
+                  <tr key={ev.id}>
+                    <td><strong>{ev.teams?.team_name}</strong></td>
+                    <td style={{ fontSize: '0.82rem' }}>
+                      {ev.teams?.problem_statements ? (
+                        <span title={ev.teams?.problem_statements?.title}>
+                          <strong>{ev.teams.problem_statements.ps_code}</strong>
+                        </span>
+                      ) : '—'}
+                    </td>
+                    <td style={{ textAlign: 'center' }}>{parsed.rubric.understanding}</td>
+                    <td style={{ textAlign: 'center' }}>{parsed.rubric.innovation}</td>
+                    <td style={{ textAlign: 'center' }}>{parsed.rubric.technical}</td>
+                    <td style={{ textAlign: 'center' }}>{parsed.rubric.prototype}</td>
+                    <td style={{ textAlign: 'center' }}>{parsed.rubric.impact}</td>
+                    <td style={{ textAlign: 'center' }}>{parsed.rubric.presentation}</td>
+                    <td style={{ textAlign: 'center' }}>
+                      <span className="pill-badge status-verified" style={{ fontWeight: 800, fontSize: '0.9rem' }}>
+                        {parsed.total} / 50
+                      </span>
+                    </td>
+                    <td style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', maxWidth: '180px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }} title={parsed.remarks}>
+                      {parsed.remarks || '—'}
+                    </td>
+                    <td style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>
+                      {new Date(ev.created_at).toLocaleDateString()}
+                    </td>
+                  </tr>
+                );
+              })}
             </tbody>
           </table>
         </div>
