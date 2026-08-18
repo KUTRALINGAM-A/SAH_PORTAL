@@ -223,6 +223,119 @@ export function AuthProvider({ children }) {
     return data && data.length > 0;
   }, [profile]);
 
+  // Reset password 6-digit OTP email trigger
+  const resetPasswordForEmail = async (email) => {
+    setError(null);
+    try {
+      const cleanEmail = email.trim().toLowerCase();
+
+      // 1. Check if user profile exists
+      const { data: userProfile, error: profErr } = await supabase
+        .from('profiles')
+        .select('id, email')
+        .eq('email', cleanEmail)
+        .maybeSingle();
+
+      if (profErr || !userProfile) {
+        throw new Error('No account found with this email address.');
+      }
+
+      // 2. Generate random 6-digit OTP code
+      const otpCode = Math.floor(100000 + Math.random() * 900000).toString();
+      const expiresAt = new Date(Date.now() + 10 * 60 * 1000).toISOString();
+
+      // 3. Save to password_resets table in Supabase
+      const { error: dbErr } = await supabase
+        .from('password_resets')
+        .insert({
+          email: cleanEmail,
+          otp_code: otpCode,
+          expires_at: expiresAt
+        });
+
+      if (dbErr) {
+        console.warn('DB OTP Log warning:', dbErr);
+      }
+
+      // 4. Send EXACTLY ONE email containing 6-digit OTP code via Nodemailer endpoint
+      const response = await fetch('/api/send-otp', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: cleanEmail, otpCode })
+      });
+
+      const resData = await response.json();
+      if (!response.ok || resData.error) {
+        throw new Error(resData.error || 'Failed to dispatch 6-digit OTP email.');
+      }
+
+      return { data: resData, error: null };
+    } catch (err) {
+      setError(err.message);
+      return { data: null, error: err };
+    }
+  };
+
+  // Update password for logged in user
+  const updatePassword = async (newPassword) => {
+    setError(null);
+    try {
+      const { data, error: updateErr } = await supabase.auth.updateUser({
+        password: newPassword
+      });
+      if (updateErr) throw updateErr;
+      return { data, error: null };
+    } catch (err) {
+      setError(err.message);
+      return { data: null, error: err };
+    }
+  };
+
+  // Verify 6-digit OTP code and update password
+  const verifyOtpForPasswordReset = async ({ email, token, newPassword }) => {
+    setError(null);
+    try {
+      const cleanEmail = email.trim().toLowerCase();
+      const cleanToken = token.trim();
+
+      // 1. Verify 6-digit OTP code against password_resets table
+      const { data: records, error: fetchErr } = await supabase
+        .from('password_resets')
+        .select('*')
+        .eq('email', cleanEmail)
+        .eq('otp_code', cleanToken)
+        .gte('expires_at', new Date().toISOString())
+        .order('created_at', { ascending: false })
+        .limit(1);
+
+      if (fetchErr || !records || records.length === 0) {
+        throw new Error('Invalid or expired 6-digit OTP code. Please check your email or request a new OTP.');
+      }
+
+      // 2. Update user password via RPC (or session fallback)
+      const { data: rpcData, error: rpcErr } = await supabase.rpc('reset_user_password_by_email', {
+        p_email: cleanEmail,
+        p_new_password: newPassword
+      });
+
+      if (rpcErr) {
+        // Fallback: try session updateUser if RPC function not created yet
+        const { error: updateErr } = await supabase.auth.updateUser({ password: newPassword });
+        if (updateErr) {
+          throw new Error('Database password update function missing. Please run the SQL snippet in Supabase SQL Editor.');
+        }
+      }
+
+      // 3. Clean up used OTP from password_resets table
+      await supabase.from('password_resets').delete().eq('email', cleanEmail).eq('otp_code', cleanToken);
+
+      return { data: { success: true }, error: null };
+    } catch (err) {
+      setError(err.message);
+      return { data: null, error: err };
+    }
+  };
+
   const value = {
     session,
     user: session?.user || null,
@@ -232,6 +345,9 @@ export function AuthProvider({ children }) {
     signUp,
     signIn,
     signOut,
+    resetPasswordForEmail,
+    verifyOtpForPasswordReset,
+    updatePassword,
     updateProfile,
     refreshProfile,
     hasRole,

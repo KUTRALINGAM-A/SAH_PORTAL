@@ -11,6 +11,8 @@ import flowchart from './assets/FLOWCHART.png';
 // Pages
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
+import ForgotPasswordPage from './pages/ForgotPasswordPage';
+import ResetPasswordPage from './pages/ResetPasswordPage';
 import DashboardPage from './pages/DashboardPage';
 import TeamMarketplace from './pages/TeamMarketplace';
 import MyTeamPage from './pages/MyTeamPage';
@@ -177,8 +179,10 @@ export default function App() {
     <>
       <Routes>
         {/* Auth pages — no banner/header/navbar */}
-        <Route path="/login"element={<LoginPage />} />
-        <Route path="/register"element={<RegisterPage />} />
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/register" element={<RegisterPage />} />
+        <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+        <Route path="/reset-password" element={<ResetPasswordPage />} />
 
         {/* All other pages with layout */}
         <Route path="*"element={
