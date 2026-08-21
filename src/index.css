@@ -267,6 +267,10 @@ h4 { font-size: 1.125rem; }
 }
 
 /* ---- Notification Bell ---- */
+.notification-bell-wrapper {
+  position: relative;
+}
+
 .notification-bell {
   position: relative;
   cursor: pointer;
@@ -276,6 +280,9 @@ h4 { font-size: 1.125rem; }
   background: none;
   border: none;
   color: var(--navy);
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .notification-bell:hover {
@@ -283,13 +290,21 @@ h4 { font-size: 1.125rem; }
 }
 
 .notification-bell .bell-icon {
-  font-size: 1.3rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--navy);
+}
+
+.notification-bell .bell-icon svg {
+  width: 22px;
+  height: 22px;
 }
 
 .notification-bell .badge {
   position: absolute;
-  top: 2px;
-  right: 2px;
+  top: 0px;
+  right: 0px;
   background: var(--red);
   color: var(--white);
   font-size: 0.65rem;
@@ -2201,6 +2216,192 @@ body:has(.modal-overlay) {
   }
 }
 
+/* ---- User Profile Modal ---- */
+.user-profile-modal {
+  max-width: min(580px, calc(100vw - 24px));
+  width: 100%;
+  padding: 0;
+  overflow: hidden;
+  background: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 30px 70px -10px rgba(0, 0, 0, 0.55);
+}
+
+.upm-header {
+  background: linear-gradient(135deg, var(--navy) 0%, #1e3a8a 100%);
+  padding: 24px 24px 20px;
+  color: #ffffff;
+  position: relative;
+}
+
+.upm-close-btn {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  background: rgba(255, 255, 255, 0.18);
+  border: none;
+  color: #ffffff;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  transition: all 0.2s;
+}
+
+.upm-close-btn:hover {
+  background: rgba(255, 255, 255, 0.35);
+}
+
+.upm-header-content {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.upm-name-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.upm-name {
+  margin: 0;
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.upm-subtitle {
+  margin: 4px 0 0;
+  opacity: 0.9;
+  font-size: 0.88rem;
+  color: #e2e8f0;
+}
+
+.upm-body {
+  padding: 24px;
+  background: #ffffff;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  max-height: 65vh;
+  overflow-y: auto;
+}
+
+.upm-section-title {
+  margin: 0 0 10px;
+  font-size: 0.82rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--text-secondary);
+  font-weight: 700;
+}
+
+.upm-detail-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  background: #F8FAFC;
+  border: 1px solid #E2E8F0;
+  padding: 14px 16px;
+  border-radius: var(--radius-md);
+  font-size: 0.9rem;
+}
+
+.upm-detail-label {
+  color: var(--text-secondary);
+  font-size: 0.78rem;
+  display: block;
+  margin-bottom: 2px;
+}
+
+.upm-detail-value {
+  color: var(--text-primary);
+}
+
+.upm-contact-box {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  background: #F8FAFC;
+  border: 1px solid #E2E8F0;
+  padding: 14px 16px;
+  border-radius: var(--radius-md);
+}
+
+.upm-contact-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.9rem;
+}
+
+.upm-footer {
+  padding: 16px 24px;
+  background: #F8FAFC;
+  border-top: 1px solid #E2E8F0;
+  display: flex;
+  justify-content: flex-end;
+}
+
+/* UPM Mobile */
+@media (max-width: 600px) {
+  .user-profile-modal {
+    max-width: calc(100vw - 16px);
+    border-radius: var(--radius-lg);
+  }
+
+  .upm-header {
+    padding: 18px 16px 14px;
+  }
+
+  .upm-name {
+    font-size: 1.1rem;
+  }
+
+  .upm-subtitle {
+    font-size: 0.8rem;
+  }
+
+  .upm-body {
+    padding: 16px;
+    gap: 16px;
+    max-height: 60vh;
+  }
+
+  .upm-detail-grid {
+    grid-template-columns: 1fr;
+    gap: 10px;
+    padding: 12px;
+    font-size: 0.85rem;
+  }
+
+  .upm-contact-box {
+    padding: 12px;
+  }
+
+  .upm-contact-row {
+    font-size: 0.85rem;
+  }
+
+  .upm-footer {
+    padding: 12px 16px;
+  }
+
+  .upm-close-btn {
+    top: 12px;
+    right: 12px;
+    width: 28px;
+    height: 28px;
+    font-size: 0.85rem;
+  }
+}
+
 /* ---- How It Works Flowchart Section ---- */
 .how-it-works-section {
   position: relative;
@@ -2922,9 +3123,17 @@ body:has(.modal-overlay) {
 
   /* -- Notifications -- */
   .notification-dropdown {
+    position: fixed;
+    top: 60px;
+    left: 50%;
+    transform: translateX(-50%);
+    right: auto;
     width: calc(100vw - 32px);
-    right: -16px;
-    max-width: 360px;
+    max-width: 400px;
+    max-height: 70vh;
+    border-radius: var(--radius-lg);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2);
+    z-index: 9999;
   }
 
   /* -- Hero Banner -- */
@@ -3009,7 +3218,8 @@ body:has(.modal-overlay) {
   }
 
   .sah-logo-img {
-    width: 140px;
+    width: 100%;
+    max-width: 100%;
   }
 
   /* -- Flowchart -- */
@@ -3020,7 +3230,13 @@ body:has(.modal-overlay) {
 
   /* -- Modals -- */
   .modal-overlay {
-    padding: 12px;
+    padding: 8px;
+  }
+
+  .modal-card {
+    max-width: calc(100vw - 16px) !important;
+    max-height: 92vh !important;
+    border-radius: var(--radius-md) !important;
   }
 
   .modal-content {
@@ -3033,6 +3249,63 @@ body:has(.modal-overlay) {
   .modal-header {
     flex-wrap: wrap;
     gap: 8px;
+  }
+
+  /* -- Member Slots -- */
+  .member-slot {
+    padding: 10px 12px;
+    gap: 10px;
+  }
+
+  .member-slot .avatar {
+    width: 36px;
+    height: 36px;
+    font-size: 0.82rem;
+  }
+
+  .member-slot .member-name {
+    font-size: 0.82rem;
+    flex-wrap: wrap;
+  }
+
+  .member-slot .member-detail {
+    font-size: 0.72rem;
+  }
+
+  /* -- Team Cards -- */
+  .team-card {
+    width: 100%;
+  }
+
+  .team-card .team-card-header {
+    padding: 14px 14px 10px;
+  }
+
+  .team-card .team-card-body {
+    padding: 10px 14px;
+  }
+
+  .team-card .team-card-footer {
+    padding: 10px 14px 14px;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .team-card .team-card-header .team-name {
+    font-size: 0.88rem;
+  }
+
+  .team-card .team-card-header .team-ps {
+    font-size: 0.7rem;
+  }
+
+  .team-card .skills-row {
+    gap: 4px;
+  }
+
+  .team-card .skills-row .pill-badge {
+    font-size: 0.68rem;
+    padding: 2px 6px;
   }
 
   /* -- Skill Selector -- */
@@ -3178,8 +3451,44 @@ body:has(.modal-overlay) {
 
   /* -- Notification Dropdown -- */
   .notification-dropdown {
+    position: fixed;
+    top: 56px;
+    left: 50%;
+    transform: translateX(-50%);
+    right: auto;
     width: calc(100vw - 20px);
-    right: -10px;
+    max-width: 100%;
+    max-height: 65vh;
+    border-radius: var(--radius-md);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.25);
+    z-index: 9999;
+  }
+
+  /* -- Member Slots (phone) -- */
+  .member-slot {
+    padding: 10px;
+    gap: 8px;
+  }
+
+  .member-slot .avatar {
+    width: 32px;
+    height: 32px;
+    font-size: 0.75rem;
+  }
+
+  .member-slot .member-name {
+    font-size: 0.78rem;
+  }
+
+  /* -- Modal (phone) -- */
+  .modal-overlay {
+    padding: 6px;
+  }
+
+  .modal-card {
+    max-width: calc(100vw - 12px) !important;
+    max-height: 94vh !important;
+    border-radius: var(--radius-md) !important;
   }
 
   /* -- Hero Banner -- */

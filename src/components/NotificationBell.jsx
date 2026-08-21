@@ -34,23 +34,28 @@ export default function NotificationBell() {
 
   const getNotifIcon = (type) => {
     switch (type) {
-      case 'join_request': return '';
-      case 'request_accepted': return '';
-      case 'request_declined': return '';
-      case 'team_locked': return '';
-      case 'team_verified': return '';
-      default: return '';
+      case 'join_request': return '📩';
+      case 'request_accepted': return '✅';
+      case 'request_declined': return '❌';
+      case 'team_locked': return '🔒';
+      case 'team_verified': return '✔️';
+      default: return '📢';
     }
   };
 
   return (
-    <div className="notification-bell"ref={dropdownRef} style={{ position: 'relative' }}>
+    <div className="notification-bell-wrapper" ref={dropdownRef} style={{ position: 'relative' }}>
       <button
         className="notification-bell"
         onClick={() => setIsOpen(!isOpen)}
         aria-label="Notifications"
       >
-        <span className="bell-icon"></span>
+        <span className="bell-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
+            <path d="M13.73 21a2 2 0 0 1-3.46 0" />
+          </svg>
+        </span>
         {unreadCount > 0 && (
           <span className="badge">{unreadCount > 9 ? '9+' : unreadCount}</span>
         )}
@@ -61,7 +66,7 @@ export default function NotificationBell() {
           <div className="dropdown-header">
             <span>Notifications</span>
             {unreadCount > 0 && (
-              <button className="mark-all-read"onClick={markAllAsRead}>
+              <button className="mark-all-read" onClick={markAllAsRead}>
                 Mark all as read
               </button>
             )}
@@ -69,7 +74,7 @@ export default function NotificationBell() {
 
           {notifications.length === 0 ? (
             <div className="notification-empty">
-              <p> No notifications yet</p>
+              <p>🔔 No notifications yet</p>
             </div>
           ) : (
             notifications.map(notif => (
