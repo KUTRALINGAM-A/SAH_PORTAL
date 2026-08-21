@@ -5,7 +5,6 @@ import Header from './components/Header';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import ProtectedRoute from './components/ProtectedRoute';
-import sahLogo from './assets/Logo.png';
 import flowchart from './assets/FLOWCHART.png';
 import vJeyakumarImg from './assets/V_jeyakumar.jpg';
 import piyushImg from './assets/piyush-pratap-singh-faculty-image.jpeg';
@@ -26,6 +25,7 @@ import MyTeamPage from './pages/MyTeamPage';
 import CreateTeamPage from './pages/CreateTeamPage';
 import ProfilePage from './pages/ProfilePage';
 import ProblemStatementsPage from './pages/ProblemStatementsPage';
+import EventLandingPage from './pages/EventLandingPage';
 
 // Admin Pages
 import ProblemStatementsAdmin from './pages/admin/ProblemStatementsAdmin';
@@ -41,7 +41,7 @@ import EvaluationHistory from './pages/judge/EvaluationHistory';
 // SPOC Pages
 import VerificationQueue from './pages/spoc/VerificationQueue';
 
-function HomePage() {
+function SahHomePage() {
   const { isAuthenticated } = useAuth();
 
   if (isAuthenticated) {
@@ -231,6 +231,7 @@ export default function App() {
   return (
     <>
       <Routes>
+        <Route path="/" element={<EventLandingPage />} />
         {/* Auth pages — no banner/header/navbar */}
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
@@ -245,7 +246,7 @@ export default function App() {
             <Navbar />
             <Routes>
               {/* Public */}
-              <Route path="/" element={<HomePage />} />
+              <Route path="/sah" element={<SahHomePage />} />
               <Route path="/problem-statements" element={<ProblemStatementsPage />} />
 
               {/* Student / Team Leader */}
