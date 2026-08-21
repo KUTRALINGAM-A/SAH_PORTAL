@@ -7,6 +7,13 @@ import Footer from './components/Footer';
 import ProtectedRoute from './components/ProtectedRoute';
 import sahLogo from './assets/Logo.png';
 import flowchart from './assets/FLOWCHART.png';
+import vJeyakumarImg from './assets/V_jeyakumar.jpg';
+import piyushImg from './assets/piyush-pratap-singh-faculty-image.jpeg';
+import simhadriImg from './assets/simhadri_sir.jpeg';
+import krishnakumarImg from './assets/s-krishnakumar.png';
+import nivethithaImg from './assets/nivethitha.jpg';
+import aravindImg from './assets/Aravind.png';
+import parthasarathyImg from './assets/dr-parthasarathy.jpg';
 
 // Pages
 import LoginPage from './pages/LoginPage';
@@ -134,7 +141,7 @@ function HomePage() {
           <div className="oc-cards-row oc-cards-center">
             <div className="oc-card oc-card-patron">
               <div className="oc-avatar oc-avatar-lg">
-                <span className="oc-avatar-initials">VJ</span>
+                <img src={vJeyakumarImg} alt="Dr. V. Jeyakumar" />
               </div>
               <div className="oc-name">Dr. V. Jeyakumar</div>
               <div className="oc-designation">Principal</div>
@@ -149,7 +156,7 @@ function HomePage() {
           <div className="oc-cards-row oc-cards-center">
             <div className="oc-card">
               <div className="oc-avatar oc-avatar-md">
-                <span className="oc-avatar-initials">PP</span>
+                <img src={piyushImg} alt="Dr. Piyush Pratap Singh" />
               </div>
               <div className="oc-name">Dr. Piyush Pratap Singh</div>
               <div className="oc-designation">SPOC — Smart India Hackathon</div>
@@ -164,7 +171,7 @@ function HomePage() {
           <div className="oc-cards-row oc-cards-center">
             <div className="oc-card">
               <div className="oc-avatar oc-avatar-md">
-                <span className="oc-avatar-initials">RS</span>
+                <img src={simhadriImg} alt="Dr. Ravishankar Simhadri" />
               </div>
               <div className="oc-name">Dr. Ravishankar Simhadri</div>
               <div className="oc-designation">Co-Patron</div>
@@ -173,7 +180,7 @@ function HomePage() {
 
             <div className="oc-card">
               <div className="oc-avatar oc-avatar-md">
-                <span className="oc-avatar-initials">SK</span>
+                <img src={krishnakumarImg} alt="Dr. S. Krishnakumar" />
               </div>
               <div className="oc-name">Dr. S. Krishnakumar</div>
               <div className="oc-designation">Co-Patron</div>
@@ -182,7 +189,7 @@ function HomePage() {
 
             <div className="oc-card">
               <div className="oc-avatar oc-avatar-md">
-                <span className="oc-avatar-initials">DN</span>
+                <img src={nivethithaImg} alt="Dr. Nivethitha" />
               </div>
               <div className="oc-name">Dr. Nivethitha</div>
               <div className="oc-designation">Co-Patron</div>
@@ -191,7 +198,7 @@ function HomePage() {
 
             <div className="oc-card">
               <div className="oc-avatar oc-avatar-md">
-                <span className="oc-avatar-initials">JA</span>
+                <img src={aravindImg} alt="Dr. J.V. Aravind" />
               </div>
               <div className="oc-name">Dr. J.V. Aravind</div>
               <div className="oc-designation">Co-Patron</div>
@@ -200,7 +207,7 @@ function HomePage() {
 
             <div className="oc-card">
               <div className="oc-avatar oc-avatar-md">
-                <span className="oc-avatar-initials">SP</span>
+                <img src={parthasarathyImg} alt="Dr. S. Parthasarathy" />
               </div>
               <div className="oc-name">Dr. S. Parthasarathy</div>
               <div className="oc-designation">Co-Patron</div>
