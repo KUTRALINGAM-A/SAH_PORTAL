@@ -280,45 +280,68 @@ export function AuthProvider({ children }) {
     return data && data.length > 0;
   }, [profile]);
 
-  // Reset password 6-digit OTP email trigger
-  const resetPasswordForEmail = async (email) => {
+  // Reset password 6-digit OTP email trigger (Prioritizes College Mail ID if available)
+  const resetPasswordForEmail = async (emailInput) => {
     setError(null);
     try {
-      const cleanEmail = email.trim().toLowerCase();
+      const cleanInput = emailInput.trim().toLowerCase();
 
-      // 1. Check if user profile exists
-      const { data: userProfile, error: profErr } = await supabase
+      // 1. Check if user profile exists (search by personal email or college email)
+      let userProfile = null;
+      const { data: byPersonal } = await supabase
         .from('profiles')
-        .select('id, email')
-        .eq('email', cleanEmail)
+        .select('id, email, college_email')
+        .ilike('email', cleanInput)
         .maybeSingle();
 
-      if (profErr || !userProfile) {
-        throw new Error('No account found with this email address.');
+      if (byPersonal) {
+        userProfile = byPersonal;
+      } else {
+        const { data: byCollege } = await supabase
+          .from('profiles')
+          .select('id, email, college_email')
+          .ilike('college_email', cleanInput)
+          .maybeSingle();
+
+        if (byCollege) {
+          userProfile = byCollege;
+        }
       }
+
+      if (!userProfile) {
+        throw new Error('No account found with this email address or College Mail ID.');
+      }
+
+      // Priority: Send to College Mail ID if present, otherwise Personal Email
+      const hasCollegeEmail = !!(userProfile.college_email && userProfile.college_email.trim());
+      const targetEmail = hasCollegeEmail ? userProfile.college_email.trim().toLowerCase() : userProfile.email.trim().toLowerCase();
+      const primaryAuthEmail = userProfile.email.trim().toLowerCase();
 
       // 2. Generate random 6-digit OTP code
       const otpCode = Math.floor(100000 + Math.random() * 900000).toString();
       const expiresAt = new Date(Date.now() + 10 * 60 * 1000).toISOString();
 
       // 3. Save to password_resets table in Supabase
+      const resetsToInsert = [
+        { email: targetEmail, otp_code: otpCode, expires_at: expiresAt }
+      ];
+      if (targetEmail !== primaryAuthEmail) {
+        resetsToInsert.push({ email: primaryAuthEmail, otp_code: otpCode, expires_at: expiresAt });
+      }
+
       const { error: dbErr } = await supabase
         .from('password_resets')
-        .insert({
-          email: cleanEmail,
-          otp_code: otpCode,
-          expires_at: expiresAt
-        });
+        .insert(resetsToInsert);
 
       if (dbErr) {
         console.warn('DB OTP Log warning:', dbErr);
       }
 
-      // 4. Send EXACTLY ONE email containing 6-digit OTP code via Nodemailer endpoint
+      // 4. Send OTP code via Nodemailer endpoint to target email
       const response = await fetch('/api/send-otp', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: cleanEmail, otpCode })
+        body: JSON.stringify({ email: targetEmail, otpCode })
       });
 
       const resData = await response.json();
@@ -326,7 +349,14 @@ export function AuthProvider({ children }) {
         throw new Error(resData.error || 'Failed to dispatch 6-digit OTP email.');
       }
 
-      return { data: resData, error: null };
+      return {
+        data: {
+          targetEmail,
+          primaryAuthEmail,
+          isCollegeEmail: hasCollegeEmail
+        },
+        error: null
+      };
     } catch (err) {
       setError(err.message);
       return { data: null, error: err };
@@ -352,14 +382,26 @@ export function AuthProvider({ children }) {
   const verifyOtpForPasswordReset = async ({ email, token, newPassword }) => {
     setError(null);
     try {
-      const cleanEmail = email.trim().toLowerCase();
+      const cleanInput = email.trim().toLowerCase();
       const cleanToken = token.trim();
+
+      // Find user profile to resolve primary auth email
+      let primaryEmail = cleanInput;
+      const { data: userProfile } = await supabase
+        .from('profiles')
+        .select('email, college_email')
+        .or(`email.ilike.${cleanInput},college_email.ilike.${cleanInput}`)
+        .maybeSingle();
+
+      if (userProfile?.email) {
+        primaryEmail = userProfile.email;
+      }
 
       // 1. Verify 6-digit OTP code against password_resets table
       const { data: records, error: fetchErr } = await supabase
         .from('password_resets')
         .select('*')
-        .eq('email', cleanEmail)
+        .or(`email.eq.${cleanInput},email.eq.${primaryEmail}`)
         .eq('otp_code', cleanToken)
         .gte('expires_at', new Date().toISOString())
         .order('created_at', { ascending: false })
@@ -369,9 +411,9 @@ export function AuthProvider({ children }) {
         throw new Error('Invalid or expired 6-digit OTP code. Please check your email or request a new OTP.');
       }
 
-      // 2. Update user password via RPC (or session fallback)
+      // 2. Update user password via RPC (using primaryEmail for auth.users lookup)
       const { data: rpcData, error: rpcErr } = await supabase.rpc('reset_user_password_by_email', {
-        p_email: cleanEmail,
+        p_email: primaryEmail,
         p_new_password: newPassword
       });
 
@@ -384,7 +426,7 @@ export function AuthProvider({ children }) {
       }
 
       // 3. Clean up used OTP from password_resets table
-      await supabase.from('password_resets').delete().eq('email', cleanEmail).eq('otp_code', cleanToken);
+      await supabase.from('password_resets').delete().or(`email.eq.${cleanInput},email.eq.${primaryEmail}`).eq('otp_code', cleanToken);
 
       return { data: { success: true }, error: null };
     } catch (err) {

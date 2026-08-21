@@ -9,6 +9,7 @@ export default function ForgotPasswordPage() {
 
   const [step, setStep] = useState(1); // 1 = Request OTP, 2 = Verify OTP & Reset
   const [email, setEmail] = useState('');
+  const [dispatchedEmail, setDispatchedEmail] = useState('');
   const [otpToken, setOtpToken] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -25,12 +26,19 @@ export default function ForgotPasswordPage() {
     setMessage('');
     setLoading(true);
 
-    const { error: resetErr } = await resetPasswordForEmail(email);
+    const { data: resetData, error: resetErr } = await resetPasswordForEmail(email);
 
     if (resetErr) {
       setError(resetErr.message || 'Failed to send OTP email. Please check the email address.');
     } else {
-      setMessage(`A 6-digit OTP security code has been sent to ${email}. Please check your inbox.`);
+      const target = resetData?.targetEmail || email;
+      const isCollege = resetData?.isCollegeEmail;
+      setDispatchedEmail(target);
+      setMessage(
+        isCollege
+          ? `A 6-digit OTP security code has been sent to your College Mail ID: ${target}. Please check your inbox.`
+          : `A 6-digit OTP security code has been sent to your Personal Email: ${target}. Please check your inbox.`
+      );
       setStep(2);
     }
     setLoading(false);
@@ -59,7 +67,7 @@ export default function ForgotPasswordPage() {
     setLoading(true);
 
     const { error: verifyErr } = await verifyOtpForPasswordReset({
-      email,
+      email: dispatchedEmail || email,
       token: otpToken,
       newPassword
     });
@@ -92,8 +100,8 @@ export default function ForgotPasswordPage() {
 
         <p className="login-subheading">
           {step === 1
-            ? 'Enter your registered email address to receive a 6-digit OTP security code.'
-            : `Enter the 6-digit OTP sent to ${email} along with your new password.`}
+            ? 'Enter your registered Email Address or College Mail ID to receive a 6-digit OTP code.'
+            : `Enter the 6-digit OTP sent to ${dispatchedEmail || email} along with your new password.`}
         </p>
 
         {error && (
