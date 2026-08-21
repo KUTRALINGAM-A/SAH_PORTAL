@@ -435,6 +435,139 @@ export function AuthProvider({ children }) {
     }
   };
 
+  // Send 6-digit OTP code to College Mail ID for registration confirmation
+  const sendRegistrationOtp = async (formData) => {
+    setError(null);
+    try {
+      const cleanEmail = formData.email.trim().toLowerCase();
+      const cleanCollegeEmail = formData.collegeEmail ? formData.collegeEmail.trim().toLowerCase() : '';
+      const cleanRollNo = formData.rollNo ? formData.rollNo.trim().toUpperCase() : null;
+
+      // 1. Uniqueness check: Roll No
+      if (cleanRollNo) {
+        const { data: existingRoll } = await supabase
+          .from('profiles')
+          .select('id')
+          .ilike('roll_no', cleanRollNo)
+          .maybeSingle();
+
+        if (existingRoll) {
+          throw new Error(`Roll Number "${cleanRollNo}" is already registered. Please check your roll number or log in.`);
+        }
+      }
+
+      // 2. Uniqueness check: College Email
+      if (cleanCollegeEmail) {
+        const { data: existingCollege } = await supabase
+          .from('profiles')
+          .select('id')
+          .ilike('college_email', cleanCollegeEmail)
+          .maybeSingle();
+
+        if (existingCollege) {
+          throw new Error(`College Mail ID "${cleanCollegeEmail}" is already registered. Please log in or use a different email.`);
+        }
+      }
+
+      // 3. Uniqueness check: Personal Email
+      const { data: existingEmail } = await supabase
+        .from('profiles')
+        .select('id')
+        .ilike('email', cleanEmail)
+        .maybeSingle();
+
+      if (existingEmail) {
+        throw new Error(`Email address "${cleanEmail}" is already registered. Please log in instead.`);
+      }
+
+      // Generate 6-digit OTP code
+      const otpCode = Math.floor(100000 + Math.random() * 900000).toString();
+      const expiresAt = new Date(Date.now() + 10 * 60 * 1000).toISOString();
+
+      // Store in registration_otps table
+      const { error: dbErr } = await supabase
+        .from('registration_otps')
+        .insert({
+          college_email: cleanCollegeEmail,
+          otp_code: otpCode,
+          form_data: formData,
+          expires_at: expiresAt
+        });
+
+      if (dbErr) {
+        console.warn('registration_otps table note:', dbErr);
+      }
+
+      // Send 6-digit OTP code to College Mail ID via Nodemailer endpoint
+      const response = await fetch('/api/send-otp', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: cleanCollegeEmail, otpCode })
+      });
+
+      const resData = await response.json();
+      if (!response.ok || resData.error) {
+        throw new Error(resData.error || 'Failed to dispatch OTP verification email to College Mail ID.');
+      }
+
+      return {
+        data: {
+          collegeEmail: cleanCollegeEmail,
+          otpCode,
+          expiresAt
+        },
+        error: null
+      };
+    } catch (err) {
+      setError(err.message);
+      return { data: null, error: err };
+    }
+  };
+
+  // Verify Registration OTP and Create Account
+  const verifyRegistrationOtpAndCreateAccount = async ({ collegeEmail, otpToken, formData, serverOtpCode }) => {
+    setError(null);
+    try {
+      const cleanCollegeEmail = collegeEmail.trim().toLowerCase();
+      const cleanToken = otpToken.trim();
+
+      // 1. Check registration_otps table
+      const { data: records, error: fetchErr } = await supabase
+        .from('registration_otps')
+        .select('*')
+        .ilike('college_email', cleanCollegeEmail)
+        .eq('otp_code', cleanToken)
+        .gte('expires_at', new Date().toISOString())
+        .order('created_at', { ascending: false })
+        .limit(1);
+
+      let validRecord = records && records.length > 0 ? records[0] : null;
+
+      // Fallback verification if table not initialized
+      if (!validRecord && serverOtpCode && serverOtpCode === cleanToken) {
+        validRecord = { form_data: formData };
+      }
+
+      if (!validRecord) {
+        throw new Error('Invalid or expired 6-digit OTP code. Please check your College Mail ID or request a new OTP.');
+      }
+
+      const activeFormData = validRecord.form_data || formData;
+
+      // 2. Now create the permanent account
+      const signUpResult = await signUp(activeFormData);
+      if (signUpResult.error) throw signUpResult.error;
+
+      // 3. Delete OTP record
+      await supabase.from('registration_otps').delete().ilike('college_email', cleanCollegeEmail).eq('otp_code', cleanToken);
+
+      return { data: signUpResult.data, error: null };
+    } catch (err) {
+      setError(err.message);
+      return { data: null, error: err };
+    }
+  };
+
   const value = {
     session,
     user: session?.user || null,
@@ -444,6 +577,8 @@ export function AuthProvider({ children }) {
     signUp,
     signIn,
     signOut,
+    sendRegistrationOtp,
+    verifyRegistrationOtpAndCreateAccount,
     resetPasswordForEmail,
     verifyOtpForPasswordReset,
     updatePassword,

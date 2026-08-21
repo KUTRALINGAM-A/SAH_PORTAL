@@ -141,6 +141,18 @@ CREATE TABLE IF NOT EXISTS notifications (
 );
 
 -- ============================================================
+-- 8. REGISTRATION OTPS TABLE
+-- ============================================================
+CREATE TABLE IF NOT EXISTS registration_otps (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    college_email TEXT NOT NULL,
+    otp_code TEXT NOT NULL,
+    form_data JSONB NOT NULL,
+    expires_at TIMESTAMPTZ NOT NULL,
+    created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- ============================================================
 -- ENABLE ROW LEVEL SECURITY
 -- ============================================================
 ALTER TABLE profiles ENABLE ROW LEVEL SECURITY;
@@ -150,6 +162,10 @@ ALTER TABLE team_members ENABLE ROW LEVEL SECURITY;
 ALTER TABLE join_requests ENABLE ROW LEVEL SECURITY;
 ALTER TABLE evaluations ENABLE ROW LEVEL SECURITY;
 ALTER TABLE notifications ENABLE ROW LEVEL SECURITY;
+ALTER TABLE registration_otps ENABLE ROW LEVEL SECURITY;
+
+DROP POLICY IF EXISTS "Public Registration OTP Policy" ON registration_otps;
+CREATE POLICY "Public Registration OTP Policy" ON registration_otps FOR ALL USING (true) WITH CHECK (true);
 
 -- ============================================================
 -- RLS POLICIES (Idempotent with DROP POLICY IF EXISTS)
