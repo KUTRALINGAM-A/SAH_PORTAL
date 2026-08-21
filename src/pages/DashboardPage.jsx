@@ -431,36 +431,24 @@ export default function DashboardPage() {
       ) : (isAdmin || isSpoc) ? (
         null
       ) : (
-        /* Student Stats Row — Recruiting and Locked Teams removed */
+        /* Student Stats Row — Count displays only (drill-down details restricted to Admin/SPOC) */
         <div className="stats-row">
           <StatCard
             number={stats.totalTeams}
             label="Total Teams"
-            onClick={() => setDetailsModalTab('all_teams')}
-            active={detailsModalTab === 'all_teams'}
-            hint="Click to view all registered teams & members"
           />
           <StatCard
             number={stats.totalStudents}
             label="Registered Students"
-            onClick={() => setDetailsModalTab('all_students')}
-            active={detailsModalTab === 'all_students'}
-            hint="Click to view all registered students"
           />
           <StatCard
             number={stats.unassignedStudents}
             label="Students Without Team"
             accent
-            onClick={() => setDetailsModalTab('unassigned')}
-            active={detailsModalTab === 'unassigned'}
-            hint="Click to view students not in any team yet"
           />
           <StatCard
             number={stats.femaleRatio}
             label="Female Participation"
-            onClick={() => setDetailsModalTab('gender')}
-            active={detailsModalTab === 'gender'}
-            hint="Click to check SIH female member compliance"
           />
         </div>
       )}
@@ -978,7 +966,7 @@ export default function DashboardPage() {
       </div>
 
       {/* Admin / SPOC Live Intelligence Drill-Down Modal */}
-      {detailsModalTab && (
+      {(isAdmin || isSpoc) && detailsModalTab && (
         <AdminDashboardDetailsModal
           initialTab={detailsModalTab}
           teams={allTeams}
