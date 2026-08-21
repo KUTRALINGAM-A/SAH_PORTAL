@@ -157,6 +157,57 @@ function HomePage() {
             </div>
           </div>
         </div>
+
+        {/* Co-Patrons */}
+        <div className="oc-tier">
+          <div className="oc-tier-label">Co-Patrons</div>
+          <div className="oc-cards-row oc-cards-center">
+            <div className="oc-card">
+              <div className="oc-avatar oc-avatar-md">
+                <span className="oc-avatar-initials">RS</span>
+              </div>
+              <div className="oc-name">Dr. Ravishankar Simhadri</div>
+              <div className="oc-designation">Co-Patron</div>
+              <div className="oc-institution">Amrita Vishwa Vidyapeetham, Chennai Campus</div>
+            </div>
+
+            <div className="oc-card">
+              <div className="oc-avatar oc-avatar-md">
+                <span className="oc-avatar-initials">SK</span>
+              </div>
+              <div className="oc-name">Dr. S. Krishnakumar</div>
+              <div className="oc-designation">Co-Patron</div>
+              <div className="oc-institution">Amrita Vishwa Vidyapeetham, Chennai Campus</div>
+            </div>
+
+            <div className="oc-card">
+              <div className="oc-avatar oc-avatar-md">
+                <span className="oc-avatar-initials">DN</span>
+              </div>
+              <div className="oc-name">Dr. Nivethitha</div>
+              <div className="oc-designation">Co-Patron</div>
+              <div className="oc-institution">Amrita Vishwa Vidyapeetham, Chennai Campus</div>
+            </div>
+
+            <div className="oc-card">
+              <div className="oc-avatar oc-avatar-md">
+                <span className="oc-avatar-initials">JA</span>
+              </div>
+              <div className="oc-name">Dr. J.V. Aravind</div>
+              <div className="oc-designation">Co-Patron</div>
+              <div className="oc-institution">Amrita Vishwa Vidyapeetham, Chennai Campus</div>
+            </div>
+
+            <div className="oc-card">
+              <div className="oc-avatar oc-avatar-md">
+                <span className="oc-avatar-initials">SP</span>
+              </div>
+              <div className="oc-name">Dr. S. Parthasarathy</div>
+              <div className="oc-designation">Co-Patron</div>
+              <div className="oc-institution">Amrita Vishwa Vidyapeetham, Chennai Campus</div>
+            </div>
+          </div>
+        </div>
       </section>
 
       
