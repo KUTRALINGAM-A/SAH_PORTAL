@@ -581,7 +581,7 @@ h4 { font-size: 1.125rem; }
   display: flex;
   flex-direction: column;
   align-items: center;
-  justifyContent: center;
+  justify-content: center;
 }
 
 .stats-row-2col .stat-card .stat-number {
@@ -624,7 +624,7 @@ h4 { font-size: 1.125rem; }
   display: flex;
   flex-direction: column;
   align-items: center;
-  justifyContent: center;
+  justify-content: center;
 }
 
 .stat-card::before {
@@ -2652,7 +2652,8 @@ body:has(.modal-overlay) {
 /* Responsive */
 @media (max-width: 768px) {
   .sah-logo-img {
-    width: 160px;
+    width: 100%;
+    max-width: 100%;
   }
   .oc-card {
     width: 100%;
@@ -2729,6 +2730,7 @@ body:has(.modal-overlay) {
     padding: 0 8px;
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
+    top: 58px;
   }
 
   .navbar-container {
@@ -3086,6 +3088,10 @@ body:has(.modal-overlay) {
   }
 
   /* -- Navbar -- */
+  .main-navbar {
+    top: 52px;
+  }
+
   .nav-tab {
     padding: 10px 10px;
     font-size: 0.68rem;
@@ -3224,9 +3230,10 @@ body:has(.modal-overlay) {
     padding: 16px 12px;
   }
 
-  /* -- SAH Logo -- */
+  /* -- SAH Logo (Flowchart) -- */
   .sah-logo-img {
-    width: 120px;
+    width: 100%;
+    max-width: 100%;
   }
 }
 
@@ -3258,6 +3265,10 @@ body:has(.modal-overlay) {
 
   .login-card .login-logo img {
     height: 42px;
+  }
+
+  .main-navbar {
+    top: 48px;
   }
 
   .nav-tab {

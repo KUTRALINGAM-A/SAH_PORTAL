@@ -45,19 +45,19 @@ function HomePage() {
   const { isAuthenticated } = useAuth();
 
   if (isAuthenticated) {
-    return <Navigate to="/dashboard"replace />;
+    return <Navigate to="/dashboard" replace />;
   }
 
   return (
     <div className="page-container">
       {/* Hero */}
-      <div className="hero-banner"style={{ marginTop: '0' }}>
+      <div className="hero-banner" style={{ marginTop: '0' }}>
         <h1>Smart Amrita Hackathon 2026</h1>
         <p>Amrita Vishwa Vidyapeetham, Chennai Campus — Innovating India, Solving National Challenges</p>
       </div>
 
       {/* What is SAH */}
-      <div className="card"style={{ marginBottom: '24px', padding: '32px' }}>
+      <div className="card" style={{ marginBottom: '24px', padding: '32px' }}>
         <h2 style={{ marginBottom: '12px' }}>What is SAH 2026?</h2>
         <p style={{ color: 'var(--text-secondary)', lineHeight: 1.8, fontSize: '0.95rem' }}>
           Smart Amrita Hackathon (SAH) 2026 is an internal hackathon organized by
@@ -112,7 +112,7 @@ function HomePage() {
               </div>
             </div>
           ))}
-          
+
         </div>
       </section>{/* CTA */}
       <div style={{ textAlign: 'center', marginBottom: '30px' }}>
@@ -143,7 +143,7 @@ function HomePage() {
               <div className="oc-avatar oc-avatar-lg">
                 <img src={vJeyakumarImg} alt="Dr. V. Jeyakumar" />
               </div>
-              <div className="oc-name">Dr. V. Jeyakumar</div>
+              <div className="oc-name">Dr. V. Jayakumar</div>
               <div className="oc-designation">Principal</div>
               <div className="oc-institution">Amrita Vishwa Vidyapeetham, Chennai Campus</div>
             </div>
@@ -174,7 +174,6 @@ function HomePage() {
                 <img src={simhadriImg} alt="Dr. Ravishankar Simhadri" />
               </div>
               <div className="oc-name">Dr. Ravishankar Simhadri</div>
-              <div className="oc-designation">Co-Patron</div>
               <div className="oc-institution">Amrita Vishwa Vidyapeetham, Chennai Campus</div>
             </div>
 
@@ -183,7 +182,6 @@ function HomePage() {
                 <img src={krishnakumarImg} alt="Dr. S. Krishnakumar" />
               </div>
               <div className="oc-name">Dr. S. Krishnakumar</div>
-              <div className="oc-designation">Co-Patron</div>
               <div className="oc-institution">Amrita Vishwa Vidyapeetham, Chennai Campus</div>
             </div>
 
@@ -192,7 +190,6 @@ function HomePage() {
                 <img src={nivethithaImg} alt="Dr. Nivethitha" />
               </div>
               <div className="oc-name">Dr. Nivethitha</div>
-              <div className="oc-designation">Co-Patron</div>
               <div className="oc-institution">Amrita Vishwa Vidyapeetham, Chennai Campus</div>
             </div>
 
@@ -201,7 +198,6 @@ function HomePage() {
                 <img src={aravindImg} alt="Dr. J.V. Aravind" />
               </div>
               <div className="oc-name">Dr. J.V. Aravind</div>
-              <div className="oc-designation">Co-Patron</div>
               <div className="oc-institution">Amrita Vishwa Vidyapeetham, Chennai Campus</div>
             </div>
 
@@ -210,14 +206,13 @@ function HomePage() {
                 <img src={parthasarathyImg} alt="Dr. S. Parthasarathy" />
               </div>
               <div className="oc-name">Dr. S. Parthasarathy</div>
-              <div className="oc-designation">Co-Patron</div>
               <div className="oc-institution">Amrita Vishwa Vidyapeetham, Chennai Campus</div>
             </div>
           </div>
         </div>
       </section>
 
-      
+
     </div>
   );
 }
@@ -227,7 +222,7 @@ export default function App() {
 
   if (loading) {
     return (
-      <div className="flex-center"style={{ height: '100vh' }}>
+      <div className="flex-center" style={{ height: '100vh' }}>
         <div className="spinner" />
       </div>
     );
@@ -243,37 +238,37 @@ export default function App() {
         <Route path="/reset-password" element={<ResetPasswordPage />} />
 
         {/* All other pages with layout */}
-        <Route path="*"element={
+        <Route path="*" element={
           <>
             <AnnouncementBanner />
             <Header />
             <Navbar />
             <Routes>
               {/* Public */}
-              <Route path="/"element={<HomePage />} />
-              <Route path="/problem-statements"element={<ProblemStatementsPage />} />
+              <Route path="/" element={<HomePage />} />
+              <Route path="/problem-statements" element={<ProblemStatementsPage />} />
 
               {/* Student / Team Leader */}
-              <Route path="/dashboard"element={<ProtectedRoute><DashboardPage /></ProtectedRoute>} />
-              <Route path="/marketplace"element={<ProtectedRoute><TeamMarketplace /></ProtectedRoute>} />
-              <Route path="/my-team"element={<ProtectedRoute><MyTeamPage /></ProtectedRoute>} />
-              <Route path="/create-team"element={<ProtectedRoute><CreateTeamPage /></ProtectedRoute>} />
-              <Route path="/profile"element={<ProtectedRoute><ProfilePage /></ProtectedRoute>} />
+              <Route path="/dashboard" element={<ProtectedRoute><DashboardPage /></ProtectedRoute>} />
+              <Route path="/marketplace" element={<ProtectedRoute><TeamMarketplace /></ProtectedRoute>} />
+              <Route path="/my-team" element={<ProtectedRoute><MyTeamPage /></ProtectedRoute>} />
+              <Route path="/create-team" element={<ProtectedRoute><CreateTeamPage /></ProtectedRoute>} />
+              <Route path="/profile" element={<ProtectedRoute><ProfilePage /></ProtectedRoute>} />
 
               {/* Admin & SPOC Shared Management */}
               <Route path="/admin/problem-statements" element={<ProtectedRoute roles={['admin', 'spoc']}><ProblemStatementsAdmin /></ProtectedRoute>} />
               <Route path="/admin/judge-panels" element={<ProtectedRoute roles={['admin']}><JudgePanelsAdmin /></ProtectedRoute>} />
               <Route path="/admin/analytics" element={<ProtectedRoute roles={['admin', 'spoc']}><AnalyticsDashboard /></ProtectedRoute>} />
-              <Route path="/admin/roster"element={<ProtectedRoute roles={['admin', 'spoc']}><MasterRoster /></ProtectedRoute>} />
-              <Route path="/admin/bootcamp"element={<ProtectedRoute roles={['admin', 'spoc']}><BootcampShortlist /></ProtectedRoute>} />
-              <Route path="/spoc/verify"element={<ProtectedRoute roles={['spoc', 'admin']}><VerificationQueue /></ProtectedRoute>} />
+              <Route path="/admin/roster" element={<ProtectedRoute roles={['admin', 'spoc']}><MasterRoster /></ProtectedRoute>} />
+              <Route path="/admin/bootcamp" element={<ProtectedRoute roles={['admin', 'spoc']}><BootcampShortlist /></ProtectedRoute>} />
+              <Route path="/spoc/verify" element={<ProtectedRoute roles={['spoc', 'admin']}><VerificationQueue /></ProtectedRoute>} />
 
               {/* Judge */}
-              <Route path="/judge/evaluate"element={<ProtectedRoute roles={['judge', 'admin']}><EvaluationPage /></ProtectedRoute>} />
-              <Route path="/judge/history"element={<ProtectedRoute roles={['judge', 'admin']}><EvaluationHistory /></ProtectedRoute>} />
+              <Route path="/judge/evaluate" element={<ProtectedRoute roles={['judge', 'admin']}><EvaluationPage /></ProtectedRoute>} />
+              <Route path="/judge/history" element={<ProtectedRoute roles={['judge', 'admin']}><EvaluationHistory /></ProtectedRoute>} />
 
               {/* 404 */}
-              <Route path="*"element={
+              <Route path="*" element={
                 <div className="page-container">
                   <div className="empty-state">
                     <div className="empty-icon"></div>
