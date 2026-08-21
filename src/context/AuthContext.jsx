@@ -344,7 +344,16 @@ export function AuthProvider({ children }) {
         body: JSON.stringify({ email: targetEmail, otpCode })
       });
 
-      const resData = await response.json();
+      const contentType = response.headers.get('content-type') || '';
+      let resData = {};
+
+      if (contentType.includes('application/json')) {
+        resData = await response.json();
+      } else {
+        const text = await response.text();
+        throw new Error(`OTP service error (${response.status}): ${text.slice(0, 120)}`);
+      }
+
       if (!response.ok || resData.error) {
         throw new Error(resData.error || 'Failed to dispatch 6-digit OTP email.');
       }
@@ -505,7 +514,16 @@ export function AuthProvider({ children }) {
         body: JSON.stringify({ email: cleanCollegeEmail, otpCode })
       });
 
-      const resData = await response.json();
+      const contentType = response.headers.get('content-type') || '';
+      let resData = {};
+
+      if (contentType.includes('application/json')) {
+        resData = await response.json();
+      } else {
+        const text = await response.text();
+        throw new Error(`OTP service error (${response.status}): ${text.slice(0, 120)}`);
+      }
+
       if (!response.ok || resData.error) {
         throw new Error(resData.error || 'Failed to dispatch OTP verification email to College Mail ID.');
       }
