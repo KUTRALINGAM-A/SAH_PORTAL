@@ -105,7 +105,7 @@ export default function ProfilePage() {
       <div className="card">
         <h3 style={{ marginBottom: '20px' }}>Profile Information</h3>
 
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
+        <div className="form-row-2col">
           {/* Full Name */}
           <div className="form-group">
             <label className="form-label">Full Name <span className="required">*</span></label>

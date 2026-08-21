@@ -2671,3 +2671,646 @@ body:has(.modal-overlay) {
     height: 80px;
   }
 }
+
+/* ============================================================
+   COMPREHENSIVE MOBILE RESPONSIVE STYLES
+   Breakpoints: 768px (tablet), 480px (phone), 360px (small phone)
+   ============================================================ */
+
+/* ---- Form Row 2-Column Utility ---- */
+.form-row-2col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+/* ============================================================
+   TABLET BREAKPOINT (max-width: 768px)
+   ============================================================ */
+@media (max-width: 768px) {
+
+  /* -- Layout & Containers -- */
+  .page-container {
+    padding: 20px 16px;
+  }
+
+  .page-title {
+    font-size: 1.4rem;
+  }
+
+  .page-subtitle {
+    font-size: 0.82rem;
+  }
+
+  /* -- Header -- */
+  .site-header {
+    padding: 0 14px;
+    height: 58px;
+  }
+
+  .header-logo img {
+    height: 42px;
+  }
+
+  .header-logo-text .title {
+    font-size: 0.85rem;
+  }
+
+  .header-logo-text .subtitle {
+    display: none;
+  }
+
+  .header-actions {
+    gap: 8px;
+  }
+
+  /* -- Navbar -- */
+  .main-navbar {
+    padding: 0 8px;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .navbar-container {
+    gap: 0;
+    overflow-x: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  .navbar-container::-webkit-scrollbar {
+    display: none;
+  }
+
+  .nav-tab {
+    padding: 12px 12px;
+    font-size: 0.72rem;
+    flex-shrink: 0;
+  }
+
+  /* -- Announcement Banner -- */
+  .announcement-banner {
+    padding: 8px 12px;
+    font-size: 0.78rem;
+  }
+
+  .announcement-banner .banner-content {
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  /* -- Forms -- */
+  .form-row-2col {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+
+  .form-group {
+    margin-bottom: 16px;
+  }
+
+  .form-input, .form-select, .form-textarea {
+    font-size: 16px; /* prevents iOS zoom */
+    padding: 12px 14px;
+  }
+
+  /* -- Login / Register Card -- */
+  .login-page {
+    padding: 20px 14px;
+    align-items: flex-start;
+    padding-top: 24px;
+  }
+
+  .login-card {
+    padding: 28px 20px;
+    max-width: 100%;
+    border-radius: var(--radius-lg);
+  }
+
+  .login-card .login-heading {
+    font-size: 1.2rem;
+    margin-bottom: 16px;
+  }
+
+  .login-card .login-subheading {
+    font-size: 0.82rem;
+    margin-bottom: 16px;
+  }
+
+  .login-card .login-logo img {
+    height: 60px;
+  }
+
+  /* -- Buttons -- */
+  .btn {
+    padding: 10px 20px;
+    font-size: 0.85rem;
+  }
+
+  .btn-lg {
+    padding: 12px 24px;
+    font-size: 0.92rem;
+  }
+
+  .btn-login-pill {
+    padding: 6px 14px;
+    font-size: 0.82rem;
+  }
+
+  .btn-login-pill span {
+    display: none;
+  }
+
+  /* -- Grid Layouts -- */
+  .grid-2, .grid-3, .grid-4 {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+
+  .stats-row {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+
+  /* -- Filter Bar -- */
+  .filter-bar {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .search-input {
+    min-width: 100%;
+    width: 100%;
+  }
+
+  .filter-select {
+    width: 100%;
+  }
+
+  /* -- Cards -- */
+  .card {
+    padding: 18px 16px;
+    border-radius: var(--radius-md);
+  }
+
+  .card-elevated:hover {
+    transform: none;
+  }
+
+  /* -- Team Cards -- */
+  .team-card .team-card-header {
+    padding: 14px 16px;
+  }
+
+  .team-card .team-card-header .team-name {
+    font-size: 1rem;
+  }
+
+  .team-card .team-card-body {
+    padding: 14px 16px;
+  }
+
+  .team-card .team-card-footer {
+    padding: 12px 16px;
+    flex-direction: column;
+    gap: 10px;
+    align-items: stretch;
+  }
+
+  .team-card .team-card-footer .btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  /* -- Join Request Cards -- */
+  .join-request-card {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+    padding: 14px 16px;
+  }
+
+  .join-request-card .request-actions {
+    justify-content: flex-end;
+  }
+
+  /* -- Member Slots -- */
+  .member-slot {
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .member-slot .member-actions {
+    width: 100%;
+    justify-content: flex-end;
+  }
+
+  /* -- Tables -- */
+  .data-table {
+    font-size: 0.78rem;
+    display: block;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .data-table th, .data-table td {
+    padding: 10px 12px;
+    white-space: nowrap;
+  }
+
+  /* -- Notifications -- */
+  .notification-dropdown {
+    width: calc(100vw - 32px);
+    right: -16px;
+    max-width: 360px;
+  }
+
+  /* -- Hero Banner -- */
+  .hero-banner {
+    padding: 36px 20px;
+    margin-bottom: 20px;
+    border-radius: var(--radius-lg);
+  }
+
+  .hero-banner h1 {
+    font-size: 1.6rem;
+  }
+
+  .hero-banner p {
+    font-size: 0.88rem;
+  }
+
+  /* -- Footer -- */
+  .footer-container {
+    grid-template-columns: 1fr;
+    gap: 24px;
+    text-align: center;
+  }
+
+  /* -- Admin Sections -- */
+  .admin-section-header {
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  /* -- Live Sync -- */
+  .live-sync-section {
+    padding: 18px 14px 14px;
+    border-radius: var(--radius-lg);
+  }
+
+  .live-sync-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .live-sync-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  /* -- Organizing Committee -- */
+  .organizing-committee-section {
+    padding: 0 0 12px;
+  }
+
+  .oc-cards-row {
+    gap: 16px;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .oc-tier {
+    margin-bottom: 24px;
+  }
+
+  .oc-tier-label {
+    font-size: 0.75rem;
+    margin-bottom: 14px;
+  }
+
+  .oc-name {
+    font-size: 0.95rem;
+  }
+
+  .oc-designation {
+    font-size: 0.8rem;
+  }
+
+  .oc-institution {
+    font-size: 0.72rem;
+  }
+
+  /* -- SAH Logo Showcase -- */
+  .sah-logo-showcase {
+    padding: 16px;
+  }
+
+  .sah-logo-img {
+    width: 140px;
+  }
+
+  /* -- Flowchart -- */
+  .flowchart-pill {
+    font-size: 0.72rem;
+    padding: 6px 16px;
+  }
+
+  /* -- Modals -- */
+  .modal-overlay {
+    padding: 12px;
+  }
+
+  .modal-content {
+    max-width: 100%;
+    max-height: 90vh;
+    padding: 20px 16px;
+    border-radius: var(--radius-lg);
+  }
+
+  .modal-header {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  /* -- Skill Selector -- */
+  .skill-selector {
+    padding: 10px;
+  }
+
+  .skill-selector .skill-categories {
+    max-height: 160px;
+  }
+
+  /* -- Profile Page -- */
+  .profile-header-card {
+    flex-direction: column;
+    text-align: center;
+    gap: 14px;
+  }
+
+  /* -- Rubric Slider -- */
+  .rubric-slider-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+  }
+
+  /* -- Role Switcher -- */
+  .role-switcher {
+    flex-wrap: wrap;
+  }
+}
+
+/* ============================================================
+   PHONE BREAKPOINT (max-width: 480px)
+   ============================================================ */
+@media (max-width: 480px) {
+
+  /* -- Header -- */
+  .site-header {
+    padding: 0 10px;
+    height: 52px;
+  }
+
+  .header-logo img {
+    height: 36px;
+  }
+
+  .header-logo {
+    gap: 8px;
+  }
+
+  .header-logo-text .title {
+    font-size: 0.78rem;
+  }
+
+  /* -- Navbar -- */
+  .nav-tab {
+    padding: 10px 10px;
+    font-size: 0.68rem;
+  }
+
+  /* -- Banner -- */
+  .announcement-banner {
+    padding: 6px 10px;
+    font-size: 0.72rem;
+  }
+
+  .announcement-banner .deadline-pill {
+    font-size: 0.7rem;
+    padding: 2px 10px;
+  }
+
+  /* -- Typography -- */
+  h1 { font-size: 1.5rem; }
+  h2 { font-size: 1.25rem; }
+  h3 { font-size: 1.1rem; }
+  h4 { font-size: 1rem; }
+
+  .page-title {
+    font-size: 1.25rem;
+  }
+
+  /* -- Login/Register -- */
+  .login-page {
+    padding: 12px 10px;
+    padding-top: 16px;
+  }
+
+  .login-card {
+    padding: 24px 16px;
+  }
+
+  .login-card .login-heading {
+    font-size: 1.05rem;
+    margin-bottom: 12px;
+  }
+
+  .login-card .login-logo img {
+    height: 50px;
+  }
+
+  /* -- Stats Row -- */
+  .stats-row {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .stat-card .stat-number {
+    font-size: 2rem;
+  }
+
+  .stat-card .stat-label {
+    font-size: 0.78rem;
+  }
+
+  /* -- Cards -- */
+  .card {
+    padding: 14px 12px;
+  }
+
+  /* -- Team Card -- */
+  .team-card .team-card-header .team-name {
+    font-size: 0.92rem;
+  }
+
+  .team-card .team-card-header .team-ps {
+    font-size: 0.72rem;
+  }
+
+  /* -- Buttons -- */
+  .btn {
+    padding: 9px 16px;
+    font-size: 0.82rem;
+  }
+
+  .btn-lg {
+    padding: 11px 20px;
+    font-size: 0.88rem;
+  }
+
+  /* -- Notification Dropdown -- */
+  .notification-dropdown {
+    width: calc(100vw - 20px);
+    right: -10px;
+  }
+
+  /* -- Hero Banner -- */
+  .hero-banner {
+    padding: 28px 16px;
+    border-radius: var(--radius-md);
+  }
+
+  .hero-banner h1 {
+    font-size: 1.3rem;
+  }
+
+  .hero-banner p {
+    font-size: 0.82rem;
+  }
+
+  /* -- Organizing Committee -- */
+  .oc-card {
+    max-width: 100%;
+    padding: 24px 16px 20px;
+  }
+
+  .oc-card-patron {
+    max-width: 100%;
+    padding: 28px 18px 22px;
+  }
+
+  .oc-avatar-lg {
+    width: 80px;
+    height: 80px;
+  }
+
+  .oc-avatar-md {
+    width: 70px;
+    height: 70px;
+  }
+
+  .oc-name {
+    font-size: 0.9rem;
+  }
+
+  /* -- Modals -- */
+  .modal-overlay {
+    padding: 8px;
+  }
+
+  .modal-content {
+    padding: 16px 12px;
+  }
+
+  /* -- SAH Logo -- */
+  .sah-logo-img {
+    width: 120px;
+  }
+}
+
+/* ============================================================
+   SMALL PHONE BREAKPOINT (max-width: 360px)
+   ============================================================ */
+@media (max-width: 360px) {
+
+  .site-header {
+    height: 48px;
+    padding: 0 8px;
+  }
+
+  .header-logo img {
+    height: 32px;
+  }
+
+  .header-logo-text .title {
+    font-size: 0.72rem;
+  }
+
+  .login-card {
+    padding: 20px 12px;
+  }
+
+  .login-card .login-heading {
+    font-size: 0.95rem;
+  }
+
+  .login-card .login-logo img {
+    height: 42px;
+  }
+
+  .nav-tab {
+    padding: 9px 8px;
+    font-size: 0.65rem;
+  }
+
+  .btn-lg {
+    padding: 10px 16px;
+    font-size: 0.84rem;
+  }
+
+  h1 { font-size: 1.3rem; }
+  h2 { font-size: 1.15rem; }
+
+  .page-title {
+    font-size: 1.1rem;
+  }
+
+  .hero-banner h1 {
+    font-size: 1.15rem;
+  }
+}
+
+/* ============================================================
+   TOUCH-FRIENDLY ENHANCEMENTS
+   ============================================================ */
+@media (hover: none) and (pointer: coarse) {
+  /* Remove hover effects that don't work on touch */
+  .card-elevated:hover {
+    transform: none;
+    box-shadow: var(--shadow-md);
+  }
+
+  .team-card:hover {
+    transform: none;
+  }
+
+  /* Larger touch targets */
+  .nav-tab {
+    min-height: 44px;
+  }
+
+  .btn {
+    min-height: 44px;
+  }
+
+  .notification-bell {
+    min-width: 44px;
+    min-height: 44px;
+  }
+
+  .filter-toggle {
+    min-height: 44px;
+  }
+}

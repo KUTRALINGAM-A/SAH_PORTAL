@@ -191,7 +191,7 @@ export default function RegisterPage() {
             </div>
 
             {/* Personal Email & College Mail ID */}
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '14px' }}>
+            <div className="form-row-2col">
               <div className="form-group">
                 <label className="form-label">Personal Email <span className="required">*</span></label>
                 <input
@@ -218,7 +218,7 @@ export default function RegisterPage() {
             </div>
 
             {/* Password & Confirm Password */}
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '14px' }}>
+            <div className="form-row-2col">
               <div className="form-group">
                 <label className="form-label">Password <span className="required">*</span></label>
                 <input
@@ -244,7 +244,7 @@ export default function RegisterPage() {
             </div>
 
             {/* Gender & Department */}
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '14px' }}>
+            <div className="form-row-2col">
               <div className="form-group">
                 <label className="form-label">Gender <span className="required">*</span></label>
                 <select
@@ -276,7 +276,7 @@ export default function RegisterPage() {
             </div>
 
             {/* Year of Study & Mandatory Phone */}
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '14px' }}>
+            <div className="form-row-2col">
               <div className="form-group">
                 <label className="form-label">Year of Study</label>
                 <select
@@ -305,7 +305,7 @@ export default function RegisterPage() {
             </div>
 
             {/* GitHub & LinkedIn */}
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '14px' }}>
+            <div className="form-row-2col">
               <div className="form-group">
                 <label className="form-label">GitHub Profile URL</label>
                 <input
