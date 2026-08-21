@@ -14,7 +14,7 @@ function otpEmailPlugin() {
           });
           req.on('end', async () => {
             try {
-              const { email, otpCode } = JSON.parse(body || '{}');
+              const { email, otpCode, type } = JSON.parse(body || '{}');
 
               if (!email || !otpCode) {
                 res.statusCode = 400;
@@ -24,6 +24,24 @@ function otpEmailPlugin() {
 
               const smtpUser = process.env.SMTP_USER || process.env.VITE_SMTP_USER || '27.kutralingam.xi.b@gmail.com';
               const smtpPass = process.env.SMTP_PASS || process.env.VITE_SMTP_PASS || 'ccmdrfqcdibluewc';
+
+              const isRegistration = type === 'registration';
+
+              const subject = isRegistration
+                ? 'SAH 2026 Portal - Student Registration Verification Code'
+                : 'SAH 2026 Portal - Password Reset Security OTP';
+
+              const title = isRegistration
+                ? 'Student Registration Verification'
+                : 'Password Reset Request';
+
+              const introText = isRegistration
+                ? 'Thank you for registering for SAH 2026! Please use the following 6-digit OTP code to verify your College Mail ID and complete your student registration:'
+                : 'We received a request to reset your password. Your 6-digit OTP security code is:';
+
+              const footerText = isRegistration
+                ? 'This code is valid for 10 minutes. If you did not initiate registration on the SAH Portal, please ignore this email.'
+                : 'This code is valid for 10 minutes. If you did not request a password reset, please ignore this email.';
 
               const transporter = nodemailer.createTransport({
                 host: 'smtp.gmail.com',
@@ -38,18 +56,18 @@ function otpEmailPlugin() {
               await transporter.sendMail({
                 from: `"SAH Admin" <${smtpUser}>`,
                 to: email,
-                subject: 'SAH 2026 Portal - 6-Digit Password Reset OTP',
+                subject,
                 html: `
-                  <div style="font-family: Arial, sans-serif; max-width: 500px; margin: 0 auto; padding: 24px; border: 1px solid #e0e0e0; border-radius: 8px; background-color: #ffffff;">
-                    <div style="text-align: center; margin-bottom: 20px;">
-                      <h2 style="color: #E65100; margin: 0;">Smart Amrita Hackathon 2026</h2>
-                      <p style="color: #666666; font-size: 0.9rem; margin-top: 4px;">Password Reset Request</p>
+                  <div style="font-family: Arial, sans-serif; max-width: 520px; margin: 0 auto; padding: 24px; border: 1px solid #e0e0e0; border-radius: 10px; background-color: #ffffff;">
+                    <div style="text-align: center; margin-bottom: 20px; border-bottom: 2px solid #FFF3E0; padding-bottom: 16px;">
+                      <h2 style="color: #E65100; margin: 0; font-size: 22px;">Smart Amrita Hackathon 2026</h2>
+                      <p style="color: #666666; font-size: 0.95rem; margin-top: 6px; font-weight: 600;">${title}</p>
                     </div>
-                    <p style="font-size: 0.95rem; color: #333333;">Your 6-digit OTP security code is:</p>
-                    <div style="text-align: center; margin: 24px 0; padding: 16px; background-color: #FFF3E0; border-radius: 8px;">
-                      <span style="font-size: 36px; font-weight: bold; letter-spacing: 8px; color: #E65100; font-family: monospace;">${otpCode}</span>
+                    <p style="font-size: 0.95rem; color: #333333; line-height: 1.5;">${introText}</p>
+                    <div style="text-align: center; margin: 24px 0; padding: 18px; background-color: #FFF3E0; border-radius: 8px; border: 1px dashed #FF9800;">
+                      <span style="font-size: 38px; font-weight: bold; letter-spacing: 10px; color: #E65100; font-family: monospace;">${otpCode}</span>
                     </div>
-                    <p style="font-size: 0.85rem; color: #666666;">This code is valid for 10 minutes. If you did not request this password reset, please ignore this email.</p>
+                    <p style="font-size: 0.85rem; color: #777777; line-height: 1.4;">${footerText}</p>
                   </div>
                 `
               });

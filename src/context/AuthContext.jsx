@@ -341,7 +341,7 @@ export function AuthProvider({ children }) {
       const response = await fetch('/api/send-otp', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: targetEmail, otpCode })
+        body: JSON.stringify({ email: targetEmail, otpCode, type: 'password_reset' })
       });
 
       const contentType = response.headers.get('content-type') || '';
@@ -511,7 +511,7 @@ export function AuthProvider({ children }) {
       const response = await fetch('/api/send-otp', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: cleanCollegeEmail, otpCode })
+        body: JSON.stringify({ email: cleanCollegeEmail, otpCode, type: 'registration' })
       });
 
       const contentType = response.headers.get('content-type') || '';
