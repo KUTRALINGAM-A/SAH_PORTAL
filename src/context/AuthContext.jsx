@@ -69,15 +69,55 @@ export function AuthProvider({ children }) {
     return () => subscription.unsubscribe();
   }, [fetchProfile]);
 
-  // Sign up with email + password, then create profile
-  const signUp = async ({ email, password, rollNo, fullName, gender, department, skills, phone, yearOfStudy, githubUrl, linkedinUrl, role = 'student' }) => {
+  // Sign up with email + password, then create profile (Students only through portal)
+  const signUp = async ({ email, collegeEmail, password, rollNo, fullName, gender, department, skills, phone, yearOfStudy, githubUrl, linkedinUrl }) => {
     setError(null);
     try {
       const cleanEmail = email.trim().toLowerCase();
-      const cleanRollNo = role === 'student' && rollNo ? rollNo.trim().toUpperCase() : null;
+      const cleanCollegeEmail = collegeEmail ? collegeEmail.trim().toLowerCase() : '';
+      const cleanRollNo = rollNo ? rollNo.trim().toUpperCase() : null;
+      const cleanPhone = phone ? phone.trim() : null;
       const skillsArray = Array.isArray(skills) ? skills : [];
+      const userRole = 'student';
 
-      // 1. Create auth user with complete user metadata
+      // 1. Double check uniqueness: Check Roll No
+      if (cleanRollNo) {
+        const { data: existingRoll } = await supabase
+          .from('profiles')
+          .select('id')
+          .ilike('roll_no', cleanRollNo)
+          .maybeSingle();
+
+        if (existingRoll) {
+          throw new Error(`Roll Number "${cleanRollNo}" is already registered. Please check your roll number or log in.`);
+        }
+      }
+
+      // 2. Double check uniqueness: Check College Email
+      if (cleanCollegeEmail) {
+        const { data: existingCollege } = await supabase
+          .from('profiles')
+          .select('id')
+          .ilike('college_email', cleanCollegeEmail)
+          .maybeSingle();
+
+        if (existingCollege) {
+          throw new Error(`College Mail ID "${cleanCollegeEmail}" is already registered. Please log in or use a different email.`);
+        }
+      }
+
+      // 3. Double check uniqueness: Check Personal Email
+      const { data: existingEmail } = await supabase
+        .from('profiles')
+        .select('id')
+        .ilike('email', cleanEmail)
+        .maybeSingle();
+
+      if (existingEmail) {
+        throw new Error(`Email address "${cleanEmail}" is already registered. Please log in instead.`);
+      }
+
+      // 4. Create auth user with complete user metadata
       const { data: authData, error: authError } = await supabase.auth.signUp({
         email: cleanEmail,
         password,
@@ -85,12 +125,13 @@ export function AuthProvider({ children }) {
           data: {
             full_name: fullName.trim(),
             roll_no: cleanRollNo,
+            college_email: cleanCollegeEmail,
             gender: gender || 'Male',
             department: department || 'CSE',
-            role: role || 'student',
+            role: userRole,
             skills: skillsArray,
-            phone: phone ? phone.trim() : null,
-            year_of_study: role === 'student' ? (yearOfStudy || null) : 'Faculty / Staff',
+            phone: cleanPhone,
+            year_of_study: yearOfStudy || null,
             github_url: githubUrl ? githubUrl.trim() : null,
             linkedin_url: linkedinUrl ? linkedinUrl.trim() : null
           }
@@ -104,7 +145,7 @@ export function AuthProvider({ children }) {
         throw new Error('An account with this email already exists. Please log in instead.');
       }
 
-      // 2. Automatically log the user in immediately
+      // 5. Automatically log the user in immediately
       if (authData?.user) {
         const { data: loginData } = await supabase.auth.signInWithPassword({
           email: cleanEmail,
@@ -113,16 +154,18 @@ export function AuthProvider({ children }) {
 
         const activeUserId = loginData?.user?.id || authData.user.id;
 
-        // 3. Directly update/ensure all profile fields are explicitly saved in PostgreSQL profiles table
+        // 6. Directly update/ensure all profile fields are explicitly saved in PostgreSQL profiles table
         const profilePayload = {
           full_name: fullName.trim(),
           roll_no: cleanRollNo,
+          college_email: cleanCollegeEmail,
+          email: cleanEmail,
           gender: gender || 'Male',
           department: department || 'CSE',
-          role: role || 'student',
+          role: userRole,
           skills: skillsArray,
-          phone: phone ? phone.trim() : null,
-          year_of_study: role === 'student' ? (yearOfStudy || null) : 'Faculty / Staff',
+          phone: cleanPhone,
+          year_of_study: yearOfStudy || null,
           github_url: githubUrl ? githubUrl.trim() : null,
           linkedin_url: linkedinUrl ? linkedinUrl.trim() : null
         };
@@ -147,12 +190,26 @@ export function AuthProvider({ children }) {
     }
   };
 
-  // Sign in with email + password
+  // Sign in with personal email OR college mail ID + password
   const signIn = async ({ email, password }) => {
     setError(null);
     try {
+      const cleanInput = email.trim().toLowerCase();
+      let authEmail = cleanInput;
+
+      // Check if user entered a College Mail ID instead of primary Auth email
+      const { data: matchedProfile } = await supabase
+        .from('profiles')
+        .select('email')
+        .ilike('college_email', cleanInput)
+        .maybeSingle();
+
+      if (matchedProfile?.email) {
+        authEmail = matchedProfile.email;
+      }
+
       const { data, error: signInError } = await supabase.auth.signInWithPassword({
-        email,
+        email: authEmail,
         password
       });
 

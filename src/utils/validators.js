@@ -1,14 +1,14 @@
 /**
- * Validates Amrita Chennai Roll Number format: AM.CH.U4XXX00000
- * Examples: AM.CH.U4CSE22001, AM.CH.U4AIE23045
+ * Validates Amrita Roll Number format: CH.EN.U4[DEPT][YEAR][NUMBER] or CH.SC.U4[DEPT][YEAR][NUMBER]
+ * Examples: CH.EN.U4ARE23008, CH.SC.U4CSE23244
  */
 export function validateRollNo(rollNo) {
   if (!rollNo) return { valid: false, message: 'Roll number is required.' };
-  const pattern = /^AM\.CH\.U4[A-Z]{2,4}\d{5}$/;
-  if (!pattern.test(rollNo.toUpperCase())) {
+  const pattern = /^CH\.(EN|SC)\.U4[A-Z]{2,4}\d{5}$/i;
+  if (!pattern.test(rollNo.trim())) {
     return {
       valid: false,
-      message: 'Invalid Roll ID format. Expected: AM.CH.U4CSE22001'
+      message: 'Invalid Roll ID format. Expected format: CH.EN.U4ARE23008 or CH.SC.U4CSE23244'
     };
   }
   return { valid: true, message: '' };
@@ -20,8 +20,20 @@ export function validateRollNo(rollNo) {
 export function validateEmail(email) {
   if (!email) return { valid: false, message: 'Email is required.' };
   const pattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  if (!pattern.test(email)) {
+  if (!pattern.test(email.trim())) {
     return { valid: false, message: 'Invalid email format.' };
+  }
+  return { valid: true, message: '' };
+}
+
+/**
+ * Validates College Mail ID format (Mandatory)
+ */
+export function validateCollegeEmail(collegeEmail) {
+  if (!collegeEmail) return { valid: false, message: 'College Mail ID is required.' };
+  const pattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!pattern.test(collegeEmail.trim())) {
+    return { valid: false, message: 'Invalid College Mail ID format.' };
   }
   return { valid: true, message: '' };
 }
@@ -66,13 +78,13 @@ export function validateUrl(url) {
 }
 
 /**
- * Validates phone number (Indian format)
+ * Validates phone number (Mandatory, Indian format)
  */
 export function validatePhone(phone) {
-  if (!phone) return { valid: true, message: '' }; // Optional
+  if (!phone || !phone.trim()) return { valid: false, message: 'Phone number is required.' };
   const pattern = /^[+]?[0-9]{10,13}$/;
-  if (!pattern.test(phone.replace(/[\s-]/g, ''))) {
-    return { valid: false, message: 'Invalid phone number.' };
+  if (!pattern.test(phone.trim().replace(/[\s-]/g, ''))) {
+    return { valid: false, message: 'Invalid phone number (min 10 digits).' };
   }
   return { valid: true, message: '' };
 }

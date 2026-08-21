@@ -34,14 +34,14 @@ INSERT INTO auth.users (id, instance_id, email, encrypted_password, email_confir
 ('f0000000-0000-0000-0000-000000000001', '00000000-0000-0000-0000-000000000000', 'judge1@amrita.edu', crypt('Password123!', gen_salt('bf')), NOW(), '{"provider":"email","providers":["email"]}', '{"full_name":"Prof. Rajesh Kumar","role":"judge"}', NOW(), NOW(), 'authenticated', 'authenticated'),
 ('f0000000-0000-0000-0000-000000000002', '00000000-0000-0000-0000-000000000000', 'judge2@amrita.edu', crypt('Password123!', gen_salt('bf')), NOW(), '{"provider":"email","providers":["email"]}', '{"full_name":"Dr. Lakshmi Prasad","role":"judge"}', NOW(), NOW(), 'authenticated', 'authenticated'),
 ('e0000000-0000-0000-0000-000000000001', '00000000-0000-0000-0000-000000000000', 'spoc@amrita.edu', crypt('Password123!', gen_salt('bf')), NOW(), '{"provider":"email","providers":["email"]}', '{"full_name":"Dr. M. Venkatesh","role":"spoc"}', NOW(), NOW(), 'authenticated', 'authenticated'),
-('c0000000-0000-0000-0000-000000000001', '00000000-0000-0000-0000-000000000000', 'student1@amrita.edu', crypt('Password123!', gen_salt('bf')), NOW(), '{"provider":"email","providers":["email"]}', '{"full_name":"Aarav Sharma","roll_no":"AM.CH.U4CSE22001","role":"student"}', NOW(), NOW(), 'authenticated', 'authenticated'),
-('c0000000-0000-0000-0000-000000000002', '00000000-0000-0000-0000-000000000000', 'student2@amrita.edu', crypt('Password123!', gen_salt('bf')), NOW(), '{"provider":"email","providers":["email"]}', '{"full_name":"Ananya Ramesh","roll_no":"AM.CH.U4ECE22045","role":"student"}', NOW(), NOW(), 'authenticated', 'authenticated'),
-('c0000000-0000-0000-0000-000000000003', '00000000-0000-0000-0000-000000000000', 'student3@amrita.edu', crypt('Password123!', gen_salt('bf')), NOW(), '{"provider":"email","providers":["email"]}', '{"full_name":"Vikram Patel","roll_no":"AM.CH.U4AIE22012","role":"student"}', NOW(), NOW(), 'authenticated', 'authenticated'),
-('c0000000-0000-0000-0000-000000000004', '00000000-0000-0000-0000-000000000000', 'student4@amrita.edu', crypt('Password123!', gen_salt('bf')), NOW(), '{"provider":"email","providers":["email"]}', '{"full_name":"Priya Sundaram","roll_no":"AM.CH.U4ME22008","role":"student"}', NOW(), NOW(), 'authenticated', 'authenticated'),
-('c0000000-0000-0000-0000-000000000005', '00000000-0000-0000-0000-000000000000', 'student5@amrita.edu', crypt('Password123!', gen_salt('bf')), NOW(), '{"provider":"email","providers":["email"]}', '{"full_name":"Karthik Raja","roll_no":"AM.CH.U4CSE22099","role":"student"}', NOW(), NOW(), 'authenticated', 'authenticated'),
-('c0000000-0000-0000-0000-000000000006', '00000000-0000-0000-0000-000000000000', 'student6@amrita.edu', crypt('Password123!', gen_salt('bf')), NOW(), '{"provider":"email","providers":["email"]}', '{"full_name":"Meera Nair","roll_no":"AM.CH.U4CYS22015","role":"student"}', NOW(), NOW(), 'authenticated', 'authenticated'),
-('c0000000-0000-0000-0000-000000000007', '00000000-0000-0000-0000-000000000000', 'student7@amrita.edu', crypt('Password123!', gen_salt('bf')), NOW(), '{"provider":"email","providers":["email"]}', '{"full_name":"Rohan Verma","roll_no":"AM.CH.U4CSE22044","role":"student"}', NOW(), NOW(), 'authenticated', 'authenticated'),
-('c0000000-0000-0000-0000-000000000008', '00000000-0000-0000-0000-000000000000', 'student8@amrita.edu', crypt('Password123!', gen_salt('bf')), NOW(), '{"provider":"email","providers":["email"]}', '{"full_name":"Sneha Das","roll_no":"AM.CH.U4AIE22088","role":"student"}', NOW(), NOW(), 'authenticated', 'authenticated');
+('c0000000-0000-0000-0000-000000000001', '00000000-0000-0000-0000-000000000000', 'student1@amrita.edu', crypt('Password123!', gen_salt('bf')), NOW(), '{"provider":"email","providers":["email"]}', '{"full_name":"Aarav Sharma","roll_no":"CH.EN.U4CSE23001","role":"student"}', NOW(), NOW(), 'authenticated', 'authenticated'),
+('c0000000-0000-0000-0000-000000000002', '00000000-0000-0000-0000-000000000000', 'student2@amrita.edu', crypt('Password123!', gen_salt('bf')), NOW(), '{"provider":"email","providers":["email"]}', '{"full_name":"Ananya Ramesh","roll_no":"CH.EN.U4ECE23045","role":"student"}', NOW(), NOW(), 'authenticated', 'authenticated'),
+('c0000000-0000-0000-0000-000000000003', '00000000-0000-0000-0000-000000000000', 'student3@amrita.edu', crypt('Password123!', gen_salt('bf')), NOW(), '{"provider":"email","providers":["email"]}', '{"full_name":"Vikram Patel","roll_no":"CH.EN.U4AIE23012","role":"student"}', NOW(), NOW(), 'authenticated', 'authenticated'),
+('c0000000-0000-0000-0000-000000000004', '00000000-0000-0000-0000-000000000000', 'student4@amrita.edu', crypt('Password123!', gen_salt('bf')), NOW(), '{"provider":"email","providers":["email"]}', '{"full_name":"Priya Sundaram","roll_no":"CH.EN.U4ME23008","role":"student"}', NOW(), NOW(), 'authenticated', 'authenticated'),
+('c0000000-0000-0000-0000-000000000005', '00000000-0000-0000-0000-000000000000', 'student5@amrita.edu', crypt('Password123!', gen_salt('bf')), NOW(), '{"provider":"email","providers":["email"]}', '{"full_name":"Karthik Raja","roll_no":"CH.EN.U4CSE23099","role":"student"}', NOW(), NOW(), 'authenticated', 'authenticated'),
+('c0000000-0000-0000-0000-000000000006', '00000000-0000-0000-0000-000000000000', 'student6@amrita.edu', crypt('Password123!', gen_salt('bf')), NOW(), '{"provider":"email","providers":["email"]}', '{"full_name":"Meera Nair","roll_no":"CH.EN.U4CYS23015","role":"student"}', NOW(), NOW(), 'authenticated', 'authenticated'),
+('c0000000-0000-0000-0000-000000000007', '00000000-0000-0000-0000-000000000000', 'student7@amrita.edu', crypt('Password123!', gen_salt('bf')), NOW(), '{"provider":"email","providers":["email"]}', '{"full_name":"Rohan Verma","roll_no":"CH.EN.U4CSE23044","role":"student"}', NOW(), NOW(), 'authenticated', 'authenticated'),
+('c0000000-0000-0000-0000-000000000008', '00000000-0000-0000-0000-000000000000', 'student8@amrita.edu', crypt('Password123!', gen_salt('bf')), NOW(), '{"provider":"email","providers":["email"]}', '{"full_name":"Sneha Das","roll_no":"CH.EN.U4AIE23088","role":"student"}', NOW(), NOW(), 'authenticated', 'authenticated');
 
 
 -- 4. AUTH IDENTITIES (REQUIRED BY SUPABASE GOTRUE AUTH FOR PASSWORD LOGIN)
@@ -62,23 +62,24 @@ ON CONFLICT (id) DO NOTHING;
 
 
 -- 5. PROFILES
-INSERT INTO profiles (id, roll_no, full_name, email, gender, department, role, skills, phone, year_of_study) VALUES
-('a0000000-0000-0000-0000-000000000001', NULL, 'Dr. K. Sivaraman (Admin)', 'admin@amrita.edu', 'Male', 'CSE', 'admin', '{}', '+91 9876543210', 'Faculty'),
-('f0000000-0000-0000-0000-000000000001', NULL, 'Prof. Rajesh Kumar (Judge)', 'judge1@amrita.edu', 'Male', 'ECE', 'judge', '{}', '+91 9876543211', 'Faculty'),
-('f0000000-0000-0000-0000-000000000002', NULL, 'Dr. Lakshmi Prasad (Judge)', 'judge2@amrita.edu', 'Female', 'AI & DS', 'judge', '{}', '+91 9876543212', 'Faculty'),
-('e0000000-0000-0000-0000-000000000001', NULL, 'Dr. M. Venkatesh (SPOC)', 'spoc@amrita.edu', 'Male', 'Mechanical Engineering', 'spoc', '{}', '+91 9876543213', 'Faculty'),
-('c0000000-0000-0000-0000-000000000001', 'AM.CH.U4CSE22001', 'Aarav Sharma', 'student1@amrita.edu', 'Male', 'CSE', 'student', '{"React", "Python", "Machine Learning"}', '+91 9876543201', '3rd Year'),
-('c0000000-0000-0000-0000-000000000002', 'AM.CH.U4ECE22045', 'Ananya Ramesh', 'student2@amrita.edu', 'Female', 'ECE', 'student', '{"Embedded C", "IoT", "Arduino"}', '+91 9876543202', '3rd Year'),
-('c0000000-0000-0000-0000-000000000003', 'AM.CH.U4AIE22012', 'Vikram Patel', 'student3@amrita.edu', 'Male', 'AI & DS', 'student', '{"PyTorch", "Computer Vision", "OpenCV"}', '+91 9876543203', '3rd Year'),
-('c0000000-0000-0000-0000-000000000004', 'AM.CH.U4ME22008', 'Priya Sundaram', 'student4@amrita.edu', 'Female', 'Mechanical Engineering', 'student', '{"CAD/CAM", "3D Printing", "UI/UX Design"}', '+91 9876543204', '2nd Year'),
-('c0000000-0000-0000-0000-000000000005', 'AM.CH.U4CSE22099', 'Karthik Raja', 'student5@amrita.edu', 'Male', 'CSE', 'student', '{"Node.js", "Docker", "PostgreSQL"}', '+91 9876543205', '3rd Year'),
-('c0000000-0000-0000-0000-000000000006', 'AM.CH.U4CYS22015', 'Meera Nair', 'student6@amrita.edu', 'Female', 'Cyber Security', 'student', '{"Ethical Hacking", "Network Security"}', '+91 9876543206', '2nd Year'),
-('c0000000-0000-0000-0000-000000000007', 'AM.CH.U4CSE22044', 'Rohan Verma', 'student7@amrita.edu', 'Male', 'CSE', 'student', '{"Golang", "Kubernetes", "AWS"}', '+91 9876543207', '3rd Year'),
-('c0000000-0000-0000-0000-000000000008', 'AM.CH.U4AIE22088', 'Sneha Das', 'student8@amrita.edu', 'Female', 'AI & DS', 'student', '{"Machine Learning", "TensorFlow", "React"}', '+91 9876543208', '2nd Year')
+INSERT INTO profiles (id, roll_no, full_name, email, college_email, gender, department, role, skills, phone, year_of_study) VALUES
+('a0000000-0000-0000-0000-000000000001', NULL, 'Dr. K. Sivaraman (Admin)', 'admin@amrita.edu', 'admin.college@ch.amrita.edu', 'Male', 'CSE', 'admin', '{}', '+91 9876543210', 'Faculty'),
+('f0000000-0000-0000-0000-000000000001', NULL, 'Prof. Rajesh Kumar (Judge)', 'judge1@amrita.edu', 'judge1.college@ch.amrita.edu', 'Male', 'ECE', 'judge', '{}', '+91 9876543211', 'Faculty'),
+('f0000000-0000-0000-0000-000000000002', NULL, 'Dr. Lakshmi Prasad (Judge)', 'judge2@amrita.edu', 'judge2.college@ch.amrita.edu', 'Female', 'CSE AIDS', 'judge', '{}', '+91 9876543212', 'Faculty'),
+('e0000000-0000-0000-0000-000000000001', NULL, 'Dr. M. Venkatesh (SPOC)', 'spoc@amrita.edu', 'spoc.college@ch.amrita.edu', 'Male', 'MEE', 'spoc', '{}', '+91 9876543213', 'Faculty'),
+('c0000000-0000-0000-0000-000000000001', 'CH.EN.U4CSE23001', 'Aarav Sharma', 'student1@amrita.edu', 'aarav.cse23@ch.students.amrita.edu', 'Male', 'CSE', 'student', '{"React", "Python", "Machine Learning"}', '+91 9876543201', '3rd Year'),
+('c0000000-0000-0000-0000-000000000002', 'CH.EN.U4ECE23045', 'Ananya Ramesh', 'student2@amrita.edu', 'ananya.ece23@ch.students.amrita.edu', 'Female', 'ECE', 'student', '{"Embedded C", "IoT", "Arduino"}', '+91 9876543202', '3rd Year'),
+('c0000000-0000-0000-0000-000000000003', 'CH.EN.U4AIE23012', 'Vikram Patel', 'student3@amrita.edu', 'vikram.aie23@ch.students.amrita.edu', 'Male', 'CSE AI', 'student', '{"PyTorch", "Computer Vision", "OpenCV"}', '+91 9876543203', '3rd Year'),
+('c0000000-0000-0000-0000-000000000004', 'CH.EN.U4ME23008', 'Priya Sundaram', 'student4@amrita.edu', 'priya.me23@ch.students.amrita.edu', 'Female', 'MEE', 'student', '{"CAD/CAM", "3D Printing", "UI/UX Design"}', '+91 9876543204', '2nd Year'),
+('c0000000-0000-0000-0000-000000000005', 'CH.EN.U4CSE23099', 'Karthik Raja', 'student5@amrita.edu', 'karthik.cse23@ch.students.amrita.edu', 'Male', 'CSE', 'student', '{"Node.js", "Docker", "PostgreSQL"}', '+91 9876543205', '3rd Year'),
+('c0000000-0000-0000-0000-000000000006', 'CH.EN.U4CYS23015', 'Meera Nair', 'student6@amrita.edu', 'meera.cys23@ch.students.amrita.edu', 'Female', 'CSE CYS', 'student', '{"Ethical Hacking", "Network Security"}', '+91 9876543206', '2nd Year'),
+('c0000000-0000-0000-0000-000000000007', 'CH.EN.U4CSE23044', 'Rohan Verma', 'student7@amrita.edu', 'rohan.cse23@ch.students.amrita.edu', 'Male', 'CSE', 'student', '{"Golang", "Kubernetes", "AWS"}', '+91 9876543207', '3rd Year'),
+('c0000000-0000-0000-0000-000000000008', 'CH.EN.U4AIE23088', 'Sneha Das', 'student8@amrita.edu', 'sneha.aie23@ch.students.amrita.edu', 'Female', 'CSE AI', 'student', '{"Machine Learning", "TensorFlow", "React"}', '+91 9876543208', '2nd Year')
 ON CONFLICT (id) DO UPDATE SET
   roll_no = EXCLUDED.roll_no,
   full_name = EXCLUDED.full_name,
   email = EXCLUDED.email,
+  college_email = EXCLUDED.college_email,
   gender = EXCLUDED.gender,
   department = EXCLUDED.department,
   role = EXCLUDED.role,

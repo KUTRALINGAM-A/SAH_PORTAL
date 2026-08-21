@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import SkillTagSelector from '../components/SkillTagSelector';
 import { DEPARTMENTS, YEARS_OF_STUDY } from '../data/departments';
-import { validateRollNo, validateEmail, validatePassword, validatePhone } from '../utils/validators';
+import { validateRollNo, validateEmail, validateCollegeEmail, validatePassword, validatePhone } from '../utils/validators';
 import sahLogo from '../assets/Logo.png';
 
 export default function RegisterPage() {
@@ -12,13 +12,13 @@ export default function RegisterPage() {
 
   const [form, setForm] = useState({
     email: '',
+    collegeEmail: '',
     password: '',
     confirmPassword: '',
     rollNo: '',
     fullName: '',
     gender: '',
     department: '',
-    role: 'student',
     skills: [],
     phone: '',
     yearOfStudy: '',
@@ -38,13 +38,14 @@ export default function RegisterPage() {
   const validate = () => {
     const errs = {};
 
-    if (form.role === 'student') {
-      const rollResult = validateRollNo(form.rollNo);
-      if (!rollResult.valid) errs.rollNo = rollResult.message;
-    }
+    const rollResult = validateRollNo(form.rollNo);
+    if (!rollResult.valid) errs.rollNo = rollResult.message;
 
     const emailResult = validateEmail(form.email);
     if (!emailResult.valid) errs.email = emailResult.message;
+
+    const collegeEmailResult = validateCollegeEmail(form.collegeEmail);
+    if (!collegeEmailResult.valid) errs.collegeEmail = collegeEmailResult.message;
 
     const passwordResult = validatePassword(form.password);
     if (!passwordResult.valid) errs.password = passwordResult.message;
@@ -68,15 +69,15 @@ export default function RegisterPage() {
     setLoading(true);
     const { error } = await signUp({
       email: form.email,
+      collegeEmail: form.collegeEmail,
       password: form.password,
-      rollNo: form.role === 'student' ? form.rollNo : null,
+      rollNo: form.rollNo,
       fullName: form.fullName,
       gender: form.gender,
       department: form.department,
-      role: form.role,
       skills: form.skills,
       phone: form.phone,
-      yearOfStudy: form.role === 'student' ? form.yearOfStudy : 'Faculty / Staff',
+      yearOfStudy: form.yearOfStudy,
       githubUrl: form.githubUrl,
       linkedinUrl: form.linkedinUrl
     });
@@ -92,14 +93,14 @@ export default function RegisterPage() {
   if (success) {
     return (
       <div className="login-page">
-        <div className="login-card"style={{ textAlign: 'center' }}>
+        <div className="login-card" style={{ textAlign: 'center' }}>
           <div style={{ fontSize: '4rem', marginBottom: '16px' }}></div>
           <h2 style={{ color: 'var(--green)', marginBottom: '12px' }}>Registration Successful!</h2>
           <p style={{ color: 'var(--text-secondary)', marginBottom: '24px' }}>
-            Account created for <strong>{form.email}</strong> ({form.role}).
-            You can now log in to the SAH Portal.
+            Account created for <strong>{form.email}</strong>.
+            You can now log in to the SAH Portal using either your Personal Email or College Mail ID.
           </p>
-          <Link to="/login"className="btn btn-primary btn-lg">
+          <Link to="/login" className="btn btn-primary btn-lg">
             Go to Login
           </Link>
         </div>
@@ -108,16 +109,14 @@ export default function RegisterPage() {
   }
 
   return (
-    <div className="login-page"style={{ alignItems: 'flex-start', paddingTop: '40px' }}>
-      <div className="login-card"style={{ maxWidth: '560px' }}>
+    <div className="login-page" style={{ alignItems: 'flex-start', paddingTop: '40px' }}>
+      <div className="login-card" style={{ maxWidth: '580px' }}>
         <div className="login-logo">
           <img src={sahLogo} alt="SAH 2026 Logo" style={{ display: 'block', margin: '0 auto 16px', maxHeight: '80px', width: 'auto' }} />
         </div>
 
-        <h2 className="login-heading"style={{ fontSize: '1.3rem' }}>
-          {form.role === 'student' ? 'Student Registration' :
-           form.role === 'admin' ? 'Admin Registration' :
-           form.role === 'judge' ? 'Judge Registration' : 'SPOC Registration'}
+        <h2 className="login-heading" style={{ fontSize: '1.3rem' }}>
+          Student Registration
         </h2>
 
         <p className="login-subheading">
@@ -135,36 +134,19 @@ export default function RegisterPage() {
         )}
 
         <form onSubmit={handleSubmit}>
-          {/* User Type / Role */}
+          {/* Roll Number */}
           <div className="form-group">
-            <label className="form-label">User Type / Portal Role <span className="required">*</span></label>
-            <select
-              className="form-select"
-              value={form.role}
-              onChange={(e) => updateField('role', e.target.value)}
-            >
-              <option value="student"> Student / Team Leader</option>
-              <option value="admin"> Organizing Committee (Admin)</option>
-              <option value="judge"> Judge / Evaluator</option>
-              <option value="spoc"> SPOC / Institute Leader</option>
-            </select>
+            <label className="form-label">Student Roll Number <span className="required">*</span></label>
+            <input
+              type="text"
+              className={`form-input ${errors.rollNo ? 'error' : ''}`}
+              placeholder="CH.EN.U4CSE23008"
+              value={form.rollNo}
+              onChange={(e) => updateField('rollNo', e.target.value.toUpperCase())}
+            />
+            {errors.rollNo && <div className="form-error">{errors.rollNo}</div>}
+            <div className="form-hint">Format: CH.EN.U4[DEPT][YEAR][NUMBER] or CH.SC.U4[DEPT][YEAR][NUMBER]</div>
           </div>
-
-          {/* Roll Number (Students only) */}
-          {form.role === 'student' && (
-            <div className="form-group">
-              <label className="form-label">Student Roll Number <span className="required">*</span></label>
-              <input
-                type="text"
-                className={`form-input ${errors.rollNo ? 'error' : ''}`}
-                placeholder="AM.CH.U4CSE22001"
-                value={form.rollNo}
-                onChange={(e) => updateField('rollNo', e.target.value.toUpperCase())}
-              />
-              {errors.rollNo && <div className="form-error">{errors.rollNo}</div>}
-              <div className="form-hint">Format: AM.CH.U4[DEPT][YEAR][NUMBER]</div>
-            </div>
-          )}
 
           {/* Full Name */}
           <div className="form-group">
@@ -179,20 +161,34 @@ export default function RegisterPage() {
             {errors.fullName && <div className="form-error">{errors.fullName}</div>}
           </div>
 
-          {/* Email */}
-          <div className="form-group">
-            <label className="form-label">Email <span className="required">*</span></label>
-            <input
-              type="email"
-              className={`form-input ${errors.email ? 'error' : ''}`}
-              placeholder="your.email@example.com"
-              value={form.email}
-              onChange={(e) => updateField('email', e.target.value)}
-            />
-            {errors.email && <div className="form-error">{errors.email}</div>}
+          {/* Personal Email & College Mail ID */}
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '14px' }}>
+            <div className="form-group">
+              <label className="form-label">Personal Email <span className="required">*</span></label>
+              <input
+                type="email"
+                className={`form-input ${errors.email ? 'error' : ''}`}
+                placeholder="your.email@example.com"
+                value={form.email}
+                onChange={(e) => updateField('email', e.target.value)}
+              />
+              {errors.email && <div className="form-error">{errors.email}</div>}
+            </div>
+
+            <div className="form-group">
+              <label className="form-label">College Mail ID <span className="required">*</span></label>
+              <input
+                type="email"
+                className={`form-input ${errors.collegeEmail ? 'error' : ''}`}
+                placeholder="name@ch.amrita.edu"
+                value={form.collegeEmail}
+                onChange={(e) => updateField('collegeEmail', e.target.value)}
+              />
+              {errors.collegeEmail && <div className="form-error">{errors.collegeEmail}</div>}
+            </div>
           </div>
 
-          {/* Password */}
+          {/* Password & Confirm Password */}
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '14px' }}>
             <div className="form-group">
               <label className="form-label">Password <span className="required">*</span></label>
@@ -250,25 +246,24 @@ export default function RegisterPage() {
             </div>
           </div>
 
-          {/* Year (Students only) & Phone */}
-          <div style={{ display: 'grid', gridTemplateColumns: form.role === 'student' ? '1fr 1fr' : '1fr', gap: '14px' }}>
-            {form.role === 'student' && (
-              <div className="form-group">
-                <label className="form-label">Year of Study</label>
-                <select
-                  className="form-select"
-                  value={form.yearOfStudy}
-                  onChange={(e) => updateField('yearOfStudy', e.target.value)}
-                >
-                  <option value="">Select Year</option>
-                  {YEARS_OF_STUDY.map(year => (
-                    <option key={year} value={year}>{year}</option>
-                  ))}
-                </select>
-              </div>
-            )}
+          {/* Year of Study & Mandatory Phone */}
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '14px' }}>
             <div className="form-group">
-              <label className="form-label">Phone / WhatsApp</label>
+              <label className="form-label">Year of Study</label>
+              <select
+                className="form-select"
+                value={form.yearOfStudy}
+                onChange={(e) => updateField('yearOfStudy', e.target.value)}
+              >
+                <option value="">Select Year</option>
+                {YEARS_OF_STUDY.map(year => (
+                  <option key={year} value={year}>{year}</option>
+                ))}
+              </select>
+            </div>
+
+            <div className="form-group">
+              <label className="form-label">Phone / WhatsApp <span className="required">*</span></label>
               <input
                 type="tel"
                 className={`form-input ${errors.phone ? 'error' : ''}`}

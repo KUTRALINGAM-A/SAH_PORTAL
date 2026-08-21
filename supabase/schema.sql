@@ -8,15 +8,16 @@
 -- ============================================================
 CREATE TABLE IF NOT EXISTS profiles (
     id UUID PRIMARY KEY REFERENCES auth.users(id) ON DELETE CASCADE,
-    roll_no TEXT UNIQUE,                         -- Format: AM.CH.U4CSE22001 (Students only, NULL for Admin/Judge/SPOC)
+    roll_no TEXT UNIQUE,                         -- Format: CH.EN.U4CSE23008 or CH.SC.U4CSE23244 (Students only)
     full_name TEXT NOT NULL,
     email TEXT UNIQUE NOT NULL,
+    college_email TEXT UNIQUE,
     gender TEXT CHECK (gender IN ('Male', 'Female', 'Other')) NOT NULL,
     campus TEXT DEFAULT 'Amrita Chennai' NOT NULL,
     department TEXT NOT NULL,
     skills TEXT[] DEFAULT '{}',
     role TEXT CHECK (role IN ('student', 'admin', 'judge', 'spoc')) DEFAULT 'student',
-    phone TEXT,
+    phone TEXT NOT NULL,
     year_of_study TEXT,
     github_url TEXT,
     linkedin_url TEXT,

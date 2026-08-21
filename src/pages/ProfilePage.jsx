@@ -19,11 +19,18 @@ export default function ProfilePage() {
   if (!profile) return <div className="loading-spinner"><div className="spinner" /></div>;
 
   const handleSave = async () => {
+    if (!form.phone || !form.phone.trim()) {
+      setToast({ type: 'error', message: 'Phone number is required.' });
+      setTimeout(() => setToast(null), 4000);
+      return;
+    }
+
     setLoading(true);
     const { error } = await updateProfile({
       full_name: form.full_name?.trim(),
       gender: form.gender,
       department: form.department,
+      college_email: form.college_email?.trim() || null,
       skills: form.skills || [],
       phone: form.phone?.trim() || null,
       year_of_study: profile.role === 'student' ? form.year_of_study : 'Faculty / Staff',
@@ -131,12 +138,29 @@ export default function ProfilePage() {
             </div>
           )}
 
-          {/* Email */}
+          {/* Personal Email & College Email */}
           <div className="form-group">
-            <label className="form-label">Email Address</label>
+            <label className="form-label">Personal Email</label>
             <div style={{ padding: '10px 0', fontSize: '0.92rem', color: 'var(--text-secondary)' }}>
               {profile.email}
             </div>
+          </div>
+
+          <div className="form-group">
+            <label className="form-label">College Mail ID</label>
+            {editing ? (
+              <input
+                type="email"
+                className="form-input"
+                placeholder="name@ch.amrita.edu"
+                value={form.college_email || ''}
+                onChange={(e) => setForm({ ...form, college_email: e.target.value })}
+              />
+            ) : (
+              <div style={{ padding: '10px 0', fontSize: '0.92rem', color: 'var(--text-secondary)' }}>
+                {profile.college_email || '—'}
+              </div>
+            )}
           </div>
 
           {/* Gender */}
@@ -196,7 +220,7 @@ export default function ProfilePage() {
 
           {/* Phone */}
           <div className="form-group">
-            <label className="form-label">Phone / WhatsApp</label>
+            <label className="form-label">Phone / WhatsApp <span className="required">*</span></label>
             {editing ? (
               <input
                 type="tel"
