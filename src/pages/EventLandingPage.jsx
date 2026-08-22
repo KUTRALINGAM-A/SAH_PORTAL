@@ -1,133 +1,48 @@
 import { Canvas, extend, useFrame, useThree } from '@react-three/fiber';
-import { useAspect, useTexture } from '@react-three/drei';
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useMemo, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import * as THREE from 'three/webgpu';
 import { bloom } from 'three/examples/jsm/tsl/display/BloomNode.js';
-import { abs, add, blendScreen, float, mix, mod, mx_cell_noise_float, oneMinus, pass, smoothstep, texture, uniform, uv, vec2, vec3 } from 'three/tsl';
-
-/* Previous event-selector implementation retained below for easy reference.
-const events = [
-  {
-    title: 'Smart Amrita\nHackathon',
-    eyebrow: 'Build • Solve • Impact',
-    description: 'Turn bold ideas into solutions for national challenges with your team.',
-    path: '/sah',
-    cta: 'Enter Hackathon',
-    accent: 'orange',
-    icon: '✦',
-    active: true,
-  },
-  {
-    title: 'April\nFest',
-    eyebrow: 'Create • Perform • Celebrate',
-    description: 'A vibrant stage for creativity, culture, and the energy of campus.',
-    cta: 'Coming Soon',
-    accent: 'violet',
-    icon: '◌',
-  },
-  {
-    title: 'Project Expo &\nPoster Presentation',
-    eyebrow: 'Discover • Present • Inspire',
-    description: 'Share research, prototypes, and the work that moves ideas forward.',
-    cta: 'Coming Soon',
-    accent: 'teal',
-    icon: '↗',
-  },
-];
-
-function Bulb() {
-  return (
-    <div className="event-bulb" aria-hidden="true">
-      <span className="bulb-aura bulb-aura-one" />
-      <span className="bulb-aura bulb-aura-two" />
-      <div className="bulb-glass">
-        <span className="bulb-highlight" />
-        <span className="bulb-filament bulb-filament-left" />
-        <span className="bulb-filament bulb-filament-right" />
-        <span className="bulb-core" />
-      </div>
-      <div className="bulb-neck" />
-      <div className="bulb-base"><i /><i /><i /></div>
-    </div>
-  );
-}
-
-export default function EventLandingPage() {
-  return (
-    <main className="event-landing">
-      <div className="event-grid" aria-hidden="true" />
-      <div className="event-orbit event-orbit-one" aria-hidden="true" />
-      <div className="event-orbit event-orbit-two" aria-hidden="true" />
-      <div className="event-spark event-spark-one" aria-hidden="true">✦</div>
-      <div className="event-spark event-spark-two" aria-hidden="true">✦</div>
-      <div className="event-spark event-spark-three" aria-hidden="true">·</div>
-
-      <header className="event-landing-header">
-        <Link className="event-brand" to="/" aria-label="SAH events home">
-          <span className="event-brand-mark">A</span>
-          <span>AMRITA <small>EVENTS 2026</small></span>
-        </Link>
-        <span className="event-status"><i /> CHENNAI CAMPUS</span>
-      </header>
-
-      <section className="event-hero">
-        <div className="event-hero-copy">
-          <p className="event-kicker">ONE CAMPUS. INFINITE POSSIBILITIES.</p>
-          <h1>Make your<br /><em>next idea</em> matter.</h1>
-          <p className="event-intro">Choose your stage. Build, present, celebrate, and leave your mark at Amrita Chennai.</p>
-          <a className="event-scroll-cue" href="#events"><span /> Explore events</a>
-        </div>
-        <Bulb />
-      </section>
-
-      <section className="event-choices" id="events" aria-label="Choose an event">
-        <div className="event-section-heading">
-          <p>SELECT YOUR EXPERIENCE</p>
-          <span>01 — 03</span>
-        </div>
-        <div className="event-card-grid">
-          {events.map((event, index) => {
-            const content = <>
-              <div className="event-card-top"><span>{String(index + 1).padStart(2, '0')}</span><b>{event.icon}</b></div>
-              <div className="event-card-content">
-                <p>{event.eyebrow}</p>
-                <h2>{event.title.split('\n').map((line) => <span key={line}>{line}</span>)}</h2>
-                <div className="event-card-bottom"><span>{event.description}</span><strong>{event.cta} <i>→</i></strong></div>
-              </div>
-            </>;
-            return event.active ? (
-              <Link className={`event-card event-card-${event.accent}`} key={event.title} to={event.path}>{content}</Link>
-            ) : (
-              <article className={`event-card event-card-${event.accent} event-card-disabled`} key={event.title} aria-label={`${event.title.replace('\n', ' ')} — coming soon`}>{content}</article>
-            );
-          })}
-        </div>
-      </section>
-    </main>
-  );
-}
-*/
-
-const TEXTUREMAP = { src: 'https://i.postimg.cc/XYwvXN8D/img-4.png' };
-const DEPTHMAP = { src: 'https://i.postimg.cc/2SHKQh2q/raw-4.webp' };
-const WIDTH = 300;
-const HEIGHT = 300;
+import { motion } from 'framer-motion';
+import {
+  abs, add, float, mix, mod, oneMinus, pass, sin,
+  smoothstep, uniform, uv, vec3, positionLocal, normalView,
+  floor, fract, step, length, vec2
+} from 'three/tsl';
 
 extend(THREE);
 
+/* ═══════════════════════════════════════════════════════════════════════
+   PostProcessing: bloom + saffron/green full-screen scanning sweep
+   ═══════════════════════════════════════════════════════════════════════ */
 function PostProcessing() {
   const { gl, scene, camera } = useThree();
   const scanProgress = useRef({ value: 0 });
+
   const renderer = useMemo(() => {
     const postProcessing = new THREE.PostProcessing(gl);
     const scenePass = pass(scene, camera);
     const color = scenePass.getTextureNode('output');
+
     const uScanProgress = uniform(0);
     scanProgress.current = uScanProgress;
-    const scanLine = smoothstep(0, 0.05, abs(uv().y.sub(float(uScanProgress.value))));
-    const redOverlay = vec3(1, 0, 0).mul(oneMinus(scanLine)).mul(0.4);
-    postProcessing.outputNode = mix(color, add(color, redOverlay), smoothstep(0.9, 1, oneMinus(scanLine))).add(bloom(color, 1, 0.5, 1));
+
+    const scanPos = float(uScanProgress.value);
+    const scanLine = smoothstep(0, 0.05, abs(uv().y.sub(scanPos)));
+
+    // Saffron → green gradient overlay
+    const saffron = vec3(1.0, 0.55, 0.1);
+    const green = vec3(0.0, 0.75, 0.3);
+    const scanColor = mix(saffron, green, uv().x);
+    const overlay = scanColor.mul(oneMinus(scanLine)).mul(0.4);
+
+    const withScan = mix(
+      color,
+      add(color, overlay),
+      smoothstep(0.9, 1.0, oneMinus(scanLine))
+    );
+
+    postProcessing.outputNode = withScan.add(bloom(color, 1.2, 0.5, 0.8));
     return postProcessing;
   }, [camera, gl, scene]);
 
@@ -135,153 +50,410 @@ function PostProcessing() {
     scanProgress.current.value = Math.sin(clock.getElapsedTime() * 0.5) * 0.5 + 0.5;
     renderer.renderAsync();
   }, 1);
+
   return null;
 }
 
-function Scene() {
-  const [rawMap, depthMap] = useTexture([TEXTUREMAP.src, DEPTHMAP.src]);
-  const meshRef = useRef(null);
-  const [visible, setVisible] = useState(false);
-  const [w, h] = useAspect(WIDTH, HEIGHT);
-  useEffect(() => { if (rawMap && depthMap) setVisible(true); }, [rawMap, depthMap]);
-  const { material, uniforms } = useMemo(() => {
-    const uPointer = uniform(new THREE.Vector2(0));
-    const uProgress = uniform(0);
-    const depth = texture(depthMap);
-    const image = texture(rawMap, uv().add(depth.r.mul(uPointer).mul(0.01)));
-    const tUv = vec2(uv().x.mul(float(WIDTH).div(HEIGHT)), uv().y);
-    const tiledUv = mod(tUv.mul(vec2(120, 120)), 2).sub(1);
-    const brightness = mx_cell_noise_float(tUv.mul(vec2(120, 120)).div(2));
-    const dots = smoothstep(0.5, 0.49, tiledUv.length()).mul(brightness);
-    const flow = oneMinus(smoothstep(0, 0.02, abs(depth.sub(uProgress))));
-    return { material: new THREE.MeshBasicNodeMaterial({ colorNode: blendScreen(image, dots.mul(flow).mul(vec3(10, 0, 0))), transparent: true, opacity: 0 }), uniforms: { uPointer, uProgress } };
-  }, [rawMap, depthMap]);
-  useFrame(({ clock, pointer }) => {
-    uniforms.uProgress.value = Math.sin(clock.getElapsedTime() * 0.5) * 0.5 + 0.5;
-    uniforms.uPointer.value = pointer;
-    if (meshRef.current?.material) meshRef.current.material.opacity = THREE.MathUtils.lerp(meshRef.current.material.opacity, visible ? 1 : 0, 0.07);
-  });
-  return <mesh ref={meshRef} scale={[w * 0.4, h * 0.4, 1]} material={material}><planeGeometry /></mesh>;
+/* ═══════════════════════════════════════════════════════════════════════
+   Helper: build a scanning node material using TSL
+   Grey base + colored contour lines that sweep layer-by-layer
+   ═══════════════════════════════════════════════════════════════════════ */
+function buildScanMaterial(baseR, baseG, baseB, accentR, accentG, accentB, opts = {}) {
+  const { wireframe = false, transparent = false, opacity = 1.0, side = THREE.FrontSide, patternType } = opts;
+
+  const uProgress = uniform(0);
+  const uTime = uniform(0);
+
+  const y = uv().y;
+
+  // ── Main scan contour (single bright line sweeping up/down) ──
+  const pulse = sin(float(uTime).mul(2.5)).mul(0.4).add(0.6);
+  const mainContour = oneMinus(smoothstep(0, 0.04, abs(y.sub(uProgress)))).mul(pulse);
+
+  // ── Layer lines (thin horizontal contours for "3D scan" look) ──
+  const layerPhase = mod(y.mul(18.0).sub(float(uTime).mul(0.35)), 1.0);
+  const layerPulse = sin(float(uTime).mul(3.0).add(y.mul(10.0))).mul(0.5).add(0.5);
+  const layerLines = oneMinus(smoothstep(0, 0.018, abs(layerPhase.sub(0.5)))).mul(layerPulse);
+
+  // ── Edge glow (Fresnel rim light based on normals) ──
+  const edgeDist = oneMinus(abs(normalView.z));
+  const edgeGlow = smoothstep(0.3, 1.0, edgeDist);
+
+  // ── Procedural Patterns ──
+  let patternIntensity = float(0.0);
+
+  if (patternType === 'binary') {
+    const gridUV = uv().mul(vec2(40.0, 32.0));
+    const cell = floor(gridUV);
+    const localUV = fract(gridUV).sub(0.5);
+
+    const dotVal = cell.x.mul(12.9898).add(cell.y.mul(78.233));
+    const rand = fract(sin(dotVal).mul(43758.5453));
+
+    const isOne = step(0.5, rand);
+    const drawOne = step(abs(localUV.x), 0.08).mul(step(abs(localUV.y), 0.35));
+    
+    const boxX = abs(localUV.x);
+    const boxY = abs(localUV.y);
+    const drawZeroOuter = step(boxX, 0.22).mul(step(boxY, 0.35));
+    const drawZeroInner = step(boxX, 0.1).mul(step(boxY, 0.25));
+    const drawZero = drawZeroOuter.sub(drawZeroInner);
+    
+    const rand2 = fract(rand.mul(13.543));
+    const isFilled = step(0.3, rand2);
+
+    patternIntensity = mix(drawZero, drawOne, isOne).mul(isFilled);
+  } else if (patternType === 'circuit') {
+    const gridUV = uv().mul(vec2(20.0, 16.0));
+    const cell = floor(gridUV);
+    const localUV = fract(gridUV).sub(0.5);
+
+    const dotVal = cell.x.mul(12.9898).add(cell.y.mul(78.233));
+    const rand = fract(sin(dotVal).mul(43758.5453));
+    const rand2 = fract(rand.mul(13.543));
+
+    const hasH = step(0.3, rand);
+    const hasV = step(0.3, rand2);
+
+    const lineH = hasH.mul(step(abs(localUV.y), 0.06));
+    const lineV = hasV.mul(step(abs(localUV.x), 0.06));
+
+    const isNode = step(0.7, rand);
+    const node = isNode.mul(step(length(localUV), 0.2));
+    const nodeHole = isNode.mul(step(length(localUV), 0.1));
+
+    patternIntensity = step(0.5, lineH.add(lineV).add(node).sub(nodeHole));
+  }
+
+  // ── Compose: dark base + accent colored scan effects ──
+  const base = vec3(baseR, baseG, baseB);
+  const accent = vec3(accentR, accentG, accentB);
+  
+  const baseIntensity = mainContour.mul(0.9).add(layerLines.mul(0.2)).add(edgeGlow.mul(0.08));
+  const finalPattern = patternIntensity.mul(0.4).add(patternIntensity.mul(mainContour).mul(1.0));
+  const intensity = baseIntensity.add(finalPattern);
+  
+  const colorNode = mix(base, accent, intensity);
+
+  const mat = new THREE.MeshBasicNodeMaterial({ colorNode, transparent, wireframe, side });
+  if (transparent) mat.opacity = opacity;
+  mat.depthWrite = !transparent;
+
+  return { material: mat, uniforms: { uProgress, uTime } };
 }
 
-// WebGL version of the reference effect: the scan is selected by the depth map,
-// not by screen position, so it moves through the object's actual body layers.
-function DepthScanScene() {
-  const [rawMap, depthMap] = useTexture([TEXTUREMAP.src, DEPTHMAP.src]);
-  const meshRef = useRef(null);
-  const [w, h] = useAspect(WIDTH, HEIGHT);
-  const uniforms = useMemo(() => ({
-    uMap: { value: rawMap },
-    uDepthMap: { value: depthMap },
-    uProgress: { value: 0 },
-    uTime: { value: 0 },
-    uPointer: { value: new THREE.Vector2(0, 0) },
-  }), [rawMap, depthMap]);
+/* ═══════════════════════════════════════════════════════════════════════
+   Helper: Bulb Brain Geometry Generator (Left or Right Half)
+   ═══════════════════════════════════════════════════════════════════════ */
+function useBulbBrainGeometry(isLeft) {
+  return useMemo(() => {
+    const curve = new THREE.SplineCurve([
+      new THREE.Vector2(0.27, -0.59),
+      new THREE.Vector2(0.29, -0.44),
+      new THREE.Vector2(0.44, -0.14),
+      new THREE.Vector2(0.57, 0.16),
+      new THREE.Vector2(0.61, 0.36),
+      new THREE.Vector2(0.59, 0.56),
+      new THREE.Vector2(0.51, 0.73),
+      new THREE.Vector2(0.37, 0.86),
+      new THREE.Vector2(0.19, 0.94),
+      new THREE.Vector2(0.00, 0.97),
+    ]);
+    const pts = curve.getPoints(128);
+    // Left half (X < 0): PI to 2*PI. Right half (X > 0): 0 to PI.
+    const phiStart = isLeft ? Math.PI : 0;
+    const geo = new THREE.LatheGeometry(pts, 64, phiStart, Math.PI);
+    const pos = geo.attributes.position;
+    for (let i = 0; i < pos.count; i++) {
+      const x = pos.getX(i), y = pos.getY(i), z = pos.getZ(i);
+      let bump = 0;
+      if (y > -0.2) {
+        const factor = Math.min(1, (y + 0.2) * 1.5);
+        if (isLeft) {
+          bump = (Math.sin(y * 22) * 0.045 * Math.cos(x * 18) + Math.sin(x * 20 + z * 15) * 0.035) * factor;
+        } else {
+          bump = (Math.sin(y * 18 + 2) * 0.04 * Math.sin(x * 15) + Math.cos(x * 18 + z * 12) * 0.04) * factor;
+        }
+      }
+      pos.setX(i, x * (1 + bump));
+      pos.setZ(i, z * (1 + bump));
+    }
+    geo.computeVertexNormals();
+    return geo;
+  }, [isLeft]);
+}
 
-  useFrame(({ clock, pointer }) => {
+/* ═══════════════════════════════════════════════════════════════════════
+   3D Components: Bulb Brain Solid (Left & Right)
+   ═══════════════════════════════════════════════════════════════════════ */
+function BulbBrainSolidLeft() {
+  const meshRef = useRef();
+  const geometry = useBulbBrainGeometry(true);
+  const { material, uniforms } = useMemo(() => buildScanMaterial(0.9, 0.45, 0.05, 1.0, 0.8, 0.2, { patternType: 'circuit' }), []);
+  useFrame(({ clock }) => {
     uniforms.uProgress.value = Math.sin(clock.getElapsedTime() * 0.5) * 0.5 + 0.5;
     uniforms.uTime.value = clock.getElapsedTime();
-    uniforms.uPointer.value.lerp(pointer, 0.06);
   });
-
-  return <mesh ref={meshRef} scale={[w * 0.4, h * 0.4, 1]}>
-    <planeGeometry args={[1, 1, 1, 1]} />
-    <shaderMaterial
-      transparent
-      uniforms={uniforms}
-      vertexShader={`varying vec2 vUv; void main() { vUv = uv; gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0); }`}
-      fragmentShader={`
-        uniform sampler2D uMap; uniform sampler2D uDepthMap; uniform float uProgress; uniform float uTime; uniform vec2 uPointer; varying vec2 vUv;
-        void main() {
-          float depth = texture2D(uDepthMap, vUv).r;
-          vec2 displacedUv = vUv + (depth - 0.5) * uPointer * 0.025;
-          vec4 base = texture2D(uMap, displacedUv);
-
-          // --- Surface normals from depth map ---
-          vec2 texel = vec2(1.0 / 300.0);
-          float dR = texture2D(uDepthMap, vUv + vec2(texel.x, 0.0)).r;
-          float dL = texture2D(uDepthMap, vUv - vec2(texel.x, 0.0)).r;
-          float dU = texture2D(uDepthMap, vUv + vec2(0.0, texel.y)).r;
-          float dD = texture2D(uDepthMap, vUv - vec2(0.0, texel.y)).r;
-          vec3 normal = normalize(vec3((dL - dR) * 8.0, (dD - dU) * 8.0, 0.35));
-
-          // --- Primary orbiting light (wide dramatic arc) ---
-          float lt = uTime * 0.6;
-          vec3 lightDir1 = normalize(vec3(sin(lt) * 1.4, cos(lt * 0.73) * 1.1, 0.7));
-          vec3 halfDir1 = normalize(lightDir1 + vec3(0.0, 0.0, 1.0));
-          float diff1 = pow(max(dot(normal, lightDir1), 0.0), 1.5);
-          float spec1 = pow(max(dot(normal, halfDir1), 0.0), 32.0);
-
-          // --- Secondary counter-rotating light ---
-          float lt2 = uTime * 0.45 + 2.1;
-          vec3 lightDir2 = normalize(vec3(cos(lt2) * 1.0, sin(lt2 * 0.9) * 0.9, 0.8));
-          vec3 halfDir2 = normalize(lightDir2 + vec3(0.0, 0.0, 1.0));
-          float diff2 = pow(max(dot(normal, lightDir2), 0.0), 1.5);
-          float spec2 = pow(max(dot(normal, halfDir2), 0.0), 28.0);
-
-          // --- Sweep beam: bright line that travels across the surface ---
-          vec2 center = vUv - 0.5;
-          float sweepAngle = uTime * 0.52;
-          vec2 sweepDir = vec2(cos(sweepAngle), sin(sweepAngle));
-          float sweepPos = dot(center, sweepDir);
-          float sweepWave = sin(uTime * 0.38) * 0.35;
-          float sweepLine = smoothstep(0.06, 0.0, abs(sweepPos - sweepWave));
-          float sweepBroad = smoothstep(0.18, 0.0, abs(sweepPos - sweepWave)) * 0.35;
-          float sweepOnSurface = sweepLine * depth + sweepBroad;
-
-          // --- Rim / edge lighting that rotates ---
-          float rimAngle = uTime * 0.35;
-          vec2 rimDir = vec2(sin(rimAngle), cos(rimAngle));
-          float rim = 1.0 - abs(dot(normal.xy, rimDir));
-          rim = pow(max(rim, 0.0), 3.0) * depth;
-
-          // --- Compose light contributions ---
-          vec3 warmLight = vec3(1.0, 0.22, 0.08);
-          vec3 hotWhite = vec3(1.0, 0.85, 0.75);
-          vec3 coolAccent = vec3(1.0, 0.45, 0.25);
-
-          vec3 lightGlow = warmLight * (diff1 * 0.45 + diff2 * 0.25)
-            + hotWhite * (spec1 * 1.6 + spec2 * 0.8)
-            + warmLight * sweepOnSurface * 0.65
-            + coolAccent * rim * 0.55;
-
-          // --- Depth contour scan waves ---
-          float contourWave = 0.5 + 0.5 * sin(depth * 34.0 - uTime * 4.6);
-          float layer = smoothstep(0.83, 0.98, contourWave);
-          float halo = smoothstep(0.58, 0.96, contourWave) * 0.42;
-          vec3 redCore = vec3(1.0, 0.0, 0.0);
-          vec3 glow = redCore * layer * 1.9 + vec3(1.0, 0.07, 0.02) * halo * 0.75;
-
-          // --- Final composite ---
-          vec3 color = mix(base.rgb, redCore, layer * 0.95) + glow + lightGlow;
-          gl_FragColor = vec4(color, base.a);
-        }
-      `}
-    />
-  </mesh>;
+  return <mesh ref={meshRef} geometry={geometry} material={material} scale={1.6} position={[-0.012, 0.35, 0]} />;
 }
 
+function BulbBrainSolidRight() {
+  const meshRef = useRef();
+  const geometry = useBulbBrainGeometry(false);
+  const { material, uniforms } = useMemo(() => buildScanMaterial(0.05, 0.6, 0.2, 0.2, 1.0, 0.4, { patternType: 'binary' }), []);
+  useFrame(({ clock }) => {
+    uniforms.uProgress.value = Math.sin(clock.getElapsedTime() * 0.5) * 0.5 + 0.5;
+    uniforms.uTime.value = clock.getElapsedTime();
+  });
+  return <mesh ref={meshRef} geometry={geometry} material={material} scale={1.6} position={[0.012, 0.35, 0]} />;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+   3D Components: Bulb Brain Wireframe Overlay (Left & Right)
+   ═══════════════════════════════════════════════════════════════════════ */
+function BulbBrainWireframeLeft() {
+  const meshRef = useRef();
+  const geometry = useBulbBrainGeometry(true);
+  const { material, uniforms } = useMemo(() => buildScanMaterial(0.9, 0.45, 0.05, 1.0, 0.9, 0.3, { wireframe: true, transparent: true, opacity: 0.35, side: THREE.DoubleSide }), []);
+  useFrame(({ clock }) => {
+    uniforms.uProgress.value = Math.sin(clock.getElapsedTime() * 0.5) * 0.5 + 0.5;
+    uniforms.uTime.value = clock.getElapsedTime();
+  });
+  return <mesh ref={meshRef} geometry={geometry} material={material} scale={1.62} position={[-0.012, 0.35, 0]} />;
+}
+
+function BulbBrainWireframeRight() {
+  const meshRef = useRef();
+  const geometry = useBulbBrainGeometry(false);
+  const { material, uniforms } = useMemo(() => buildScanMaterial(0.05, 0.6, 0.2, 0.4, 1.0, 0.6, { wireframe: true, transparent: true, opacity: 0.35, side: THREE.DoubleSide }), []);
+  useFrame(({ clock }) => {
+    uniforms.uProgress.value = Math.sin(clock.getElapsedTime() * 0.5) * 0.5 + 0.5;
+    uniforms.uTime.value = clock.getElapsedTime();
+  });
+  return <mesh ref={meshRef} geometry={geometry} material={material} scale={1.62} position={[0.012, 0.35, 0]} />;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+   3D Component: Bulb Screw Base
+   ═══════════════════════════════════════════════════════════════════════ */
+function BulbBase() {
+  const meshRef = useRef();
+
+  const geometry = useMemo(() => {
+    const pts = [
+      new THREE.Vector2(0.00, -1.10),
+      new THREE.Vector2(0.18, -1.10),
+      new THREE.Vector2(0.22, -1.05),
+      new THREE.Vector2(0.20, -1.00),
+      new THREE.Vector2(0.24, -0.95),
+      new THREE.Vector2(0.22, -0.90),
+      new THREE.Vector2(0.25, -0.85),
+      new THREE.Vector2(0.23, -0.80),
+      new THREE.Vector2(0.27, -0.75),
+      new THREE.Vector2(0.28, -0.60),
+    ];
+    return new THREE.LatheGeometry(pts, 32);
+  }, []);
+
+  // Metallic slate grey (matches logo)
+  const { material, uniforms } = useMemo(
+    () => buildScanMaterial(0.12, 0.18, 0.22, 0.4, 0.5, 0.6),
+    []
+  );
+
+  useFrame(({ clock }) => {
+    uniforms.uProgress.value = Math.sin(clock.getElapsedTime() * 0.5) * 0.5 + 0.5;
+    uniforms.uTime.value = clock.getElapsedTime();
+  });
+
+  return <mesh ref={meshRef} geometry={geometry} material={material} scale={1.6} position={[0, 0.3, 0]} />;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+   3D Component: Spike Rays (radiating lines around the bulb)
+   ═══════════════════════════════════════════════════════════════════════ */
+function SpikeRays() {
+  const spikes = useMemo(() => {
+    const items = [];
+    const count = 12;
+    for (let i = 0; i < count; i++) {
+      const angle = (i / count) * Math.PI * 2;
+      if (angle > Math.PI * 1.25 && angle < Math.PI * 1.75) continue;
+      items.push({
+        angle,
+        len: 0.25 + (Math.sin(i * 1.7) * 0.5 + 0.5) * 0.15,
+        isSaffron: i % 2 === 0,
+      });
+    }
+    return items;
+  }, []);
+
+  const matRay = useMemo(() => {
+    // Slate grey rays matching the logo
+    const { material } = buildScanMaterial(0.12, 0.18, 0.22, 0.4, 0.5, 0.6, { transparent: true, opacity: 0.9 });
+    return material;
+  }, []);
+
+  return <group position={[0, 0.5, 0]}>
+    {spikes.map((s, i) => {
+      const x = Math.cos(s.angle) * 0.88;
+      const y = Math.sin(s.angle) * 0.88;
+      return (
+        <mesh
+          key={i}
+          position={[x * 1.6, (y * 1.6) + 0.3, 0]}
+          rotation={[0, 0, s.angle - Math.PI / 2]}
+          material={matRay}
+        >
+          <cylinderGeometry args={[0.018, 0.006, s.len, 6]} />
+        </mesh>
+      );
+    })}
+  </group>;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+   3D Component: Bulb Glow Halo (background aura)
+   ═══════════════════════════════════════════════════════════════════════ */
+function BulbGlowHalo() {
+  const { material, uniforms } = useMemo(() => {
+    const u = uv();
+    const uTime = uniform(0);
+
+    const centerDist = length(u.sub(vec2(0.5, 0.5))).mul(2.0);
+    const radial = smoothstep(1.0, 0.1, centerDist);
+    
+    // Mask out the bottom so it doesn't bleed over the grey bulb base
+    const bottomMask = smoothstep(0.25, 0.45, u.y);
+    
+    // Alternate left/right pulses
+    const leftPulse = sin(float(uTime).mul(2.5)).mul(0.5).add(0.5);
+    const rightPulse = sin(float(uTime).mul(2.5).add(3.14159)).mul(0.5).add(0.5);
+    
+    const isRight = step(0.5, u.x);
+    const sidePulse = mix(leftPulse, rightPulse, isRight);
+
+    // Vertical sweep effect
+    const wave = sin(u.y.mul(6.0).sub(float(uTime).mul(3.0))).mul(0.5).add(0.5);
+
+    const pulseIntensity = sidePulse.mul(wave).mul(0.35).add(0.02);
+    const alpha = radial.mul(bottomMask).mul(pulseIntensity);
+    
+    const color = mix(vec3(0.9, 0.45, 0.05), vec3(0.05, 0.6, 0.2), isRight);
+    
+    const matNode = new THREE.MeshBasicNodeMaterial({
+      colorNode: color,
+      transparent: true,
+      depthWrite: false,
+      blending: THREE.AdditiveBlending,
+    });
+    matNode.opacityNode = alpha;
+    
+    return { material: matNode, uniforms: { uTime } };
+  }, []);
+
+  const meshRef = useRef();
+  useFrame(({ clock }) => {
+    uniforms.uTime.value = clock.getElapsedTime();
+  });
+
+  return (
+    <mesh ref={meshRef} material={material} scale={[4.5, 4.5, 1]} position={[0, 0.35, -0.2]}>
+      <planeGeometry args={[1, 1]} />
+    </mesh>
+  );
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+   Scene Container: groups everything + mouse follow + rotation
+   ═══════════════════════════════════════════════════════════════════════ */
+function SIHBulbScene() {
+  const groupRef = useRef();
+
+  useFrame(({ clock, pointer }) => {
+    if (!groupRef.current) return;
+    // Mouse follow only (no continuous rotation)
+    groupRef.current.rotation.y = THREE.MathUtils.lerp(
+      groupRef.current.rotation.y,
+      pointer.x * 0.35,
+      0.04
+    );
+    groupRef.current.rotation.x = THREE.MathUtils.lerp(
+      groupRef.current.rotation.x,
+      pointer.y * -0.12,
+      0.04
+    );
+  });
+
+  return <>
+    <PostProcessing />
+    <group ref={groupRef} scale={0.66} position={[0, -0.1, 0]}>
+      <BulbGlowHalo />
+      <BulbBrainSolidLeft />
+      <BulbBrainSolidRight />
+      <BulbBrainWireframeLeft />
+      <BulbBrainWireframeRight />
+      <BulbBase />
+      <SpikeRays />
+    </group>
+  </>;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+   Main Page Component
+   ═══════════════════════════════════════════════════════════════════════ */
 export default function EventLandingPage() {
   const navigate = useNavigate();
   const words = ['SMART', 'AMRITA', 'HACKATHON'];
-  return <main className="futuristic-hero">
-    <div className="futuristic-copy">
-      <h1>{words.map((word, index) => <span className="futuristic-word is-visible" style={{ animationDelay: `${index * 0.6}s` }} key={word}>{word}</span>)}</h1>
-      <p className="futuristic-subtitle is-visible">INNOVATE. BUILD. INSPIRE.</p>
-    </div>
-    <button className="futuristic-explore" type="button" onClick={() => navigate('/sah')}>Enter SAH 2026 <span className="futuristic-arrow">↓</span></button>
-    <div className="futuristic-visual" aria-hidden="true">
-      <Canvas
-        flat
-        gl={async (props) => {
-          const renderer = new THREE.WebGPURenderer(props);
-          await renderer.init();
-          return renderer;
+
+  return (
+    <main className="futuristic-hero">
+      <div className="futuristic-copy">
+        <h1>
+          {words.map((word, index) => (
+            <span
+              className="futuristic-word is-visible"
+              style={{ animationDelay: `${index * 0.6}s` }}
+              key={word}
+            >
+              {word}
+            </span>
+          ))}
+        </h1>
+        <p className="futuristic-subtitle is-visible">INNOVATE. BUILD. INSPIRE.</p>
+      </div>
+
+      <button
+        className="futuristic-explore"
+        type="button"
+        onClick={() => navigate('/sah')}
+      >
+        Enter SAH 2026 <span className="futuristic-arrow">↓</span>
+      </button>
+
+      <motion.div 
+        className="futuristic-visual" 
+        aria-hidden="true"
+        initial={{ opacity: 0, scale: 0.85, y: 40 }}
+        animate={{ opacity: 1, scale: 1, y: 0 }}
+        transition={{ 
+          duration: 1.8, 
+          delay: 2.0, 
+          ease: [0.16, 1, 0.3, 1]
         }}
       >
-        <PostProcessing fullScreenEffect />
-        <Scene />
-      </Canvas>
-    </div>
-  </main>;
+        <Canvas
+          flat
+          camera={{ position: [0, 0, 3.5], fov: 45 }}
+          gl={async (props) => {
+            const renderer = new THREE.WebGPURenderer(props);
+            await renderer.init();
+            return renderer;
+          }}
+        >
+          <SIHBulbScene />
+        </Canvas>
+      </motion.div>
+    </main>
+  );
 }
